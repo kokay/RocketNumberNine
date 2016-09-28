@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 public class GameActivity extends Activity {
 
+    private GameView gameView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,8 +20,19 @@ public class GameActivity extends Activity {
         Point screen = new Point();
         display.getSize(screen);
 
-        TextView test = new TextView(this);
-        test.setText(screen.x + " " + screen.y);
-        setContentView(test);
+        gameView = new GameView(this, screen.x, screen.y);
+        setContentView(gameView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gameView.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gameView.pause();
     }
 }
