@@ -27,11 +27,14 @@ public class GameView extends SurfaceView implements Runnable {
     private long timeOfFrame;
     private long fps;
 
+    private Viewport vp;
+
     public GameView(Context context, int screenX, int screenY) {
         super(context);
         gameThread = null;
         holder = getHolder();
         fps = 1000 / 60;
+        vp = new Viewport(screenX, screenY);
 
         debugPaint.setColor(Color.WHITE);
     }
