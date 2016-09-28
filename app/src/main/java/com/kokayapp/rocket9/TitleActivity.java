@@ -14,7 +14,7 @@ public class TitleActivity extends Activity {
     }
 
     public void clickPlay(View view) {
-        //Intent intent = new Intent(this, GameActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
     }
 }
