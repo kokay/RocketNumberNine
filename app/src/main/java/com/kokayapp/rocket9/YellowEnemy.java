@@ -15,6 +15,8 @@ public class YellowEnemy extends Enemy {
         this.x = x;
         this.y = y;
         velocityX = -2;
+        maxHealthPoint = 3;
+        healthPoint = 3;
 
         if(bitmaps[YELLOW] == null) {
             bitmaps[YELLOW] = prepareBitmap(context, R.drawable.yellow_enemy, vp);

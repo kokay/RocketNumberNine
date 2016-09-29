@@ -20,6 +20,9 @@ public class RedEnemy extends Enemy {
         maxVelocity = 2;
         acceleration = 1;
 
+        maxHealthPoint = 5;
+        healthPoint = 5;
+
         gun = new Gun(5);
 
         if(bitmaps[RED] == null) {

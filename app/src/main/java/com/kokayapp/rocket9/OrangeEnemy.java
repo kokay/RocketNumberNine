@@ -18,6 +18,9 @@ public class OrangeEnemy extends Enemy {
         maxVelocity = 2;
         acceleration = 2;
 
+        maxHealthPoint = 4;
+        healthPoint = 4;
+
         if(bitmaps[ORANGE] == null) {
             bitmaps[ORANGE] = prepareBitmap(context, R.drawable.orange_enemy, vp);
         }

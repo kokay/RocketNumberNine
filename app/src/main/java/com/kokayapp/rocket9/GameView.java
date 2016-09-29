@@ -78,8 +78,8 @@ public class GameView extends SurfaceView implements Runnable {
             canvas = holder.lockCanvas();
             canvas.drawColor(Color.BLACK);
 
-            rocket.draw(canvas, vp);
             for(Enemy enemy : enemies) enemy.draw(canvas, vp);
+            rocket.draw(canvas, vp);
             for(Background bg : backgrounds) bg.draw(canvas, vp);
 
             drawTools();
@@ -91,6 +91,9 @@ public class GameView extends SurfaceView implements Runnable {
         canvas.drawText("" + fps, 10, 10, debugPaint);
         if(fps >= 60)
             canvas.drawText("true", 10, 30, debugPaint);
+
+        for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
+        rocket.drawHealth(canvas, vp);
 
         for(RectF rect : ic.getButtons())
             canvas.drawRoundRect(rect, 15f, 15f, debugPaint);

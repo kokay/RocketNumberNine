@@ -19,4 +19,8 @@ public abstract class Enemy extends GameObject {
 
     public abstract void update(long fps, Rocket rocket);
     public abstract void draw(Canvas canvas, Viewport vp);
+    public void drawHealth(Canvas canvas, Viewport vp) {
+        canvas.drawRoundRect(vp.getHealthBarFrame(this), 5f, 5f, vp.healthBarFramePaint);
+        canvas.drawRoundRect(vp.getHealthBar(this), 5f, 5f, vp.healthBarEnemyPaint);
+    }
 }

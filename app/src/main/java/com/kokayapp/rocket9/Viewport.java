@@ -24,13 +24,14 @@ public class Viewport {
 
     public final int pixelsPerX;
     public final int pixelsPerY;
-    private Rect rect1;
-    private Rect rect2;
-    private RectF healthBarFrame;
-    private RectF healthBar;
-    private RectF rectF;
-    public final Paint healthBarFramePaint;
-    public final Paint healthBarPaint;
+    private Rect rect1 = new Rect();
+    private Rect rect2 = new Rect();
+    private RectF healthBarFrame = new RectF();
+    private RectF healthBar = new RectF();
+    private RectF rectF = new RectF();
+    public final Paint healthBarFramePaint = new Paint();
+    public final Paint healthBarPaint = new Paint();
+    public final Paint healthBarEnemyPaint = new Paint();
 
     public Viewport(int screenX, int screenY) {
         this.screenX = screenX;
@@ -40,18 +41,12 @@ public class Viewport {
         pixelsPerX = screenX / VIEW_WIDTH;
         pixelsPerY = screenY / VIEW_HEIGHT;
 
-        rect1 = new Rect();
-        rect2 = new Rect();
-        rectF = new RectF();
-        healthBarFrame = new RectF();
         healthBarFrame.set(5, 5, 10 * pixelsPerY, (int) 1.5 * pixelsPerY - 5);
-        healthBarFramePaint = new Paint();
-        healthBarFramePaint.setColor(Color.WHITE);
-
-        healthBar = new RectF();
         healthBar.set(8, 8, 10 * pixelsPerY - 8, (int) 1.5 * pixelsPerY - 8);
-        healthBarPaint = new Paint();
+
+        healthBarFramePaint.setColor(Color.WHITE);
         healthBarPaint.setColor(Color.GREEN);
+        healthBarEnemyPaint.setColor(Color.RED);
     }
 
     public Rect viewToScreen(GameObject go) {
@@ -68,6 +63,24 @@ public class Viewport {
 
     public RectF getHealthBar(GameObject object) {
         return healthBar;
+    }
+
+    public RectF getHealthBarFrame(Enemy enemy) {
+        int left   = (int)(screenCenterX - ((VIEW_CENTER_X - enemy.getX())  * pixelsPerX));
+        int top    = (int)(screenCenterY - ((VIEW_CENTER_Y - (enemy.getY() - 0.3))  * pixelsPerY));
+        int right  = (int)(left + (enemy.getWidth()  * pixelsPerX));
+        int bottom = (int)(screenCenterY - ((VIEW_CENTER_Y - (enemy.getY()))  * pixelsPerY));
+        rectF.set(left, top, right, bottom);
+        return rectF;
+    }
+
+    public RectF getHealthBar(Enemy enemy) {
+        int left   = (int)(screenCenterX - ((VIEW_CENTER_X - (enemy.getX() + 0.1))  * pixelsPerX));
+        int top    = (int)(screenCenterY - ((VIEW_CENTER_Y - (enemy.getY() - 0.2))  * pixelsPerY));
+        int right  = (int)(left + (((enemy.getWidth() - 0.2)  * pixelsPerX)) * enemy.getHealthPoint() / enemy.getMaxHealthPoint());
+        int bottom = (int)(screenCenterY - ((VIEW_CENTER_Y - (enemy.getY() - 0.1))  * pixelsPerY));
+        rectF.set(left, top, right, bottom);
+        return rectF;
     }
 
     public Rect getFromRect1(Background bg) {

@@ -44,4 +44,12 @@ abstract public class GameObject {
     public float getHeight() {
         return height;
     }
+
+    public int getMaxHealthPoint() {
+        return maxHealthPoint;
+    }
+
+    public int getHealthPoint() {
+        return healthPoint;
+    }
 }
