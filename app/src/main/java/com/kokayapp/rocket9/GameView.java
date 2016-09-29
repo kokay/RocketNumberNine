@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
 /**
  * Created by Koji on 9/28/2016.
  */
@@ -32,8 +34,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Viewport vp;
     private InputController ic;
     Rocket rocket;
-    YellowEnemy yellowEnemy;
-    OrangeEnemy orangeEnemy;
+    ArrayList<Enemy> enemies;
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -45,8 +46,10 @@ public class GameView extends SurfaceView implements Runnable {
 
         debugPaint.setColor(Color.WHITE);
         rocket = new Rocket(context, vp);
-        yellowEnemy = new YellowEnemy(context, vp, 32, 10);
-        orangeEnemy = new OrangeEnemy(context, vp, 50, 15);
+        enemies = new ArrayList<>();
+        enemies.add(new YellowEnemy(context, vp, 32, 10));
+        enemies.add(new OrangeEnemy(context, vp, 50, 15));
+        enemies.add(new RedEnemy(context, vp, 40, 5));
     }
 
     @Override
@@ -54,8 +57,9 @@ public class GameView extends SurfaceView implements Runnable {
         while (playing) {
             startFrameTime = System.currentTimeMillis();
             rocket.update(fps);
-            yellowEnemy.update(fps, rocket);
-            orangeEnemy.update(fps, rocket);
+            for(Enemy e : enemies) {
+                e.update(fps, rocket);
+            }
             draw();
             timeOfFrame = System.currentTimeMillis() - startFrameTime;
             if (timeOfFrame >= 1) {
@@ -75,9 +79,8 @@ public class GameView extends SurfaceView implements Runnable {
             for(Bullet bullet : rocket.getBullets())
                 canvas.drawRect(vp.viewToScreen(bullet), debugPaint);
             canvas.drawBitmap(rocket.getBitmap(), null, vp.viewToScreen(rocket), null);
-            canvas.drawBitmap(yellowEnemy.getBitmap(), null, vp.viewToScreen(yellowEnemy), null);
-            canvas.drawBitmap(orangeEnemy.getBitmap(), null, vp.viewToScreen(orangeEnemy), null);
-
+            for(Enemy e : enemies)
+                canvas.drawBitmap(e.getBitmap(), null, vp.viewToScreen(e), null);
 
             for(RectF rect : ic.getButtons())
                 canvas.drawRoundRect(rect, 15f, 15f, debugPaint);
