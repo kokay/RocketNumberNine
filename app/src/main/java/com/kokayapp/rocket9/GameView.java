@@ -32,6 +32,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Viewport vp;
     private InputController ic;
     Rocket rocket;
+    YellowEnemy yellowEnemy;
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -43,6 +44,8 @@ public class GameView extends SurfaceView implements Runnable {
 
         debugPaint.setColor(Color.WHITE);
         rocket = new Rocket(context, vp);
+        yellowEnemy = new YellowEnemy(context, vp, 32, 10);
+
     }
 
     @Override
@@ -50,6 +53,7 @@ public class GameView extends SurfaceView implements Runnable {
         while (playing) {
             startFrameTime = System.currentTimeMillis();
             rocket.update(fps);
+            yellowEnemy.update(fps);
             draw();
             timeOfFrame = System.currentTimeMillis() - startFrameTime;
             if (timeOfFrame >= 1) {
@@ -65,13 +69,14 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawText("" + fps, 10, 10, debugPaint);
             if(fps >= 60)
                 canvas.drawText("true", 10, 30, debugPaint);
-            canvas.drawBitmap(rocket.bitmap, null, vp.viewToScreen(rocket), null);
+
             for(Bullet bullet : rocket.getBullets())
                 canvas.drawRect(vp.viewToScreen(bullet), debugPaint);
+            canvas.drawBitmap(rocket.bitmap, null, vp.viewToScreen(rocket), null);
+            canvas.drawBitmap(yellowEnemy.getBitmap(), null, vp.viewToScreen(yellowEnemy), null);
 
 
-
-                for(RectF rect : ic.getButtons())
+            for(RectF rect : ic.getButtons())
                 canvas.drawRoundRect(rect, 15f, 15f, debugPaint);
             holder.unlockCanvasAndPost(canvas);
         }
