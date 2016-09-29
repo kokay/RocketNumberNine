@@ -17,14 +17,8 @@ public class Bullet extends GameObject {
         y = HIDE_PLACE_Y;
     }
 
-    @Override
     public void update(long fps) {
         x += velocityX / fps;
-    }
-
-    @Override
-    public Bitmap getBitmap() {
-        return null;
     }
 
     public void set(float x, float y, int speed) {

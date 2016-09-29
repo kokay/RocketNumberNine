@@ -22,9 +22,6 @@ abstract public class GameObject {
     protected int healthPoint = 0;
     protected int maxHealthPoint = 0;
 
-    abstract public void update(long fps);
-    abstract public Bitmap getBitmap();
-
     protected Bitmap prepareBitmap(Context context, int imageId, Viewport vp) {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), imageId);
         bitmap = Bitmap.createScaledBitmap(bitmap,

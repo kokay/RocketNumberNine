@@ -33,6 +33,7 @@ public class GameView extends SurfaceView implements Runnable {
     private InputController ic;
     Rocket rocket;
     YellowEnemy yellowEnemy;
+    OrangeEnemy orangeEnemy;
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -45,7 +46,7 @@ public class GameView extends SurfaceView implements Runnable {
         debugPaint.setColor(Color.WHITE);
         rocket = new Rocket(context, vp);
         yellowEnemy = new YellowEnemy(context, vp, 32, 10);
-
+        orangeEnemy = new OrangeEnemy(context, vp, 50, 15);
     }
 
     @Override
@@ -53,7 +54,8 @@ public class GameView extends SurfaceView implements Runnable {
         while (playing) {
             startFrameTime = System.currentTimeMillis();
             rocket.update(fps);
-            yellowEnemy.update(fps);
+            yellowEnemy.update(fps, rocket);
+            orangeEnemy.update(fps, rocket);
             draw();
             timeOfFrame = System.currentTimeMillis() - startFrameTime;
             if (timeOfFrame >= 1) {
@@ -74,6 +76,7 @@ public class GameView extends SurfaceView implements Runnable {
                 canvas.drawRect(vp.viewToScreen(bullet), debugPaint);
             canvas.drawBitmap(rocket.getBitmap(), null, vp.viewToScreen(rocket), null);
             canvas.drawBitmap(yellowEnemy.getBitmap(), null, vp.viewToScreen(yellowEnemy), null);
+            canvas.drawBitmap(orangeEnemy.getBitmap(), null, vp.viewToScreen(orangeEnemy), null);
 
 
             for(RectF rect : ic.getButtons())

@@ -14,7 +14,7 @@ public class YellowEnemy extends Enemy {
         width = 2.5f;
         this.x = x;
         this.y = y;
-        velocityX = 2;
+        velocityX = -2;
 
         if(bitmaps[YELLOW] == null) {
             bitmaps[YELLOW] = prepareBitmap(context, R.drawable.yellow_enemy, vp);
@@ -22,8 +22,8 @@ public class YellowEnemy extends Enemy {
     }
 
     @Override
-    public void update(long fps) {
-        x -= velocityX / fps;
+    public void update(long fps, Rocket rocket) {
+        x += velocityX / fps;
     }
 
     public Bitmap getBitmap() {

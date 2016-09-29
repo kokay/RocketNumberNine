@@ -51,7 +51,6 @@ public class Rocket extends GameObject {
         lastShotTime = -1;
     }
 
-    @Override
     public void update(long fps) {
         if(goingDown) {
             velocityY -= acceleration / fps;
@@ -74,7 +73,6 @@ public class Rocket extends GameObject {
             bullet.update(fps);
     }
 
-    @Override
     public Bitmap getBitmap() {
         return bitmap;
     }
