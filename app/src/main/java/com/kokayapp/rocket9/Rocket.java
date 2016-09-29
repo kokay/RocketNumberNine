@@ -1,11 +1,8 @@
 package com.kokayapp.rocket9;
 
 import android.content.Context;
-import android.content.SyncAdapterType;
 import android.graphics.Bitmap;
-import android.provider.Settings;
-
-import java.util.ArrayList;
+import android.graphics.Canvas;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -34,7 +31,13 @@ public class Rocket extends GameObject {
         goingUp = false;
         goingUp = false;
         bitmap = prepareBitmap(context, R.drawable.rocket, vp);
-        gun = new Gun(3);
+        gun = new Gun(30);
+    }
+
+    public void draw(Canvas canvas, Viewport vp) {
+        for(Bullet bullet : getBullets())
+            canvas.drawRect(vp.viewToScreen(bullet), gun.getBulletPaint());
+        canvas.drawBitmap(bitmap, null, vp.viewToScreen(this), null);
     }
 
     public void update(long fps) {
