@@ -36,12 +36,13 @@ public class GameView extends SurfaceView implements Runnable {
 
     Rocket rocket;
     ArrayList<Enemy> enemies;
+    ArrayList<Background> backgrounds;
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
         gameThread = null;
         holder = getHolder();
-        fps = 1000000000;
+        fps = 2000000000;
         vp = new Viewport(screenX, screenY);
         ic = new InputController(screenX, screenY);
 
@@ -51,6 +52,9 @@ public class GameView extends SurfaceView implements Runnable {
         enemies.add(new YellowEnemy(context, vp, 50, 10));
         enemies.add(new OrangeEnemy(context, vp, 60, 15));
         enemies.add(new RedEnemy(context, vp, 50, 5));
+        backgrounds = new ArrayList<>();
+        backgrounds.add(new Background(context, vp, R.drawable.middleground, 0, 32, 30));
+        backgrounds.add(new Background(context, vp, R.drawable.foreground, 0, 32, 300));
     }
 
     @Override
@@ -58,9 +62,9 @@ public class GameView extends SurfaceView implements Runnable {
         while (playing) {
             startFrameTime = System.currentTimeMillis();
             rocket.update(fps);
-            for(Enemy e : enemies) {
-                e.update(fps, rocket);
-            }
+            for(Enemy e : enemies) e.update(fps, rocket);
+            for(Background bg : backgrounds) bg.update(fps);
+
             draw();
             timeOfFrame = System.currentTimeMillis() - startFrameTime;
             if (timeOfFrame >= 1) {
@@ -76,6 +80,7 @@ public class GameView extends SurfaceView implements Runnable {
 
             rocket.draw(canvas, vp);
             for(Enemy enemy : enemies) enemy.draw(canvas, vp);
+            for(Background bg : backgrounds) bg.draw(canvas, vp);
 
             drawTools();
             holder.unlockCanvasAndPost(canvas);

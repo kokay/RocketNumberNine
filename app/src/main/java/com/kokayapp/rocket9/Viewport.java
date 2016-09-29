@@ -1,6 +1,7 @@
 package com.kokayapp.rocket9;
 
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 /**
  * Created by Koji on 9/28/2016.
@@ -14,14 +15,16 @@ public class Viewport {
     public static final int VIEW_CENTER_X = VIEW_WIDTH / 2;
     public static final int VIEW_CENTER_Y = VIEW_HEIGHT / 2;
 
-    private final int screenX;
-    private final int screenY;
+    public final int screenX;
+    public final int screenY;
     private final int screenCenterX;
     private final int screenCenterY;
 
     public final int pixelsPerX;
     public final int pixelsPerY;
     private Rect convertedRect;
+    private Rect fromRect;
+    private Rect toRect;
 
     public Viewport(int screenX, int screenY) {
         this.screenX = screenX;
@@ -32,6 +35,8 @@ public class Viewport {
         pixelsPerY = screenY / VIEW_HEIGHT;
 
         convertedRect = new Rect();
+        fromRect = new Rect();
+        toRect = new Rect();
     }
 
     public Rect viewToScreen(GameObject go) {
@@ -41,5 +46,25 @@ public class Viewport {
         int bottom = (int)(top + (go.getHeight() * pixelsPerY));
         convertedRect.set(left, top, right, bottom);
         return convertedRect;
+    }
+
+    public Rect getFromRect1(Background bg) {
+        fromRect.set(0, 0, bg.getBitmapWidth() - bg.getXClip(), bg.getBitmapHeight());
+        return fromRect;
+    }
+
+    public Rect getToRect1(Background bg) {
+        toRect.set(bg.getXClip(), 0, bg.getBitmapWidth(), screenY);
+        return toRect;
+    }
+
+    public Rect getFromRect2(Background bg) {
+        fromRect.set(bg.getBitmapWidth() - bg.getXClip(), 0, bg.getBitmapWidth(), bg.getBitmapHeight());
+        return fromRect;
+    }
+
+    public Rect getToRect2(Background bg) {
+        toRect.set(0, 0, bg.getXClip(), screenY);
+        return toRect;
     }
 }
