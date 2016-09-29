@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -35,6 +36,8 @@ public class GameView extends SurfaceView implements Runnable {
     private InputController ic;
     private LevelData ld;
 
+    private Rect topBar = new Rect();
+    private Paint topBarPaint = new Paint();
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -44,7 +47,8 @@ public class GameView extends SurfaceView implements Runnable {
         vp = new Viewport(screenX, screenY);
         ic = new InputController(screenX, screenY);
         ld = new LevelData(context, vp);
-
+        topBar.set(0, 0, vp.screenX, (int) 1.5 * vp.pixelsPerY);
+        topBarPaint.setColor(Color.BLUE);
         debugPaint.setColor(Color.WHITE);
     }
 
@@ -56,7 +60,6 @@ public class GameView extends SurfaceView implements Runnable {
 
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockCanvas();
-                canvas.drawColor(Color.BLACK);
                 ld.draw(canvas, vp);
                 drawTools();
                 holder.unlockCanvasAndPost(canvas);
@@ -74,7 +77,8 @@ public class GameView extends SurfaceView implements Runnable {
         canvas.drawText("" + fps, 30, 50, debugPaint);
         if(fps > 60)
             canvas.drawText("true", 30, 70, debugPaint);
-
+        canvas.drawRect(topBar, topBarPaint);
+        ld.getRocket().drawHealth(canvas, vp);
         for(RectF rect : ic.getButtons())
             canvas.drawRoundRect(rect, 15f, 15f, debugPaint);
     }

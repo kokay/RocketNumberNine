@@ -2,6 +2,10 @@ package com.kokayapp.rocket9;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.Shader;
 
 import java.util.ArrayList;
 
@@ -11,19 +15,19 @@ import java.util.ArrayList;
 
 public class LevelData {
     private Rocket rocket;
-    private ArrayList<Enemy> enemies;
-    private ArrayList<Background> backgrounds;
-    private ArrayList<Background> foregrounds;
+    private ArrayList<Enemy> enemies = new ArrayList<>();
+    private Paint background = new Paint();
+    private ArrayList<Background> backgrounds = new ArrayList<>();
+    private ArrayList<Background> foregrounds = new ArrayList<>();
 
     public LevelData(Context context, Viewport vp) {
         rocket = new Rocket(context, vp);
-        enemies = new ArrayList<>();
         enemies.add(new YellowEnemy(context, vp, 50, 10));
         enemies.add(new OrangeEnemy(context, vp, 60, 15));
         enemies.add(new RedEnemy(context, vp, 50, 5));
-        backgrounds = new ArrayList<>();
+        background.setShader(new LinearGradient(0, 0, 0, vp.screenY,
+                Color.rgb(0, 0, 80), Color.rgb(255, 255, 255), Shader.TileMode.CLAMP));
         backgrounds.add(new Background(context, vp, R.drawable.middleground, 0, 32, 30));
-        foregrounds = new ArrayList<>();
         foregrounds.add(new Background(context, vp, R.drawable.foreground, 0, 32, 300));
     }
 
@@ -35,13 +39,13 @@ public class LevelData {
     }
 
     public void draw(Canvas canvas, Viewport vp) {
+        canvas.drawPaint(background);
         for(Background bg : backgrounds) bg.draw(canvas, vp);
         for(Enemy enemy : enemies) enemy.draw(canvas, vp);
         rocket.draw(canvas, vp);
         for(Background fg : foregrounds) fg.draw(canvas, vp);
 
         for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
-        rocket.drawHealth(canvas, vp);
     }
 
     public Rocket getRocket() {
