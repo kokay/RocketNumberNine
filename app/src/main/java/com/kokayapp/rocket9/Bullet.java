@@ -17,8 +17,9 @@ public class Bullet extends GameObject {
         y = HIDE_PLACE_Y;
     }
 
-    public void update(long fps) {
+    public void update(long fps, Viewport vp) {
         x += velocityX / fps;
+        hitBox.set(vp.viewToScreen(this));
     }
 
     public void set(float x, float y, int velocityX) {

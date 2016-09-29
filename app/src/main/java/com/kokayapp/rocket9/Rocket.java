@@ -65,7 +65,7 @@ public class Rocket extends GameObject {
         hitBox.set(vp.viewToScreen(this));
 
         for (Bullet bullet : gun.getBullets())
-            bullet.update(fps);
+            bullet.update(fps, vp);
     }
 
     public void setGoingDown(boolean goingDown) {

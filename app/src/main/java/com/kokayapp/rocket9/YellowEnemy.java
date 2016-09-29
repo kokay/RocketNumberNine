@@ -26,20 +26,13 @@ public class YellowEnemy extends Enemy {
     @Override
     public void update(long fps, Viewport vp, Rocket rocket) {
         if(active){
-            x += velocityX / fps;
-            if(x + width < 0) active = visible = false;
-            else if(x <= Viewport.VIEW_WIDTH) visible = true;
+            normalAttack(fps);
         } else  {
             return;
         }
 
-        if(visible) {
-            hitBox.set(vp.viewToScreen(this));
-            if(hitBox.intersect(rocket.hitBox)) {
-                rocket.healthPoint -= 2;
-                active = visible = false;
-            }
-        }
+        if(visible)
+            checkHit(vp, rocket);
     }
 
     @Override

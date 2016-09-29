@@ -29,28 +29,13 @@ public class OrangeEnemy extends Enemy {
     @Override
     public void update(long fps, Viewport vp, Rocket rocket) {
         if(active){
-            if(y > rocket.getY()) {
-                velocityY -= acceleration / fps;
-                if(velocityY < -maxVelocity) velocityY = -maxVelocity;
-            } else if(y < rocket.getY()) {
-                velocityY += acceleration / fps;
-                if (velocityY > maxVelocity) velocityY = maxVelocity;
-            }
-            x += velocityX / fps;
-            y += velocityY / fps;
-
-            if(x + width < 0) active = visible = false;
-            else if(x <= Viewport.VIEW_WIDTH) visible = true;
+            followAttack(fps, rocket);
         } else  {
             return;
         }
 
         if(visible) {
-            hitBox.set(vp.viewToScreen(this));
-            if(hitBox.intersect(rocket.hitBox)) {
-                rocket.healthPoint -= 2;
-                active = visible = false;
-            }
+            checkHit(vp, rocket);
         }
     }
 

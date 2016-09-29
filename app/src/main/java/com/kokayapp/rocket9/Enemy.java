@@ -27,5 +27,43 @@ public abstract class Enemy extends GameObject {
         }
     }
 
+    public void normalAttack(long fps) {
+        x += velocityX / fps;
+        if(x + width < 0) active = visible = false;
+        else if(x <= Viewport.VIEW_WIDTH) visible = true;
 
+    }
+
+    public void followAttack(long fps, Rocket rocket) {
+        if (y > rocket.getY()) {
+            velocityY -= acceleration / fps;
+            if (velocityY < -maxVelocity) velocityY = -maxVelocity;
+        } else if (y < rocket.getY()) {
+            velocityY += acceleration / fps;
+            if (velocityY > maxVelocity) velocityY = maxVelocity;
+        }
+        x += velocityX / fps;
+        y += velocityY / fps;
+
+        if (x + width < 0) active = visible = false;
+        else if (x <= Viewport.VIEW_WIDTH) visible = true;
+    }
+
+    public void checkHit(Viewport vp, Rocket rocket) {
+        hitBox.set(vp.viewToScreen(this));
+        if(hitBox.intersect(rocket.hitBox)) {
+            rocket.healthPoint -= 2;
+            active = visible = false;
+            return;
+        }
+        for(Bullet bullet : rocket.getBullets()) {
+            if (hitBox.intersect(bullet.hitBox)) {
+                healthPoint -= 1;
+                if (healthPoint <= 0)
+                    active = visible = false;
+                bullet.hide();
+                return;
+            }
+        }
+    }
 }
