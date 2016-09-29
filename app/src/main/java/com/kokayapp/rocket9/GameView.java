@@ -33,6 +33,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Viewport vp;
     private InputController ic;
+
     Rocket rocket;
     ArrayList<Enemy> enemies;
 
@@ -40,7 +41,7 @@ public class GameView extends SurfaceView implements Runnable {
         super(context);
         gameThread = null;
         holder = getHolder();
-        fps = 1000 / 60;
+        fps = 1000000000;
         vp = new Viewport(screenX, screenY);
         ic = new InputController(screenX, screenY);
 

@@ -21,10 +21,10 @@ public class Bullet extends GameObject {
         x += velocityX / fps;
     }
 
-    public void set(float x, float y, int speed) {
+    public void set(float x, float y, int velocityX) {
         this.x = x;
         this.y = y;
-        velocityX = speed;
+        this.velocityX = velocityX;
     }
 
     public void hide() {

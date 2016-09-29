@@ -17,13 +17,7 @@ public class Rocket extends GameObject {
     private boolean goingUp;
     private boolean goingDown;
     private Bitmap bitmap;
-
-    private CopyOnWriteArrayList<Bullet> bullets;
-    private int maxBullets;
-    private int bulletsIdx;
-    private int fireRate;
-    private long lastShotTime;
-
+    private Gun gun;
 
     public Rocket(Context context, Viewport vp) {
         height = 3;
@@ -40,15 +34,7 @@ public class Rocket extends GameObject {
         goingUp = false;
         goingUp = false;
         bitmap = prepareBitmap(context, R.drawable.rocket, vp);
-
-        bullets = new CopyOnWriteArrayList<>();
-        maxBullets = 15;
-        for(int i=0; i < maxBullets; ++i) {
-            bullets.add(new Bullet());
-        }
-        bulletsIdx = 0;
-        fireRate = 3;
-        lastShotTime = -1;
+        gun = new Gun(3);
     }
 
     public void update(long fps) {
@@ -69,7 +55,7 @@ public class Rocket extends GameObject {
             velocityY = 0;
         }
 
-        for (Bullet bullet : bullets)
+        for (Bullet bullet : gun.getBullets())
             bullet.update(fps);
     }
 
@@ -86,14 +72,10 @@ public class Rocket extends GameObject {
     }
 
     public void shoot() {
-        if(System.currentTimeMillis() - lastShotTime > 1000 / fireRate) {
-            bullets.get(bulletsIdx).set(x + width * 0.75f, y + height * 0.5f, 15);
-            bulletsIdx = (bulletsIdx + 1) % bullets.size();
-            lastShotTime = System.currentTimeMillis();
-        }
+        gun.pullTrigger(this, 20);
     }
 
     public CopyOnWriteArrayList<Bullet> getBullets() {
-        return bullets;
+        return gun.getBullets();
     }
 }
