@@ -66,8 +66,12 @@ public class GameView extends SurfaceView implements Runnable {
             if(fps >= 60)
                 canvas.drawText("true", 10, 30, debugPaint);
             canvas.drawBitmap(rocket.bitmap, null, vp.viewToScreen(rocket), null);
+            for(Bullet bullet : rocket.getBullets())
+                canvas.drawRect(vp.viewToScreen(bullet), debugPaint);
 
-            for(RectF rect : ic.getButtons())
+
+
+                for(RectF rect : ic.getButtons())
                 canvas.drawRoundRect(rect, 15f, 15f, debugPaint);
             holder.unlockCanvasAndPost(canvas);
         }
