@@ -16,7 +16,7 @@ public class Rocket extends GameObject {
 
     private boolean goingUp;
     private boolean goingDown;
-    public final Bitmap bitmap;
+    private Bitmap bitmap;
 
     private CopyOnWriteArrayList<Bullet> bullets;
     private int maxBullets;
@@ -72,6 +72,11 @@ public class Rocket extends GameObject {
 
         for (Bullet bullet : bullets)
             bullet.update(fps);
+    }
+
+    @Override
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 
     public void setGoingDown(boolean goingDown) {

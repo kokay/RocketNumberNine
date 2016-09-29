@@ -1,5 +1,7 @@
 package com.kokayapp.rocket9;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Koji on 9/28/2016.
  */
@@ -18,6 +20,11 @@ public class Bullet extends GameObject {
     @Override
     public void update(long fps) {
         x += velocityX / fps;
+    }
+
+    @Override
+    public Bitmap getBitmap() {
+        return null;
     }
 
     public void set(float x, float y, int speed) {

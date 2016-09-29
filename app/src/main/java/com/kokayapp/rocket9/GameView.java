@@ -72,7 +72,7 @@ public class GameView extends SurfaceView implements Runnable {
 
             for(Bullet bullet : rocket.getBullets())
                 canvas.drawRect(vp.viewToScreen(bullet), debugPaint);
-            canvas.drawBitmap(rocket.bitmap, null, vp.viewToScreen(rocket), null);
+            canvas.drawBitmap(rocket.getBitmap(), null, vp.viewToScreen(rocket), null);
             canvas.drawBitmap(yellowEnemy.getBitmap(), null, vp.viewToScreen(yellowEnemy), null);
 
 
