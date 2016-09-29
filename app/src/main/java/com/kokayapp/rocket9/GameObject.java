@@ -11,17 +11,16 @@ import android.graphics.Rect;
 
 abstract public class GameObject {
 
-    protected float x;
-    protected float y;
-    protected float width;
-    protected float height;
-    protected float velocityX;
-    protected float velocityY;
-    protected float maxVelocity;
-    protected float acceleration;
-    protected int healthPoint;
-    protected int maxHealthPoint;
-    protected Rect convertedRect;
+    protected float x = 0;
+    protected float y = 0;
+    protected float width = 0;
+    protected float height = 0;
+    protected float velocityX = 0;
+    protected float velocityY = 0;
+    protected float maxVelocity = 0;
+    protected float acceleration = 0;
+    protected int healthPoint = 0;
+    protected int maxHealthPoint = 0;
 
     abstract public void update(long fps);
 
