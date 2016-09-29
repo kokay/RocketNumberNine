@@ -61,7 +61,12 @@ public class Viewport {
         return healthBarFrame;
     }
 
-    public RectF getHealthBar(GameObject object) {
+    public RectF getHealthBar(Rocket rocket) {
+        healthBar.set(
+                8,
+                8,
+                (10 * pixelsPerY - 3) * (rocket.getHealthPoint() / rocket.getMaxHealthPoint()),
+                (int) 1.5 * pixelsPerY - 8);
         return healthBar;
     }
 

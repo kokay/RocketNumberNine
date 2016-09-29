@@ -45,7 +45,7 @@ public class Rocket extends GameObject {
         canvas.drawRoundRect(vp.getHealthBar(this), 5f, 5f, vp.healthBarPaint);
     }
 
-    public void update(long fps) {
+    public void update(long fps, Viewport vp) {
         if(goingDown) {
             velocityY -= acceleration / fps;
             if(velocityY < -maxVelocity) velocityY = -maxVelocity;
@@ -62,6 +62,7 @@ public class Rocket extends GameObject {
             y = (Viewport.VIEW_HEIGHT - height);
             velocityY = 0;
         }
+        hitBox.set(vp.viewToScreen(this));
 
         for (Bullet bullet : gun.getBullets())
             bullet.update(fps);

@@ -27,26 +27,36 @@ public class OrangeEnemy extends Enemy {
     }
 
     @Override
-    public void update(long fps, Rocket rocket) {
-        if(!active) return;
+    public void update(long fps, Viewport vp, Rocket rocket) {
+        if(active){
+            if(y > rocket.getY()) {
+                velocityY -= acceleration / fps;
+                if(velocityY < -maxVelocity) velocityY = -maxVelocity;
+            } else if(y < rocket.getY()) {
+                velocityY += acceleration / fps;
+                if (velocityY > maxVelocity) velocityY = maxVelocity;
+            }
+            x += velocityX / fps;
+            y += velocityY / fps;
 
-        if(y > rocket.getY()) {
-            velocityY -= acceleration / fps;
-            if(velocityY < -maxVelocity) velocityY = -maxVelocity;
-        } else if(y < rocket.getY()) {
-            velocityY += acceleration / fps;
-            if (velocityY > maxVelocity) velocityY = maxVelocity;
+            if(x + width < 0) active = visible = false;
+            else if(x <= Viewport.VIEW_WIDTH) visible = true;
+        } else  {
+            return;
         }
 
-        x += velocityX / fps;
-        y += velocityY / fps;
-        if(x <= Viewport.VIEW_WIDTH) visible = true;
-        if(x + width < 0) active = visible = false;
+        if(visible) {
+            hitBox.set(vp.viewToScreen(this));
+            if(hitBox.intersect(rocket.hitBox)) {
+                rocket.healthPoint -= 2;
+                active = visible = false;
+            }
+        }
     }
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(!visible) return;
-        canvas.drawBitmap(bitmaps[ORANGE], null, vp.viewToScreen(this), null);
+        if(visible)
+            canvas.drawBitmap(bitmaps[ORANGE], null, vp.viewToScreen(this), null);
     }
 }

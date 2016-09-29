@@ -52,7 +52,7 @@ public class GameView extends SurfaceView implements Runnable {
     public void run() {
         while (playing) {
             startFrameTime = System.currentTimeMillis();
-            ld.update(fps);
+            ld.update(fps, vp);
 
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockCanvas();

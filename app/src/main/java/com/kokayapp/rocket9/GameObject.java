@@ -20,8 +20,9 @@ abstract public class GameObject {
     protected float velocityY = 0;
     protected float maxVelocity = 0;
     protected float acceleration = 0;
-    protected int healthPoint = 0;
-    protected int maxHealthPoint = 0;
+    protected float healthPoint = 0;
+    protected float maxHealthPoint = 0;
+    protected Rect hitBox = new Rect();
 
     protected Bitmap prepareBitmap(Context context, int imageId, Viewport vp) {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), imageId);
@@ -45,11 +46,11 @@ abstract public class GameObject {
         return height;
     }
 
-    public int getMaxHealthPoint() {
+    public float getMaxHealthPoint() {
         return maxHealthPoint;
     }
 
-    public int getHealthPoint() {
+    public float getHealthPoint() {
         return healthPoint;
     }
 }

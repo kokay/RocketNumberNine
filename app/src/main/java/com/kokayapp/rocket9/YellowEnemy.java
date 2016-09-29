@@ -24,17 +24,27 @@ public class YellowEnemy extends Enemy {
     }
 
     @Override
-    public void update(long fps, Rocket rocket) {
-        if(!active) return;
+    public void update(long fps, Viewport vp, Rocket rocket) {
+        if(active){
+            x += velocityX / fps;
+            if(x + width < 0) active = visible = false;
+            else if(x <= Viewport.VIEW_WIDTH) visible = true;
+        } else  {
+            return;
+        }
 
-        x += velocityX / fps;
-        if(x <= Viewport.VIEW_WIDTH) visible = true;
-        if(x + width < 0) active = visible = false;
+        if(visible) {
+            hitBox.set(vp.viewToScreen(this));
+            if(hitBox.intersect(rocket.hitBox)) {
+                rocket.healthPoint -= 2;
+                active = visible = false;
+            }
+        }
     }
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(!visible) return;
-        canvas.drawBitmap(bitmaps[YELLOW], null, vp.viewToScreen(this), null);
+        if(visible)
+            canvas.drawBitmap(bitmaps[YELLOW], null, vp.viewToScreen(this), null);
     }
 }

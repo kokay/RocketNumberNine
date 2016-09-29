@@ -2,6 +2,7 @@ package com.kokayapp.rocket9;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -17,10 +18,14 @@ public abstract class Enemy extends GameObject {
     protected boolean active = true;
     protected boolean visible = false;
 
-    public abstract void update(long fps, Rocket rocket);
+    public abstract void update(long fps, Viewport vp, Rocket rocket);
     public abstract void draw(Canvas canvas, Viewport vp);
     public void drawHealth(Canvas canvas, Viewport vp) {
-        canvas.drawRoundRect(vp.getHealthBarFrame(this), 5f, 5f, vp.healthBarFramePaint);
-        canvas.drawRoundRect(vp.getHealthBar(this), 5f, 5f, vp.healthBarEnemyPaint);
+        if(visible) {
+            canvas.drawRoundRect(vp.getHealthBarFrame(this), 5f, 5f, vp.healthBarFramePaint);
+            canvas.drawRoundRect(vp.getHealthBar(this), 5f, 5f, vp.healthBarEnemyPaint);
+        }
     }
+
+
 }
