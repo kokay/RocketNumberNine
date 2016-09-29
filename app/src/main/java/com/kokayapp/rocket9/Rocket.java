@@ -18,7 +18,7 @@ public class Rocket extends GameObject {
         height = 3;
         width = 5;
         x = 0;
-        y = vp.viewCenterY - (height / 2.0f);
+        y = Viewport.VIEW_CENTER_Y - (height / 2.0f);
         velocityX = 0;
         velocityY = 0;
         maxVelocity = 8;
@@ -42,8 +42,8 @@ public class Rocket extends GameObject {
         if(y < 0) {
             y = 0;
             velocityY = 0;
-        } else if (y > 17) {
-            y = 17;
+        } else if (y > (Viewport.VIEW_HEIGHT - height)) {
+            y = (Viewport.VIEW_HEIGHT - height);
             velocityY = 0;
         }
     }
