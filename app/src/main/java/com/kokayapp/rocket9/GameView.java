@@ -33,10 +33,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Viewport vp;
     private InputController ic;
+    private LevelData ld;
 
-    Rocket rocket;
-    ArrayList<Enemy> enemies;
-    ArrayList<Background> backgrounds;
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -45,55 +43,37 @@ public class GameView extends SurfaceView implements Runnable {
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
         ic = new InputController(screenX, screenY);
+        ld = new LevelData(context, vp);
 
         debugPaint.setColor(Color.WHITE);
-        rocket = new Rocket(context, vp);
-        enemies = new ArrayList<>();
-        enemies.add(new YellowEnemy(context, vp, 50, 10));
-        enemies.add(new OrangeEnemy(context, vp, 60, 15));
-        enemies.add(new RedEnemy(context, vp, 50, 5));
-        backgrounds = new ArrayList<>();
-        backgrounds.add(new Background(context, vp, R.drawable.middleground, 0, 32, 30));
-        backgrounds.add(new Background(context, vp, R.drawable.foreground, 0, 32, 300));
     }
 
     @Override
     public void run() {
         while (playing) {
             startFrameTime = System.currentTimeMillis();
-            rocket.update(fps);
-            for(Enemy e : enemies) e.update(fps, rocket);
-            for(Background bg : backgrounds) bg.update(fps);
+            ld.update(fps);
 
-            draw();
+            if (holder.getSurface().isValid()) {
+                canvas = holder.lockCanvas();
+                canvas.drawColor(Color.BLACK);
+                ld.draw(canvas, vp);
+                drawTools();
+                holder.unlockCanvasAndPost(canvas);
+            }
+
             timeOfFrame = System.currentTimeMillis() - startFrameTime;
             if (timeOfFrame >= 1) {
                 fps = 1000 / timeOfFrame;
             }
         }
-    }
-
-    private void draw() {
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-            canvas.drawColor(Color.BLACK);
-
-            for(Enemy enemy : enemies) enemy.draw(canvas, vp);
-            rocket.draw(canvas, vp);
-            for(Background bg : backgrounds) bg.draw(canvas, vp);
-
-            drawTools();
-            holder.unlockCanvasAndPost(canvas);
-        }
+        drawTools();
     }
 
     private void drawTools() {
-        canvas.drawText("" + fps, 10, 10, debugPaint);
-        if(fps >= 60)
-            canvas.drawText("true", 10, 30, debugPaint);
-
-        for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
-        rocket.drawHealth(canvas, vp);
+        canvas.drawText("" + fps, 30, 50, debugPaint);
+        if(fps > 60)
+            canvas.drawText("true", 30, 70, debugPaint);
 
         for(RectF rect : ic.getButtons())
             canvas.drawRoundRect(rect, 15f, 15f, debugPaint);
@@ -116,7 +96,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ic.handleInput(event, playing, rocket);
+        ic.handleInput(event, playing, ld.getRocket());
         return true;
     }
 }
