@@ -38,6 +38,8 @@ public class Rocket extends GameObject {
         for(Bullet bullet : getBullets())
             canvas.drawRect(vp.viewToScreen(bullet), gun.getBulletPaint());
         canvas.drawBitmap(bitmap, null, vp.viewToScreen(this), null);
+        canvas.drawRoundRect(vp.getHealthBarFrame(this), 5f, 5f, vp.healthBarFramePaint);
+        canvas.drawRoundRect(vp.getHealthBar(this), 5f, 5f, vp.healthBarPaint);
     }
 
     public void update(long fps) {
@@ -60,10 +62,6 @@ public class Rocket extends GameObject {
 
         for (Bullet bullet : gun.getBullets())
             bullet.update(fps);
-    }
-
-    public Bitmap getBitmap() {
-        return bitmap;
     }
 
     public void setGoingDown(boolean goingDown) {
