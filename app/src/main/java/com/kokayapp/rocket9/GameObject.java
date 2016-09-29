@@ -25,10 +25,25 @@ abstract public class GameObject {
 
     abstract public void update(long fps);
 
-    public Bitmap prepareBitmap(Context context, int imageId, int pixelsPerMeter) {
+    protected Bitmap prepareBitmap(Context context, int imageId, Viewport vp) {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), imageId);
         bitmap = Bitmap.createScaledBitmap(bitmap,
-                (int) (width * pixelsPerMeter), (int) (height * pixelsPerMeter), false);
+                (int) (width * vp.pixelsPerX), (int) (height * vp.pixelsPerY), false);
         return bitmap;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+    public float getHeight() {
+        return height;
     }
 }

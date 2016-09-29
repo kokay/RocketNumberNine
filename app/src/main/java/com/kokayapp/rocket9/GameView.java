@@ -28,6 +28,7 @@ public class GameView extends SurfaceView implements Runnable {
     private long fps;
 
     private Viewport vp;
+    Rocket rocket;
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -37,7 +38,9 @@ public class GameView extends SurfaceView implements Runnable {
         vp = new Viewport(screenX, screenY);
 
         debugPaint.setColor(Color.WHITE);
+        rocket = new Rocket(context, vp);
     }
+
 
     @Override
     public void run() {
@@ -49,6 +52,7 @@ public class GameView extends SurfaceView implements Runnable {
                 canvas.drawText("" + fps, 10, 10, debugPaint);
                 if(fps >= 60)
                     canvas.drawText("true", 10, 30, debugPaint);
+                canvas.drawBitmap(rocket.BITMAP, null, vp.viewToScreen(rocket), null);
                 holder.unlockCanvasAndPost(canvas);
             }
             timeOfFrame = System.currentTimeMillis() - startFrameTime;

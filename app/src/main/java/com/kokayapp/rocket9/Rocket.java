@@ -11,14 +11,14 @@ public class Rocket extends GameObject {
 
     private boolean goingUp;
     private boolean goingDown;
-    private Bitmap bitmap;
+    public final Bitmap BITMAP;
 
 
-    public Rocket(Context context) {
-        x = 0;
-        y = 18;
+    public Rocket(Context context, Viewport vp) {
         height = 3;
         width = 5;
+        x = 0;
+        y = vp.viewCenterY - (height / 2.0f);
         velocityX = 0;
         velocityY = 0;
         maxVelocity = 8;
@@ -26,7 +26,7 @@ public class Rocket extends GameObject {
         healthPoint = 10;
         maxHealthPoint = 10;
 
-        bitmap = prepareBitmap(context, R.drawable.rocket, 1000);
+        BITMAP = prepareBitmap(context, R.drawable.rocket, vp);
     }
     @Override
     public void update(long fps) {
@@ -47,4 +47,5 @@ public class Rocket extends GameObject {
             velocityY = 0;
         }
     }
+
 }
