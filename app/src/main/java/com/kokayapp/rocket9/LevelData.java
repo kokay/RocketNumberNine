@@ -26,7 +26,7 @@ public class LevelData {
         enemies.add(new OrangeEnemy(context, vp, 60, 15));
         enemies.add(new RedEnemy(context, vp, 50, 5));
         background.setShader(new LinearGradient(0, 0, 0, vp.screenY,
-                Color.rgb(0, 0, 80), Color.rgb(255, 255, 255), Shader.TileMode.CLAMP));
+                Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
         backgrounds.add(new Background(context, vp, R.drawable.middleground, 0, 32, 30));
         foregrounds.add(new Background(context, vp, R.drawable.foreground, 0, 32, 300));
     }

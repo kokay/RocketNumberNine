@@ -47,8 +47,8 @@ public class GameView extends SurfaceView implements Runnable {
         vp = new Viewport(screenX, screenY);
         ic = new InputController(screenX, screenY);
         ld = new LevelData(context, vp);
-        topBar.set(0, 0, vp.screenX, (int) 1.5 * vp.pixelsPerY);
-        topBarPaint.setColor(Color.BLUE);
+        topBar.set(0, 0, vp.screenX, (int) (1.2 * vp.pixelsPerY));
+        topBarPaint.setColor(Color.rgb(2, 12, 35));
         debugPaint.setColor(Color.WHITE);
     }
 
