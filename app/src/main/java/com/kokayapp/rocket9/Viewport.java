@@ -22,9 +22,8 @@ public class Viewport {
 
     public final int pixelsPerX;
     public final int pixelsPerY;
-    private Rect convertedRect;
-    private Rect fromRect;
-    private Rect toRect;
+    private Rect rect1;
+    private Rect rect2;
 
     public Viewport(int screenX, int screenY) {
         this.screenX = screenX;
@@ -34,9 +33,8 @@ public class Viewport {
         pixelsPerX = screenX / VIEW_WIDTH;
         pixelsPerY = screenY / VIEW_HEIGHT;
 
-        convertedRect = new Rect();
-        fromRect = new Rect();
-        toRect = new Rect();
+        rect1 = new Rect();
+        rect2 = new Rect();
     }
 
     public Rect viewToScreen(GameObject go) {
@@ -44,27 +42,27 @@ public class Viewport {
         int top    = (int)(screenCenterY - ((VIEW_CENTER_Y - go.getY())  * pixelsPerY));
         int right  = (int)(left + (go.getWidth() * pixelsPerX));
         int bottom = (int)(top + (go.getHeight() * pixelsPerY));
-        convertedRect.set(left, top, right, bottom);
-        return convertedRect;
+        rect1.set(left, top, right, bottom);
+        return rect1;
     }
 
     public Rect getFromRect1(Background bg) {
-        fromRect.set(0, 0, bg.getBitmapWidth() - bg.getXClip(), bg.getBitmapHeight());
-        return fromRect;
+        rect1.set(0, 0, bg.getBitmapWidth() - bg.getXClip(), bg.getBitmapHeight());
+        return rect1;
     }
 
     public Rect getToRect1(Background bg) {
-        toRect.set(bg.getXClip(), 0, bg.getBitmapWidth(), screenY);
-        return toRect;
+        rect2.set(bg.getXClip(), 0, bg.getBitmapWidth(), screenY);
+        return rect2;
     }
 
     public Rect getFromRect2(Background bg) {
-        fromRect.set(bg.getBitmapWidth() - bg.getXClip(), 0, bg.getBitmapWidth(), bg.getBitmapHeight());
-        return fromRect;
+        rect1.set(bg.getBitmapWidth() - bg.getXClip(), 0, bg.getBitmapWidth(), bg.getBitmapHeight());
+        return rect1;
     }
 
     public Rect getToRect2(Background bg) {
-        toRect.set(0, 0, bg.getXClip(), screenY);
-        return toRect;
+        rect2.set(0, 0, bg.getXClip(), screenY);
+        return rect2;
     }
 }
