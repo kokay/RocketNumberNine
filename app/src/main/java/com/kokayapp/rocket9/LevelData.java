@@ -56,10 +56,10 @@ public class LevelData {
     public void draw(Canvas canvas, Viewport vp) {
         canvas.drawPaint(background);
         for(Background bg : backgrounds) bg.draw(canvas, vp);
+        for(Star s : stars) s.draw(canvas, vp);
         for(Enemy enemy : enemies) enemy.draw(canvas, vp);
         rocket.draw(canvas, vp);
         for(Background fg : foregrounds) fg.draw(canvas, vp);
-        for(Star s : stars) s.draw(canvas, vp);
         for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
     }
 
