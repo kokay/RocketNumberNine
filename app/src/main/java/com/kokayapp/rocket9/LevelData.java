@@ -1,10 +1,13 @@
 package com.kokayapp.rocket9;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Shader;
 
 import java.util.ArrayList;
@@ -33,13 +36,12 @@ public class LevelData {
         enemies.add(new YellowEnemy(context, vp, 110, 10));
         enemies.add(new OrangeEnemy(context, vp, 130, 15));
         enemies.add(new RedEnemy(context, vp, 50, 5));
-        //background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
+        background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
         background.setColor(Color.rgb(39, 38, 67));
         backgrounds.add(new Background(context,
                 vp, R.drawable.middleground, Viewport.VIEW_HEIGHT - 5, Viewport.VIEW_HEIGHT, 30));
         foregrounds.add(new Background(context,
                 vp, R.drawable.foreground, Viewport.VIEW_HEIGHT - 3, Viewport.VIEW_HEIGHT, 300));
-
         for(int i=0; i < 200;++i) stars.add(new Star(vp));
     }
 
@@ -58,7 +60,6 @@ public class LevelData {
         rocket.draw(canvas, vp);
         for(Background fg : foregrounds) fg.draw(canvas, vp);
         for(Star s : stars) s.draw(canvas, vp);
-
         for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
     }
 
