@@ -48,6 +48,7 @@ public class LevelData {
         for(Enemy e : enemies) e.update(fps, vp, rocket);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
+        for(Star s : stars) s.update(fps);
     }
 
     public void draw(Canvas canvas, Viewport vp) {
@@ -56,7 +57,7 @@ public class LevelData {
         for(Enemy enemy : enemies) enemy.draw(canvas, vp);
         rocket.draw(canvas, vp);
         for(Background fg : foregrounds) fg.draw(canvas, vp);
-        for(Star s : stars) s.draw(canvas);
+        for(Star s : stars) s.draw(canvas, vp);
 
         for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
     }
