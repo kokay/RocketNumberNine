@@ -23,7 +23,7 @@ public class RedEnemy extends Enemy {
         maxHealthPoint = 5;
         healthPoint = 5;
 
-        gun = new Gun(5);
+        gun = new Gun(5, -10);
 
         if(bitmaps[RED] == null) {
             bitmaps[RED] = prepareBitmap(context, vp, R.drawable.red_enemy);
@@ -40,7 +40,7 @@ public class RedEnemy extends Enemy {
 
         if (visible) {
             checkHit(vp, rocket);
-            gun.pullTrigger(this, -10);
+            gun.pullTrigger(this);
             for (Bullet bullet : gun.getBullets()) {
                 bullet.update(fps, vp);
                 if (bullet.hitBox.intersect(rocket.hitBox)) {

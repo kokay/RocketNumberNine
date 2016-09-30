@@ -31,7 +31,7 @@ public class Rocket extends MovableObject {
         goingUp = false;
         goingUp = false;
         bitmap = prepareBitmap(context, vp, R.drawable.rocket);
-        gun = new Gun(30);
+        gun = new Gun(12, 20);
     }
 
     public void draw(Canvas canvas, Viewport vp) {
@@ -63,6 +63,7 @@ public class Rocket extends MovableObject {
             velocityY = 0;
         }
         hitBox.set(vp.viewToScreen(this));
+        gun.pullTrigger(this);
 
         for (Bullet bullet : gun.getBullets())
             bullet.update(fps, vp);
@@ -74,10 +75,6 @@ public class Rocket extends MovableObject {
 
     public void setGoingUp(boolean goingUp) {
         this.goingUp = goingUp;
-    }
-
-    public void shoot() {
-        gun.pullTrigger(this, 20);
     }
 
     public CopyOnWriteArrayList<Bullet> getBullets() {

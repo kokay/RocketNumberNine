@@ -19,7 +19,6 @@ public class InputController {
     private Paint pauseNavy = new Paint();
     private RectF up;
     private RectF down;
-    private RectF shoot;
     private RectF pausedBox;
     private Button pauseButton;
     private Button playButton;
@@ -48,12 +47,6 @@ public class InputController {
                 buttonPadding + buttonWidth,
                 up.top - buttonPadding);
 
-        shoot = new RectF(
-                vp.screenX - buttonPadding - buttonWidth,
-                vp.screenY - buttonPadding - buttonHeight,
-                vp.screenX - buttonPadding,
-                vp.screenY - buttonPadding);
-
         pausedBox = new RectF(
                 (Viewport.VIEW_CENTER_X - 8) * vp.pixelsPerX,
                 (Viewport.VIEW_CENTER_Y - 4.5f) * vp.pixelsPerX,
@@ -72,7 +65,6 @@ public class InputController {
     public void drawButtons(Canvas canvas, Viewport vp, boolean playing) {
         canvas.drawRoundRect(up, 15f, 15f, white);
         canvas.drawRoundRect(down, 15f, 15f, white);
-        canvas.drawRoundRect(shoot, 15f, 15f, white);
         canvas.drawBitmap(pauseButton.bitmap, null, pauseButton.hitBox, null);
         if(!playing) {
             canvas.drawColor(Color.argb(50, 0, 0, 0));
@@ -97,9 +89,6 @@ public class InputController {
                         if(up.contains(x, y)) {
                             rocket.setGoingDown(false);
                             rocket.setGoingUp(true);
-                        }
-                        if(shoot.contains(x, y)) {
-                            rocket.shoot();
                         }
                         if(pauseButton.hitBox.contains(x, y)) {
                             return false;

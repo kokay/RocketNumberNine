@@ -22,7 +22,7 @@ public class Bullet extends MovableObject {
         hitBox.set(vp.viewToScreen(this));
     }
 
-    public void set(float x, float y, int velocityX) {
+    public void set(float x, float y, float velocityX) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;

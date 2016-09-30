@@ -16,11 +16,13 @@ public class Gun {
     private int fireRate; // per 10 seconds
     private long lastShotTime;
     private Paint bulletPaint;
+    private float velocityX;
 
-    public Gun(int fireRate) {
+    public Gun(int fireRate, float velocityX) {
         maxBullets = 15;
         bulletsIdx = 0;
         this.fireRate = fireRate;
+        this.velocityX = velocityX;
         lastShotTime = -1;
         bullets = new CopyOnWriteArrayList<>();
         for(int i=0; i < maxBullets; ++i) {
@@ -38,7 +40,7 @@ public class Gun {
         return bulletPaint;
     }
 
-    public void pullTrigger(GameObject go, int velocityX) {
+    public void pullTrigger(GameObject go) {
         if(System.currentTimeMillis() - lastShotTime > 10000/ fireRate) {
             bullets.get(bulletsIdx).set(go.getX() + go.getWidth() * 0.75f, go.getY() + go.getHeight() * 0.5f, velocityX);
             bulletsIdx = (bulletsIdx + 1) % bullets.size();
