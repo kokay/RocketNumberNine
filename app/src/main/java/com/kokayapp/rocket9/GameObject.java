@@ -16,12 +16,6 @@ abstract public class GameObject {
     protected float y = 0;
     protected float width = 0;
     protected float height = 0;
-    protected float velocityX = 0;
-    protected float velocityY = 0;
-    protected float maxVelocity = 0;
-    protected float acceleration = 0;
-    protected float healthPoint = 0;
-    protected float maxHealthPoint = 0;
     protected Rect hitBox = new Rect();
 
     protected Bitmap prepareBitmap(Context context, int imageId, Viewport vp) {
@@ -42,15 +36,9 @@ abstract public class GameObject {
     public float getWidth() {
         return width;
     }
+
     public float getHeight() {
         return height;
     }
 
-    public float getMaxHealthPoint() {
-        return maxHealthPoint;
-    }
-
-    public float getHealthPoint() {
-        return healthPoint;
-    }
 }

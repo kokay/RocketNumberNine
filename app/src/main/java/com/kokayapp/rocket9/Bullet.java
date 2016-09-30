@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * Created by Koji on 9/28/2016.
  */
 
-public class Bullet extends GameObject {
+public class Bullet extends MovableObject {
     private static final float HIDE_PLACE_X = -1;
     private static final float HIDE_PLACE_Y = -1;
 

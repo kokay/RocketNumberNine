@@ -11,7 +11,7 @@ import java.util.Random;
  * Created by Koji on 9/29/2016.
  */
 
-public class Star extends GameObject{
+public class Star extends MovableObject {
     private Paint starPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Rect rect = new Rect();
     private Random gen = new Random();

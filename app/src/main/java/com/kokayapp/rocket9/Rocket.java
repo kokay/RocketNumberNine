@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by Koji on 9/28/2016.
  */
 
-public class Rocket extends GameObject {
+public class Rocket extends MovableObject {
 
     private boolean goingUp;
     private boolean goingDown;

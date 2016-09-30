@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by Koji on 9/28/2016.
  */
 
-public abstract class Enemy extends GameObject {
+public abstract class Enemy extends MovableObject {
     protected static Bitmap[] bitmaps = new Bitmap[3];
     protected static final int YELLOW = 0;
     protected static final int ORANGE = 1;
@@ -20,6 +20,7 @@ public abstract class Enemy extends GameObject {
 
     public abstract void update(long fps, Viewport vp, Rocket rocket);
     public abstract void draw(Canvas canvas, Viewport vp);
+
     public void drawHealth(Canvas canvas, Viewport vp) {
         if(visible) {
             canvas.drawRoundRect(vp.getHealthBarFrame(this), 5f, 5f, vp.healthBarFramePaint);
