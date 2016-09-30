@@ -21,7 +21,7 @@ public class Rocket extends MovableObject {
         width = 3f;
         x = 3;
         y = Viewport.VIEW_CENTER_Y - (height / 2.0f);
-        velocityX = 0;
+        velocityX = 10;
         velocityY = 0;
         maxVelocity = 8;
         acceleration = 10;

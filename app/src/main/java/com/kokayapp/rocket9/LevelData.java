@@ -23,6 +23,8 @@ public class LevelData {
     private ArrayList<Background> backgrounds = new ArrayList<>();
     private ArrayList<Background> foregrounds = new ArrayList<>();
     private ArrayList<Star> stars = new ArrayList<>();
+    private int distance = 10000;
+    private int score = 0;
 
     public LevelData(Context context, Viewport vp) {
         rocket = new Rocket(context, vp);
@@ -51,6 +53,7 @@ public class LevelData {
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
+        distance -= rocket.velocityX / fps;
     }
 
     public void draw(Canvas canvas, Viewport vp) {
@@ -65,5 +68,17 @@ public class LevelData {
 
     public Rocket getRocket() {
         return rocket;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int point) {
+        score += point;
     }
 }

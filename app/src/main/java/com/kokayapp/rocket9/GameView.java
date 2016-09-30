@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 public class GameView extends SurfaceView implements Runnable {
 
     private String TAG = getClass().getSimpleName();
-    private Paint debugPaint = new Paint();
 
     private volatile boolean playing;
     private volatile boolean running;
@@ -39,6 +39,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Rect topBar = new Rect();
     private Paint topBarPaint = new Paint();
+    private Paint textPaint = new Paint();
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -50,7 +51,11 @@ public class GameView extends SurfaceView implements Runnable {
         ld = new LevelData(context, vp);
         topBar.set(0, 0, vp.screenX, (int) (1.2 * vp.pixelsPerY));
         topBarPaint.setColor(Color.rgb(2, 12, 35));
-        debugPaint.setColor(Color.WHITE);
+        textPaint.setColor(Color.rgb(254, 245, 249));
+        textPaint.setTextSize(vp.pixelsPerX * 0.8f);
+        textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        textPaint.setTextAlign(Paint.Align.LEFT);
+        textPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
     }
 
     @Override
@@ -74,9 +79,17 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void drawTools() {
-        canvas.drawText("" + fps, 30, 50, debugPaint);
-        if(fps > 60) canvas.drawText("true", 30, 70, debugPaint);
+        canvas.drawText("" + fps, 30, 100, textPaint);
+        if(fps > 60) canvas.drawText("true", 30, 140, textPaint);
         canvas.drawRect(topBar, topBarPaint);
+        canvas.drawText("DISTANCE : " + ld.getDistance(),
+                (int)(vp.pixelsPerX * 10.5f),
+                (int)(vp.pixelsPerY * 0.8f),
+                textPaint);
+        canvas.drawText("SCORE : " + ld.getScore(),
+                (int)(vp.pixelsPerX * 18.5f),
+                (int)(vp.pixelsPerY * 0.8f),
+                textPaint);
         ld.getRocket().drawHealth(canvas, vp);
         ic.drawButtons(canvas, vp, playing);
     }
