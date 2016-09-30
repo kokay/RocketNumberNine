@@ -19,9 +19,9 @@ public class RedEnemy extends Enemy {
         velocityY = 0;
         maxVelocity = 2;
         acceleration = 1;
-
         maxHealthPoint = 5;
         healthPoint = 5;
+        point = 50;
 
         gun = new Gun(5, -10);
 
@@ -31,30 +31,30 @@ public class RedEnemy extends Enemy {
     }
 
     @Override
-    public void update(long fps, Viewport vp, Rocket rocket) {
-        if (active) {
-            followAttack(fps, rocket);
-        } else {
-            return;
-        }
-
-        if (visible) {
-            checkHit(vp, rocket);
-            gun.pullTrigger(this);
-            for (Bullet bullet : gun.getBullets()) {
-                bullet.update(fps, vp);
-                if (bullet.hitBox.intersect(rocket.hitBox)) {
-                    rocket.healthPoint -= 1;
-                    bullet.hide();
-                    return;
+    public int update(long fps, Viewport vp, Rocket rocket) {
+        switch (state) {
+            case ACTIVE:
+                followAttack(fps, rocket);
+                return 0;
+            case VISIBLE:
+                followAttack(fps, rocket);
+                gun.pullTrigger(this);
+                for (Bullet bullet : gun.getBullets()) {
+                    bullet.update(fps, vp);
+                    if (bullet.hitBox.intersect(rocket.hitBox)) {
+                        rocket.healthPoint -= 1;
+                        bullet.hide();
+                    }
                 }
-            }
+                return checkHit(vp, rocket);
+            default:
+                return 0;
         }
     }
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(visible) {
+        if(state == VISIBLE) {
             for(Bullet bullet : gun.getBullets())
                 canvas.drawRect(vp.viewToScreen(bullet), gun.getBulletPaint());
             canvas.drawBitmap(bitmaps[RED], null, vp.viewToScreen(this), null);

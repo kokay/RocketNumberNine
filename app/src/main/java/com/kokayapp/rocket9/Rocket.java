@@ -17,7 +17,7 @@ public class Rocket extends MovableObject {
     private Gun gun;
 
     public Rocket(Context context, Viewport vp) {
-        height = 2.2f;
+        height = 2.5f;
         width = 3f;
         x = 3;
         y = Viewport.VIEW_CENTER_Y - (height / 2.0f);

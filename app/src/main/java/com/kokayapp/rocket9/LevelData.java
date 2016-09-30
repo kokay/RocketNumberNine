@@ -49,7 +49,7 @@ public class LevelData {
 
     public void update(long fps, Viewport vp) {
         rocket.update(fps, vp);
-        for(Enemy e : enemies) e.update(fps, vp, rocket);
+        for(Enemy e : enemies) score += e.update(fps, vp, rocket);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);

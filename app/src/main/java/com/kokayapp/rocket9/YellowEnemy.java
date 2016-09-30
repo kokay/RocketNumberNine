@@ -17,6 +17,7 @@ public class YellowEnemy extends Enemy {
         velocityX = -2;
         maxHealthPoint = 3;
         healthPoint = 3;
+        point = 10;
 
         if(bitmaps[YELLOW] == null) {
             bitmaps[YELLOW] = prepareBitmap(context, vp, R.drawable.yellow_enemy);
@@ -24,20 +25,22 @@ public class YellowEnemy extends Enemy {
     }
 
     @Override
-    public void update(long fps, Viewport vp, Rocket rocket) {
-        if(active){
-            normalAttack(fps);
-        } else  {
-            return;
+    public int update(long fps, Viewport vp, Rocket rocket) {
+        switch (state) {
+            case ACTIVE:
+                normalAttack(fps);
+                return 0;
+            case VISIBLE:
+                normalAttack(fps);
+                return checkHit(vp, rocket);
+            default:
+                return 0;
         }
-
-        if(visible)
-            checkHit(vp, rocket);
     }
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(visible)
+        if(state == VISIBLE)
             canvas.drawBitmap(bitmaps[YELLOW], null, vp.viewToScreen(this), null);
     }
 }

@@ -17,9 +17,10 @@ public class OrangeEnemy extends Enemy {
         velocityY = 0;
         maxVelocity = 2;
         acceleration = 2;
-
         maxHealthPoint = 4;
         healthPoint = 4;
+        point = 30;
+
 
         if(bitmaps[ORANGE] == null) {
             bitmaps[ORANGE] = prepareBitmap(context, vp, R.drawable.orange_enemy);
@@ -27,21 +28,22 @@ public class OrangeEnemy extends Enemy {
     }
 
     @Override
-    public void update(long fps, Viewport vp, Rocket rocket) {
-        if(active){
-            followAttack(fps, rocket);
-        } else  {
-            return;
-        }
-
-        if(visible) {
-            checkHit(vp, rocket);
+    public int update(long fps, Viewport vp, Rocket rocket) {
+        switch (state) {
+            case ACTIVE:
+                followAttack(fps, rocket);
+                return 0;
+            case VISIBLE:
+                followAttack(fps, rocket);
+                return checkHit(vp, rocket);
+            default:
+                return 0;
         }
     }
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(visible)
+        if(state == VISIBLE)
             canvas.drawBitmap(bitmaps[ORANGE], null, vp.viewToScreen(this), null);
     }
 }
