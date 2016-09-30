@@ -19,8 +19,8 @@ public class Viewport {
 
     public final int screenX;
     public final int screenY;
-    private final int screenCenterX;
-    private final int screenCenterY;
+    public final int screenCenterX;
+    public final int screenCenterY;
 
     public final int pixelsPerX;
     public final int pixelsPerY;

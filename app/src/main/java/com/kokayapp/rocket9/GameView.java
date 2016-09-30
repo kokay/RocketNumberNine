@@ -78,7 +78,7 @@ public class GameView extends SurfaceView implements Runnable {
         if(fps > 60) canvas.drawText("true", 30, 70, debugPaint);
         canvas.drawRect(topBar, topBarPaint);
         ld.getRocket().drawHealth(canvas, vp);
-        ic.drawButtons(canvas, playing);
+        ic.drawButtons(canvas, vp, playing);
     }
 
     public void resume() {

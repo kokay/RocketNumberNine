@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -14,17 +15,24 @@ import java.util.ArrayList;
  */
 
 public class InputController {
-    private Paint buttonWhite = new Paint();
+    private Paint white = new Paint();
+    private Paint pauseNavy = new Paint();
     private RectF up;
     private RectF down;
     private RectF shoot;
+    private RectF pausedBox;
     private Button pauseButton;
     private Button playButton;
     private Button pausedSign;
 
 
     public InputController(Context context, Viewport vp) {
-        buttonWhite.setColor(Color.rgb(254, 245, 249));
+        white.setColor(Color.rgb(254, 245, 249));
+        white.setTextSize(vp.pixelsPerX * 2);
+        white.setTypeface(Typeface.DEFAULT_BOLD);
+        white.setTextAlign(Paint.Align.CENTER);
+        white.setFlags(Paint.ANTI_ALIAS_FLAG);
+        pauseNavy.setColor(Color.rgb(2, 12, 35));
         int buttonWidth = vp.screenX / 8;
         int buttonHeight = vp.screenY / 7;
         int buttonPadding = vp.screenX / 80;
@@ -46,6 +54,13 @@ public class InputController {
                 vp.screenX - buttonPadding,
                 vp.screenY - buttonPadding);
 
+        pausedBox = new RectF(
+                (Viewport.VIEW_CENTER_X - 8) * vp.pixelsPerX,
+                (Viewport.VIEW_CENTER_Y - 4.5f) * vp.pixelsPerX,
+                (Viewport.VIEW_CENTER_X + 8) * vp.pixelsPerX,
+                (Viewport.VIEW_CENTER_Y + 4.5f) * vp.pixelsPerX
+        );
+
         pauseButton = new Button(context, vp, R.drawable.pause_button,
                 Viewport.VIEW_WIDTH - 3.2f, 0.2f, 3f, 3f);
         pausedSign = new Button(context, vp, R.drawable.paused_sign,
@@ -54,14 +69,15 @@ public class InputController {
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
     }
 
-    public void drawButtons(Canvas canvas, boolean playing) {
-        canvas.drawRoundRect(up, 15f, 15f, buttonWhite);
-        canvas.drawRoundRect(down, 15f, 15f, buttonWhite);
-        canvas.drawRoundRect(shoot, 15f, 15f, buttonWhite);
+    public void drawButtons(Canvas canvas, Viewport vp, boolean playing) {
+        canvas.drawRoundRect(up, 15f, 15f, white);
+        canvas.drawRoundRect(down, 15f, 15f, white);
+        canvas.drawRoundRect(shoot, 15f, 15f, white);
         canvas.drawBitmap(pauseButton.bitmap, null, pauseButton.hitBox, null);
         if(!playing) {
-            canvas.drawColor(Color.argb(150, 0, 0, 0));
-            canvas.drawBitmap(pausedSign.bitmap, null, pausedSign.hitBox, null);
+            canvas.drawColor(Color.argb(50, 0, 0, 0));
+            canvas.drawRoundRect(pausedBox, 15f, 15f, pauseNavy);
+            canvas.drawText("PAUSED", vp.screenCenterX, (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, white);
             canvas.drawBitmap(playButton.bitmap, null, playButton.hitBox, null);
         }
     }
