@@ -26,7 +26,7 @@ public class RedEnemy extends Enemy {
         gun = new Gun(5);
 
         if(bitmaps[RED] == null) {
-            bitmaps[RED] = prepareBitmap(context, R.drawable.red_enemy, vp);
+            bitmaps[RED] = prepareBitmap(context, vp, R.drawable.red_enemy);
         }
     }
 

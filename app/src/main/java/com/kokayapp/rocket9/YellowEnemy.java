@@ -19,7 +19,7 @@ public class YellowEnemy extends Enemy {
         healthPoint = 3;
 
         if(bitmaps[YELLOW] == null) {
-            bitmaps[YELLOW] = prepareBitmap(context, R.drawable.yellow_enemy, vp);
+            bitmaps[YELLOW] = prepareBitmap(context, vp, R.drawable.yellow_enemy);
         }
     }
 

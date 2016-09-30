@@ -18,7 +18,7 @@ abstract public class GameObject {
     protected float height = 0;
     protected Rect hitBox = new Rect();
 
-    protected Bitmap prepareBitmap(Context context, int imageId, Viewport vp) {
+    protected Bitmap prepareBitmap(Context context, Viewport vp, int imageId) {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), imageId);
         bitmap = Bitmap.createScaledBitmap(bitmap,
                 (int) (width * vp.pixelsPerX), (int) (height * vp.pixelsPerY), false);

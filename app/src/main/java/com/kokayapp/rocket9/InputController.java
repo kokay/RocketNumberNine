@@ -1,5 +1,6 @@
 package com.kokayapp.rocket9;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,23 +15,25 @@ import java.util.ArrayList;
 
 public class InputController {
     private Paint buttonWhite = new Paint();
-    private ArrayList<RectF> buttons;
     private RectF up;
     private RectF down;
     private RectF shoot;
+    private Button pauseButton;
+    private Button playButton;
+    private Button pausedSign;
 
 
-    public InputController(int screenX, int screenY) {
+    public InputController(Context context, Viewport vp) {
         buttonWhite.setColor(Color.rgb(254, 245, 249));
-        int buttonWidth = screenX / 8;
-        int buttonHeight = screenY / 7;
-        int buttonPadding = screenX / 80;
+        int buttonWidth = vp.screenX / 8;
+        int buttonHeight = vp.screenY / 7;
+        int buttonPadding = vp.screenX / 80;
 
         up = new RectF(
                 buttonPadding,
-                screenY - buttonHeight - buttonPadding,
+                vp.screenY - buttonHeight - buttonPadding,
                 buttonPadding + buttonWidth,
-                screenY - buttonPadding);
+                vp.screenY - buttonPadding);
         down = new RectF(
                 buttonPadding,
                 up.top - buttonPadding - buttonHeight,
@@ -38,27 +41,32 @@ public class InputController {
                 up.top - buttonPadding);
 
         shoot = new RectF(
-                screenX - buttonPadding - buttonWidth,
-                screenY - buttonPadding - buttonHeight,
-                screenX - buttonPadding,
-                screenY - buttonPadding);
+                vp.screenX - buttonPadding - buttonWidth,
+                vp.screenY - buttonPadding - buttonHeight,
+                vp.screenX - buttonPadding,
+                vp.screenY - buttonPadding);
 
-        buttons = new ArrayList<>();
-        buttons.add(up);
-        buttons.add(down);
-        buttons.add(shoot);
+        pauseButton = new Button(context, vp, R.drawable.pause_button,
+                Viewport.VIEW_WIDTH - 2.7f, 0.2f, 2.5f, 2.5f);
+        pausedSign = new Button(context, vp, R.drawable.paused_sign,
+                Viewport.VIEW_CENTER_X - 8, Viewport.VIEW_CENTER_Y - 4.5f, 16f, 9f);
+        playButton = new Button(context, vp, R.drawable.play_button,
+                Viewport.VIEW_CENTER_X - 1.25f, Viewport.VIEW_CENTER_Y - 1.25f, 2.5f, 2.5f);
     }
 
-    public void drawButtons(Canvas canvas) {
-        for(RectF rect : buttons)
-            canvas.drawRoundRect(rect, 15f, 15f, buttonWhite);
+    public void drawButtons(Canvas canvas, boolean playing) {
+        canvas.drawRoundRect(up, 15f, 15f, buttonWhite);
+        canvas.drawRoundRect(down, 15f, 15f, buttonWhite);
+        canvas.drawRoundRect(shoot, 15f, 15f, buttonWhite);
+        canvas.drawBitmap(pauseButton.bitmap, null, pauseButton.hitBox, null);
+        if(!playing) {
+            canvas.drawColor(Color.argb(150, 0, 0, 0));
+            canvas.drawBitmap(pausedSign.bitmap, null, pausedSign.hitBox, null);
+            canvas.drawBitmap(playButton.bitmap, null, playButton.hitBox, null);
+        }
     }
 
-    public ArrayList<RectF> getButtons() {
-        return buttons;
-    }
-
-    public void handleInput(MotionEvent motionEvent, boolean playing, Rocket rocket) {
+    public boolean handleInput(MotionEvent motionEvent, boolean playing, Rocket rocket) {
         for(int i=0;i<motionEvent.getPointerCount();++i) {
             int y = (int) motionEvent.getY(i);
             int x = (int) motionEvent.getX(i);
@@ -77,6 +85,9 @@ public class InputController {
                         if(shoot.contains(x, y)) {
                             rocket.shoot();
                         }
+                        if(pauseButton.hitBox.contains(x, y)) {
+                            return false;
+                        }
                         break;
                     case MotionEvent.ACTION_UP:
                         rocket.setGoingDown(false);
@@ -85,9 +96,15 @@ public class InputController {
                 }
             } else {
                 switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-
+                    case MotionEvent.ACTION_DOWN:
+                        if(playButton.hitBox.contains(x, y)) {
+                            return true;
+                        }
+                        break;
                 }
+                return false;
             }
         }
+        return true;
     }
 }

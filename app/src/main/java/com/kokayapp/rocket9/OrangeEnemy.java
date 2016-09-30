@@ -22,7 +22,7 @@ public class OrangeEnemy extends Enemy {
         healthPoint = 4;
 
         if(bitmaps[ORANGE] == null) {
-            bitmaps[ORANGE] = prepareBitmap(context, R.drawable.orange_enemy, vp);
+            bitmaps[ORANGE] = prepareBitmap(context, vp, R.drawable.orange_enemy);
         }
     }
 

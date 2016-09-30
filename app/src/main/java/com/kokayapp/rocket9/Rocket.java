@@ -30,7 +30,7 @@ public class Rocket extends MovableObject {
 
         goingUp = false;
         goingUp = false;
-        bitmap = prepareBitmap(context, R.drawable.rocket, vp);
+        bitmap = prepareBitmap(context, vp, R.drawable.rocket);
         gun = new Gun(30);
     }
 

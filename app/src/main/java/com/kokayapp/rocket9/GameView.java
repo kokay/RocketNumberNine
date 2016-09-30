@@ -23,6 +23,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Paint debugPaint = new Paint();
 
     private volatile boolean playing;
+    private volatile boolean running;
     private Thread gameThread;
 
     private Canvas canvas;
@@ -45,7 +46,7 @@ public class GameView extends SurfaceView implements Runnable {
         holder = getHolder();
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
-        ic = new InputController(screenX, screenY);
+        ic = new InputController(context, vp);
         ld = new LevelData(context, vp);
         topBar.set(0, 0, vp.screenX, (int) (1.2 * vp.pixelsPerY));
         topBarPaint.setColor(Color.rgb(2, 12, 35));
@@ -54,9 +55,9 @@ public class GameView extends SurfaceView implements Runnable {
 
     @Override
     public void run() {
-        while (playing) {
+        while (running) {
             startFrameTime = System.currentTimeMillis();
-            ld.update(fps, vp);
+            if(playing) ld.update(fps, vp);
 
             if (holder.getSurface().isValid()) {
                 canvas = holder.lockCanvas();
@@ -70,7 +71,6 @@ public class GameView extends SurfaceView implements Runnable {
                 fps = 1000 / timeOfFrame;
             }
         }
-        drawTools();
     }
 
     private void drawTools() {
@@ -78,16 +78,18 @@ public class GameView extends SurfaceView implements Runnable {
         if(fps > 60) canvas.drawText("true", 30, 70, debugPaint);
         canvas.drawRect(topBar, topBarPaint);
         ld.getRocket().drawHealth(canvas, vp);
-        ic.drawButtons(canvas);
+        ic.drawButtons(canvas, playing);
     }
 
     public void resume() {
+        running = true;
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     public void pause() {
+        running = false;
         playing = false;
         try {
             gameThread.join();
@@ -98,7 +100,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ic.handleInput(event, playing, ld.getRocket());
+        playing = ic.handleInput(event, playing, ld.getRocket());
         return true;
     }
 }
