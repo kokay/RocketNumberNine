@@ -19,16 +19,26 @@ public class LevelData {
     private Paint background = new Paint();
     private ArrayList<Background> backgrounds = new ArrayList<>();
     private ArrayList<Background> foregrounds = new ArrayList<>();
+    private ArrayList<Star> stars = new ArrayList<>();
 
     public LevelData(Context context, Viewport vp) {
         rocket = new Rocket(context, vp);
         enemies.add(new YellowEnemy(context, vp, 50, 10));
+        enemies.add(new YellowEnemy(context, vp, 50, 10));
         enemies.add(new OrangeEnemy(context, vp, 60, 15));
+        enemies.add(new YellowEnemy(context, vp, 80, 10));
+        enemies.add(new YellowEnemy(context, vp, 90, 10));
+        enemies.add(new OrangeEnemy(context, vp, 100, 15));
+        enemies.add(new YellowEnemy(context, vp, 100, 10));
+        enemies.add(new YellowEnemy(context, vp, 110, 10));
+        enemies.add(new OrangeEnemy(context, vp, 130, 15));
         enemies.add(new RedEnemy(context, vp, 50, 5));
-        background.setShader(new LinearGradient(0, 0, 0, vp.screenY,
-                Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
+        //background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
+        background.setColor(Color.rgb(39, 38, 67));
         backgrounds.add(new Background(context, vp, R.drawable.middleground, 0, 32, 30));
         foregrounds.add(new Background(context, vp, R.drawable.foreground, 0, 32, 300));
+
+        //for(int i=0; i < 200;++i) stars.add(new Star(vp));
     }
 
     public void update(long fps, Viewport vp) {
@@ -44,6 +54,7 @@ public class LevelData {
         for(Enemy enemy : enemies) enemy.draw(canvas, vp);
         rocket.draw(canvas, vp);
         for(Background fg : foregrounds) fg.draw(canvas, vp);
+        //for(Star s : stars) s.draw(canvas);
 
         for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
     }
