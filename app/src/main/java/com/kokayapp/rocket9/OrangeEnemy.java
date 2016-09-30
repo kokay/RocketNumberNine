@@ -9,8 +9,8 @@ import android.graphics.Canvas;
 
 public class OrangeEnemy extends Enemy {
     public OrangeEnemy(Context context, Viewport vp, float x, float y) {
-        height = 2f;
-        width = 3f;
+        height = 2.2f;
+        width = 2.5f;
         this.x = x;
         this.y = y;
         velocityX = -4;

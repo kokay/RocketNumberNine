@@ -1,5 +1,8 @@
 package com.kokayapp.rocket9;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 
@@ -10,12 +13,15 @@ import java.util.ArrayList;
  */
 
 public class InputController {
+    private Paint buttonWhite = new Paint();
     private ArrayList<RectF> buttons;
     private RectF up;
     private RectF down;
     private RectF shoot;
 
+
     public InputController(int screenX, int screenY) {
+        buttonWhite.setColor(Color.rgb(254, 245, 249));
         int buttonWidth = screenX / 8;
         int buttonHeight = screenY / 7;
         int buttonPadding = screenX / 80;
@@ -41,6 +47,11 @@ public class InputController {
         buttons.add(up);
         buttons.add(down);
         buttons.add(shoot);
+    }
+
+    public void drawButtons(Canvas canvas) {
+        for(RectF rect : buttons)
+            canvas.drawRoundRect(rect, 15f, 15f, buttonWhite);
     }
 
     public ArrayList<RectF> getButtons() {

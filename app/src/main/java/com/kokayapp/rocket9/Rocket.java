@@ -17,8 +17,8 @@ public class Rocket extends GameObject {
     private Gun gun;
 
     public Rocket(Context context, Viewport vp) {
-        height = 3;
-        width = 5;
+        height = 2.2f;
+        width = 3f;
         x = 3;
         y = Viewport.VIEW_CENTER_Y - (height / 2.0f);
         velocityX = 0;

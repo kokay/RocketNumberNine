@@ -51,4 +51,12 @@ public class Background {
     public int getBitmapHeight() {
         return bitmap.getHeight();
     }
+
+    public float getStartY() {
+        return startY;
+    }
+
+    public float getEndY() {
+        return endY;
+    }
 }

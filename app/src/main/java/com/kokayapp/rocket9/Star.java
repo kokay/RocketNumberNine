@@ -12,15 +12,15 @@ import java.util.Random;
  */
 
 public class Star extends GameObject{
-    private Paint starPaint = new Paint();
+    private Paint starPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Rect rect = new Rect();
 
     public Star(Viewport vp) {
         Random gen = new Random();
         x = gen.nextInt(Viewport.VIEW_WIDTH) + gen.nextFloat();
         y = gen.nextInt((int)(Viewport.VIEW_HEIGHT * 0.7)) + gen.nextFloat();
-        width = .05f;
-        height = .05f;
+        width = .075f;
+        height = .075f;
         rect.set(vp.viewToScreen(this));
         starPaint.setColor(Color.argb(gen.nextInt(130), 138, 135, 107));
     }

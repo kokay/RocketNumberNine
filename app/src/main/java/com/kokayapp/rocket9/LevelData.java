@@ -35,10 +35,12 @@ public class LevelData {
         enemies.add(new RedEnemy(context, vp, 50, 5));
         //background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
         background.setColor(Color.rgb(39, 38, 67));
-        backgrounds.add(new Background(context, vp, R.drawable.middleground, 0, 32, 30));
-        foregrounds.add(new Background(context, vp, R.drawable.foreground, 0, 32, 300));
+        backgrounds.add(new Background(context,
+                vp, R.drawable.middleground, Viewport.VIEW_HEIGHT - 5, Viewport.VIEW_HEIGHT, 30));
+        foregrounds.add(new Background(context,
+                vp, R.drawable.foreground, Viewport.VIEW_HEIGHT - 3, Viewport.VIEW_HEIGHT, 300));
 
-        //for(int i=0; i < 200;++i) stars.add(new Star(vp));
+        for(int i=0; i < 200;++i) stars.add(new Star(vp));
     }
 
     public void update(long fps, Viewport vp) {
@@ -54,7 +56,7 @@ public class LevelData {
         for(Enemy enemy : enemies) enemy.draw(canvas, vp);
         rocket.draw(canvas, vp);
         for(Background fg : foregrounds) fg.draw(canvas, vp);
-        //for(Star s : stars) s.draw(canvas);
+        for(Star s : stars) s.draw(canvas);
 
         for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
     }

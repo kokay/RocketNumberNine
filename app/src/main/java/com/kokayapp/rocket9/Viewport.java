@@ -94,7 +94,7 @@ public class Viewport {
     }
 
     public Rect getToRect1(Background bg) {
-        rect2.set(bg.getXClip(), 0, bg.getBitmapWidth(), screenY);
+        rect2.set(bg.getXClip(), (int) (bg.getStartY() * pixelsPerY), bg.getBitmapWidth(), (int) (bg.getEndY()* pixelsPerY));
         return rect2;
     }
 
@@ -104,7 +104,7 @@ public class Viewport {
     }
 
     public Rect getToRect2(Background bg) {
-        rect2.set(0, 0, bg.getXClip(), screenY);
+        rect2.set(0, (int)(bg.getStartY() * pixelsPerY), bg.getXClip(), (int)(bg.getEndY() * pixelsPerY));
         return rect2;
     }
 }
