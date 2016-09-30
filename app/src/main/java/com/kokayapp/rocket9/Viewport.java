@@ -44,9 +44,9 @@ public class Viewport {
         healthBarFrame.set(5, 5, 10 * pixelsPerY, (int) 1.5 * pixelsPerY - 5);
         healthBar.set(8, 8, 10 * pixelsPerY - 8, (int) 1.5 * pixelsPerY - 8);
 
-        healthBarFramePaint.setColor(Color.WHITE);
-        healthBarPaint.setColor(Color.GREEN);
-        healthBarEnemyPaint.setColor(Color.RED);
+        healthBarFramePaint.setColor(Color.rgb(254, 245, 249));
+        healthBarPaint.setColor(Color.rgb(71, 183, 73));
+        healthBarEnemyPaint.setColor(Color.rgb(217, 57, 51));
     }
 
     public Rect viewToScreen(GameObject go) {
