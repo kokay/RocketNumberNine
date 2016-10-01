@@ -137,7 +137,7 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 if(exitButton.hitBox.contains(lastX, lastY) &&
                    exitButton.hitBox.contains(x, y)) {
-                    return GameView.OPENING;
+                    return GameView.GO_EXIT;
                 }
                 break;
         }

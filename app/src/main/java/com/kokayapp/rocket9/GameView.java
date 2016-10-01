@@ -1,6 +1,7 @@
 package com.kokayapp.rocket9;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
@@ -19,7 +20,7 @@ public class GameView extends SurfaceView implements Runnable {
     private long maxFps = 0, minFps = 10000, avgFps = 60;
 
     private volatile boolean running;
-    public static final int OPENING = 0, PLYAINTG = 1, PAUSED = 2, CLEAR = 3, GAMEOVER = 4;
+    public static final int OPENING = 0, PLYAINTG = 1, PAUSED = 2, CLEAR = 3, GAMEOVER = 4, GO_EXIT = 5;
     private volatile int state = PLYAINTG;
     private Thread gameThread;
 
@@ -30,6 +31,7 @@ public class GameView extends SurfaceView implements Runnable {
     private long timeOfFrame;
     private long fps;
 
+    private Context context;
     private Viewport vp;
     private InputController ic;
     private LevelData ld;
@@ -38,6 +40,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
+        this.context = context;
         gameThread = null;
         holder = getHolder();
         fps = 2000000000;
@@ -51,12 +54,25 @@ public class GameView extends SurfaceView implements Runnable {
     public void run() {
         while (running) {
             startFrameTime = System.currentTimeMillis();
-            if(state == PLYAINTG)
-                state = ld.update(fps, vp);
+            update();
             draw();
 
             timeOfFrame = System.currentTimeMillis() - startFrameTime;
             if (timeOfFrame >= 1) fps = 1000 / timeOfFrame;
+        }
+    }
+    private void update() {
+        switch (state) {
+            case PLYAINTG :
+                state = ld.update(fps, vp);
+                break;
+            case GO_EXIT :
+                Intent intent = new Intent(context, TitleActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+                break;
+            default:
+                break;
         }
     }
 
@@ -136,7 +152,6 @@ public class GameView extends SurfaceView implements Runnable {
 
     public void pause() {
         running = false;
-        state = PAUSED;
         try {
             gameThread.join();
         } catch (InterruptedException e) {
