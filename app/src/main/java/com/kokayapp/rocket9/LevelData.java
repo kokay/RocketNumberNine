@@ -1,6 +1,7 @@
 package com.kokayapp.rocket9;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -25,8 +26,17 @@ public class LevelData {
     private ArrayList<Star> stars = new ArrayList<>();
     private int distance = 3000;
     private int score = 0;
+    private int highScore = 0;
+
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+
 
     public LevelData(Context context, Viewport vp) {
+        prefs = context.getSharedPreferences("BestScoreFile", context.MODE_PRIVATE);
+        highScore = prefs.getInt("BestScore", 0);
+        editor = prefs.edit();
+
         rocket = new Rocket(context, vp);
         enemies.add(new YellowEnemy(context, vp, 50, 10));
         enemies.add(new YellowEnemy(context, vp, 50, 10));
@@ -55,7 +65,13 @@ public class LevelData {
         for(Star s : stars) s.update(fps);
         distance -= rocket.velocityX / fps;
         if(rocket.getHealthPoint() <= 0) return GameView.GAMEOVER;
-        if(distance <= 0) return GameView.CLEAR;
+        if(distance <= 0) {
+            if(score > highScore) {
+                editor.putInt("BestScore", score);
+                editor.commit();
+            }
+            return GameView.CLEAR;
+        }
         return GameView.PLYAINTG;
     }
 
@@ -81,7 +97,7 @@ public class LevelData {
         return score;
     }
 
-    public void addScore(int point) {
-        score += point;
+    public int getHighScore() {
+        return highScore;
     }
 }

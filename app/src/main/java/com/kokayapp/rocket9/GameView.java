@@ -96,7 +96,7 @@ public class GameView extends SurfaceView implements Runnable {
                 (int)(vp.pixelsPerX * 17.5f),
                 (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);
-        canvas.drawText("BEST SCORE : " + String.format("%1$05d", ld.getScore()),
+        canvas.drawText("HIGH SCORE : " + String.format("%1$05d", ld.getHighScore()),
                 (int)(vp.pixelsPerX * 24f),
                 (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);

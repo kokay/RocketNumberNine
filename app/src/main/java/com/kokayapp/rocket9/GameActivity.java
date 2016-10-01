@@ -1,6 +1,7 @@
 package com.kokayapp.rocket9;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
