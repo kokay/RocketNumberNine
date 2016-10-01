@@ -21,12 +21,12 @@ public class DrawingTool {
 
     public DrawingTool(Viewport vp) {
         topBar.set(0, 0, vp.screenX, (int) (1.2 * vp.pixelsPerY));
+
         infoBox .set(
                 (Viewport.VIEW_CENTER_X - 8) * vp.pixelsPerX,
                 (Viewport.VIEW_CENTER_Y - 4.5f) * vp.pixelsPerX,
                 (Viewport.VIEW_CENTER_X + 8) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_Y + 4.5f) * vp.pixelsPerX
-        );
+                (Viewport.VIEW_CENTER_Y + 4.5f) * vp.pixelsPerX );
 
         darkNavy.setColor(Color.rgb(2, 12, 35));
 

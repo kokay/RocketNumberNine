@@ -88,17 +88,17 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void drawTopBar() {
         canvas.drawRect(dt.topBar, dt.darkNavy);
-        canvas.drawText("DISTANCE : " + ld.getDistance(),
-                (int)(vp.pixelsPerX * 10.5f),
-                (int)(vp.pixelsPerY * 0.8f),
+        canvas.drawText("DISTANCE : " + String.format("%1$05d", ld.getDistance()) + " M",
+                (int)(vp.pixelsPerX * 8.5f),
+                (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);
-        canvas.drawText("SCORE : " + ld.getScore(),
-                (int)(vp.pixelsPerX * 18.5f),
-                (int)(vp.pixelsPerY * 0.8f),
+        canvas.drawText("SCORE : " + String.format("%1$05d", ld.getScore()),
+                (int)(vp.pixelsPerX * 17.5f),
+                (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);
-        canvas.drawText("HIGHEST SCORE : " + ld.getScore(),
-                (int)(vp.pixelsPerX * 22.5f),
-                (int)(vp.pixelsPerY * 0.8f),
+        canvas.drawText("BEST SCORE : " + String.format("%1$05d", ld.getScore()),
+                (int)(vp.pixelsPerX * 24f),
+                (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);
         ld.getRocket().drawHealth(canvas, vp);
     }

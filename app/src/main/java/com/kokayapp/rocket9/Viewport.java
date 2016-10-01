@@ -26,13 +26,15 @@ public class Viewport {
     public final int pixelsPerY;
     private Rect rect1 = new Rect();
     private Rect rect2 = new Rect();
+    private RectF rectF = new RectF();
     private RectF healthBarFrame = new RectF();
     private RectF healthBar = new RectF();
-    private RectF rectF = new RectF();
     public final Paint healthBarFramePaint = new Paint();
     public final Paint healthBarPaint = new Paint();
     public final Paint healthBarEnemyPaint = new Paint();
 
+    //public final Paint healthBarEmergencyPaint = new Paint();
+    //healthBarEmergencyPaint.setColor(Color.rgb(255, 200, 80));
     public Viewport(int screenX, int screenY) {
         this.screenX = screenX;
         this.screenY = screenY;
@@ -41,8 +43,13 @@ public class Viewport {
         pixelsPerX = screenX / VIEW_WIDTH;
         pixelsPerY = screenY / VIEW_HEIGHT;
 
-        healthBarFrame.set(5, 5, 10 * pixelsPerY, (int) 1.5 * pixelsPerY - 5);
-        healthBar.set(8, 8, 10 * pixelsPerY - 8, (int) 1.5 * pixelsPerY - 8);
+        healthBarFrame.set(
+                (int)(0.2f * pixelsPerX), (int)(0.2f * pixelsPerY),
+                (int)((0.2f + 8) * pixelsPerX), (int)(1.0f * pixelsPerY));
+
+        healthBar.set(
+                (int)(0.3f * pixelsPerX), (int)(0.3f * pixelsPerY),
+                (int)((0.3f + 8 - 0.2f) * pixelsPerX), (int)(0.9f * pixelsPerY ));
 
         healthBarFramePaint.setColor(Color.rgb(254, 245, 249));
         healthBarPaint.setColor(Color.rgb(71, 183, 73));
@@ -62,11 +69,8 @@ public class Viewport {
     }
 
     public RectF getHealthBar(Rocket rocket) {
-        healthBar.set(
-                8,
-                8,
-                (10 * pixelsPerY - 3) * (rocket.getHealthPoint() / rocket.getMaxHealthPoint()),
-                (int) 1.5 * pixelsPerY - 8);
+        healthBar.right = (int)((0.3f + 8 - 0.2f) * pixelsPerX) *
+                rocket.getHealthPoint() / rocket.getMaxHealthPoint();
         return healthBar;
     }
 

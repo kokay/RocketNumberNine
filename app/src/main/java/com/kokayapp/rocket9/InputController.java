@@ -20,7 +20,6 @@ public class InputController {
     private RectF down;
     private Button pauseButton;
     private Button playButton;
-    private Button pausedSign;
 
 
     public InputController(Context context, Viewport vp) {
@@ -41,9 +40,7 @@ public class InputController {
 
 
         pauseButton = new Button(context, vp, R.drawable.pause_button,
-                Viewport.VIEW_WIDTH - 3.2f, 0.2f, 3f, 3f);
-        pausedSign = new Button(context, vp, R.drawable.paused_sign,
-                Viewport.VIEW_CENTER_X - 8, Viewport.VIEW_CENTER_Y - 4.5f, 16f, 9f);
+                Viewport.VIEW_WIDTH - 3.2f, 1.3f, 3f, 3f);
         playButton = new Button(context, vp, R.drawable.play_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
     }
