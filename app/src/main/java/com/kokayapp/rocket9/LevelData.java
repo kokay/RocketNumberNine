@@ -23,7 +23,7 @@ public class LevelData {
     private ArrayList<Background> backgrounds = new ArrayList<>();
     private ArrayList<Background> foregrounds = new ArrayList<>();
     private ArrayList<Star> stars = new ArrayList<>();
-    private int distance = 10000;
+    private int distance = 3000;
     private int score = 0;
 
     public LevelData(Context context, Viewport vp) {
@@ -47,13 +47,16 @@ public class LevelData {
         for(int i=0; i < 200;++i) stars.add(new Star(vp));
     }
 
-    public void update(long fps, Viewport vp) {
+    public int update(long fps, Viewport vp) {
         rocket.update(fps, vp);
         for(Enemy e : enemies) score += e.update(fps, vp, rocket);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
         distance -= rocket.velocityX / fps;
+        if(rocket.getHealthPoint() <= 0) return GameView.GAMEOVER;
+        if(distance <= 0) return GameView.CLEAR;
+        return GameView.PLYAINTG;
     }
 
     public void draw(Canvas canvas, Viewport vp) {

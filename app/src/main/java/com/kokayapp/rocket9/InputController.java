@@ -16,22 +16,14 @@ import java.util.ArrayList;
 
 public class InputController {
     private Paint white = new Paint();
-    private Paint pauseNavy = new Paint();
     private RectF up;
     private RectF down;
-    private RectF pausedBox;
     private Button pauseButton;
     private Button playButton;
     private Button pausedSign;
 
 
     public InputController(Context context, Viewport vp) {
-        white.setColor(Color.rgb(254, 245, 249));
-        white.setTextSize(vp.pixelsPerX * 2);
-        white.setTypeface(Typeface.DEFAULT_BOLD);
-        white.setTextAlign(Paint.Align.CENTER);
-        white.setFlags(Paint.ANTI_ALIAS_FLAG);
-        pauseNavy.setColor(Color.rgb(2, 12, 35));
         int buttonWidth = vp.screenX / 8;
         int buttonHeight = vp.screenY / 7;
         int buttonPadding = vp.screenX / 80;
@@ -47,12 +39,6 @@ public class InputController {
                 buttonPadding + buttonWidth,
                 up.top - buttonPadding);
 
-        pausedBox = new RectF(
-                (Viewport.VIEW_CENTER_X - 8) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_Y - 4.5f) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_X + 8) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_Y + 4.5f) * vp.pixelsPerX
-        );
 
         pauseButton = new Button(context, vp, R.drawable.pause_button,
                 Viewport.VIEW_WIDTH - 3.2f, 0.2f, 3f, 3f);
@@ -62,24 +48,24 @@ public class InputController {
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
     }
 
-    public void drawButtons(Canvas canvas, Viewport vp, boolean playing) {
+    public void drawButtons(Canvas canvas, Viewport vp, int state) {
         canvas.drawRoundRect(up, 15f, 15f, white);
         canvas.drawRoundRect(down, 15f, 15f, white);
         canvas.drawBitmap(pauseButton.bitmap, null, pauseButton.hitBox, null);
-        if(!playing) {
-            canvas.drawColor(Color.argb(50, 0, 0, 0));
-            canvas.drawRoundRect(pausedBox, 15f, 15f, pauseNavy);
-            canvas.drawText("PAUSED", vp.screenCenterX, (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, white);
+        if(state == GameView.PAUSED) {
             canvas.drawBitmap(playButton.bitmap, null, playButton.hitBox, null);
+        } else if (state == GameView.GAMEOVER){
+        } else if (state == GameView.CLEAR){
+
         }
     }
 
-    public boolean handleInput(MotionEvent motionEvent, boolean playing, Rocket rocket) {
+    public int handleInput(MotionEvent motionEvent, int state, Rocket rocket) {
         for(int i=0;i<motionEvent.getPointerCount();++i) {
             int y = (int) motionEvent.getY(i);
             int x = (int) motionEvent.getX(i);
 
-            if(playing) {
+            if(state == GameView.PLYAINTG) {
                 switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         if(down.contains(x, y)) {
@@ -91,7 +77,7 @@ public class InputController {
                             rocket.setGoingUp(true);
                         }
                         if(pauseButton.hitBox.contains(x, y)) {
-                            return false;
+                            return GameView.PAUSED;
                         }
                         break;
                     case MotionEvent.ACTION_UP:
@@ -99,17 +85,36 @@ public class InputController {
                         rocket.setGoingUp(false);
                         break;
                 }
-            } else {
+            } else if (state == GameView.PAUSED){
                 switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         if(playButton.hitBox.contains(x, y)) {
-                            return true;
+                            return GameView.PLYAINTG;
                         }
                         break;
                 }
-                return false;
+                return GameView.PAUSED;
+
+            } else if (state == GameView.GAMEOVER){
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        if(playButton.hitBox.contains(x, y)) {
+                            return GameView.GAMEOVER;
+                        }
+                        break;
+                }
+                return GameView.GAMEOVER;
+            } else if (state == GameView.CLEAR){
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        if(playButton.hitBox.contains(x, y)) {
+                            return GameView.CLEAR;
+                        }
+                        break;
+                }
+                return GameView.CLEAR;
             }
         }
-        return true;
+        return GameView.PLYAINTG;
     }
 }
