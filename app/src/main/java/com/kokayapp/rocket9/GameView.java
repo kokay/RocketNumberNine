@@ -63,8 +63,14 @@ public class GameView extends SurfaceView implements Runnable {
     }
     private void update() {
         switch (state) {
+            case OPENING :
+                ld.updateOpening(fps, vp);
+                break;
             case PLYAINTG :
                 state = ld.update(fps, vp);
+                break;
+            case CLEAR :
+                ld.updateOpening(fps, vp);
                 break;
             case GO_EXIT :
                 Intent intent = new Intent(context, TitleActivity.class);
@@ -92,28 +98,28 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void drawDebugging() {
-        canvas.drawText("FPS : " + fps, 30, 100, dt.smallTextPaint);
-        if(fps > 60) canvas.drawText("true", 30, 140, dt.smallTextPaint);
+        canvas.drawText("FPS : " + fps, 80, 100, dt.smallTextPaint);
+        if(fps > 60) canvas.drawText("true", 80, 140, dt.smallTextPaint);
         maxFps = Math.max(maxFps, fps);
-        canvas.drawText("MAX : " + maxFps, 30, 180, dt.smallTextPaint);
+        canvas.drawText("MAX : " + maxFps, 80, 180, dt.smallTextPaint);
         minFps = Math.min(minFps, fps);
-        canvas.drawText("MIN : " + minFps, 30, 220, dt.smallTextPaint);
+        canvas.drawText("MIN : " + minFps, 80, 220, dt.smallTextPaint);
         avgFps = (avgFps + fps) / 2;
-        canvas.drawText("AVG : " + avgFps, 30, 260, dt.smallTextPaint);
+        canvas.drawText("AVG : " + avgFps, 80, 260, dt.smallTextPaint);
     }
 
     private void drawTopBar() {
         canvas.drawRect(dt.topBar, dt.darkNavy);
         canvas.drawText("DISTANCE : " + String.format("%1$05d", ld.getDistance()) + " M",
-                (int)(vp.pixelsPerX * 8.5f),
+                (int)(vp.pixelsPerX * 12.5f),
                 (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);
         canvas.drawText("SCORE : " + String.format("%1$05d", ld.getScore()),
-                (int)(vp.pixelsPerX * 17.5f),
+                (int)(vp.pixelsPerX * 20f),
                 (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);
         canvas.drawText("HIGH SCORE : " + String.format("%1$05d", ld.getHighScore()),
-                (int)(vp.pixelsPerX * 24f),
+                (int)(vp.pixelsPerX * 28f),
                 (int)(vp.pixelsPerY * 0.9f),
                 dt.smallTextPaint);
         ld.getRocket().drawHealth(canvas, vp);
@@ -123,6 +129,13 @@ public class GameView extends SurfaceView implements Runnable {
         canvas.drawColor(Color.argb(50, 0, 0, 0));
         canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
         switch (state) {
+            case OPENING : {
+                canvas.drawText("READY?", vp.screenCenterX,
+                        (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
+                canvas.drawText("Touch the Screen!", vp.screenCenterX,
+                        (Viewport.VIEW_CENTER_Y + 1.5f) * vp.pixelsPerY, dt.smallTextPaint);
+                break;
+            }
             case PAUSED : {
                 canvas.drawText("PAUSED", vp.screenCenterX,
                         (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
@@ -135,9 +148,9 @@ public class GameView extends SurfaceView implements Runnable {
             }
             case CLEAR : {
                 canvas.drawText("GAME CLEAR!!", vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
+                        (Viewport.VIEW_CENTER_Y - 2f) * vp.pixelsPerY, dt.bigTextPaint);
                 canvas.drawText("SCORE : " + ld.getScore(), vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y + 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
+                        (Viewport.VIEW_CENTER_Y + 1f) * vp.pixelsPerY, dt.smallTextPaint);
                 break;
             }
         }
@@ -145,7 +158,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     public void resume() {
         running = true;
-        state = PLYAINTG;
+        state = OPENING;
         gameThread = new Thread(this);
         gameThread.start();
     }

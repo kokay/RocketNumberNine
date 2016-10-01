@@ -33,7 +33,7 @@ public class DrawingTool {
         smallTextPaint.setColor(Color.rgb(254, 245, 249));
         smallTextPaint.setTextSize(vp.pixelsPerX * 0.8f);
         smallTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        smallTextPaint.setTextAlign(Paint.Align.LEFT);
+        smallTextPaint.setTextAlign(Paint.Align.CENTER);
         smallTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
 
         bigTextPaint.setColor(Color.rgb(254, 245, 249));

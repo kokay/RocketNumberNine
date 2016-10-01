@@ -24,7 +24,7 @@ public class LevelData {
     private ArrayList<Background> backgrounds = new ArrayList<>();
     private ArrayList<Background> foregrounds = new ArrayList<>();
     private ArrayList<Star> stars = new ArrayList<>();
-    private int distance = 3000;
+    private int distance = 300;
     private int score = 0;
     private int highScore = 0;
 
@@ -55,6 +55,13 @@ public class LevelData {
         foregrounds.add(new Background(context,
                 vp, R.drawable.foreground, Viewport.VIEW_HEIGHT - 3, Viewport.VIEW_HEIGHT, 300));
         for(int i=0; i < 200;++i) stars.add(new Star(vp));
+    }
+
+    public void updateOpening(long fps, Viewport vp) {
+        rocket.update(fps, vp);
+        for(Background bg : backgrounds) bg.update(fps);
+        for(Background fg : foregrounds) fg.update(fps);
+        for(Star s : stars) s.update(fps);
     }
 
     public int update(long fps, Viewport vp) {

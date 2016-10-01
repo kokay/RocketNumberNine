@@ -62,9 +62,19 @@ public class InputController {
             case GameView.GAMEOVER :
                 canvas.drawBitmap(exitButton.bitmap, null, exitButton.hitBox, null);
                 break;
+            case GameView.CLEAR :
+                canvas.drawBitmap(exitButton.bitmap, null, exitButton.hitBox, null);
             default :
                 break;
         }
+    }
+
+    private int handleOpeningInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_UP:
+                return GameView.PLYAINTG;
+        }
+        return GameView.OPENING;
     }
 
     public int handleInput(MotionEvent motionEvent, int state, Rocket rocket) {
@@ -72,14 +82,11 @@ public class InputController {
             int y = (int) motionEvent.getY(i);
             int x = (int) motionEvent.getX(i);
             switch (state) {
-                //case GameView.OPENING   : return handleOpeningInput(motionEvent, x, y, rocket);
-                case GameView.PLYAINTG:
-                    return handlePlayingInput(motionEvent, x, y, rocket);
-                case GameView.PAUSED:
-                    return handlePausedInput(motionEvent, x, y, rocket);
-                //case GameView.CLEAR     : return handleClearInput(motionEvent, x, y, rocket);
-                case GameView.GAMEOVER:
-                    return handleGameOverInput(motionEvent, x, y, rocket);
+                case GameView.OPENING   : return handleOpeningInput(motionEvent, x, y, rocket);
+                case GameView.PLYAINTG  : return handlePlayingInput(motionEvent, x, y, rocket);
+                case GameView.PAUSED    : return handlePausedInput(motionEvent, x, y, rocket);
+                case GameView.CLEAR     : return handleClearInput(motionEvent, x, y, rocket);
+                case GameView.GAMEOVER  : return handleGameOverInput(motionEvent, x, y, rocket);
             }
         }
         return GameView.PLYAINTG;
@@ -103,9 +110,9 @@ public class InputController {
                 if(pauseButton.hitBox.contains(lastX, lastY) &&
                    pauseButton.hitBox.contains(x, y)) {
                     return GameView.PAUSED;
-                } else {
-                    rocket.setGoingDown(false);
-                    rocket.setGoingUp(false);
+//                } else {
+//                    rocket.setGoingDown(false);
+//                    rocket.setGoingUp(false);
                 }
                 break;
         }
@@ -142,5 +149,21 @@ public class InputController {
                 break;
         }
         return GameView.GAMEOVER;
+    }
+
+    private int handleClearInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                lastX = x;
+                lastY = y;
+                break;
+            case MotionEvent.ACTION_UP:
+                if(exitButton.hitBox.contains(lastX, lastY) &&
+                        exitButton.hitBox.contains(x, y)) {
+                    return GameView.GO_EXIT;
+                }
+                break;
+        }
+        return GameView.CLEAR;
     }
 }
