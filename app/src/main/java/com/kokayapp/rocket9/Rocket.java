@@ -25,7 +25,7 @@ public class Rocket extends MovableObject {
         velocityY = 0;
         maxVelocity = 8;
         acceleration = 10;
-        healthPoint = 10;
+        healthPoint = 1;
         maxHealthPoint = 10;
 
         goingUp = false;

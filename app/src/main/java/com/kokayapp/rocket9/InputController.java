@@ -15,46 +15,52 @@ import java.util.ArrayList;
  */
 
 public class InputController {
-    private Paint white = new Paint();
-    private RectF up;
-    private RectF down;
-    private Button pauseButton;
+    private Button upButton;
+    private Button downButton;
     private Button playButton;
+    private Button pauseButton;
+    private Button continueButton;
+    private Button exitButton;
+    private Button settingButton;
+    private int lastX = -1, lastY = -1;
 
 
     public InputController(Context context, Viewport vp) {
-        int buttonWidth = vp.screenX / 8;
-        int buttonHeight = vp.screenY / 7;
-        int buttonPadding = vp.screenX / 80;
+        upButton = new Button(context, vp, R.drawable.up_button,
+                0.1f, Viewport.VIEW_HEIGHT - 6f - 0.2f, 3f, 3f);
 
-        up = new RectF(
-                buttonPadding,
-                vp.screenY - buttonHeight - buttonPadding,
-                buttonPadding + buttonWidth,
-                vp.screenY - buttonPadding);
-        down = new RectF(
-                buttonPadding,
-                up.top - buttonPadding - buttonHeight,
-                buttonPadding + buttonWidth,
-                up.top - buttonPadding);
-
+        downButton = new Button(context, vp, R.drawable.down_button,
+                0.1f, Viewport.VIEW_HEIGHT - 3f - 0.1f, 3f, 3f);
 
         pauseButton = new Button(context, vp, R.drawable.pause_button,
-                Viewport.VIEW_WIDTH - 3.2f, 1.3f, 3f, 3f);
+                Viewport.VIEW_WIDTH - 3.1f, 1.3f, 3f, 3f);
+
+        continueButton = new Button(context, vp, R.drawable.continue_button,
+                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
+
         playButton = new Button(context, vp, R.drawable.play_button,
+                Viewport.VIEW_CENTER_X - 4f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
+
+        exitButton = new Button(context, vp, R.drawable.exit_button,
+                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
+
+        settingButton = new Button(context, vp, R.drawable.settings_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
     }
 
     public void drawPlayingButtons(Canvas canvas, Viewport vp) {
-        canvas.drawRoundRect(up, 15f, 15f, white);
-        canvas.drawRoundRect(down, 15f, 15f, white);
+        canvas.drawBitmap(upButton.bitmap, null, upButton.hitBox, null);
+        canvas.drawBitmap(downButton.bitmap, null, downButton.hitBox, null);
         canvas.drawBitmap(pauseButton.bitmap, null, pauseButton.hitBox, null);
     }
 
     public void drawButtonsOnBox(Canvas canvas, Viewport vp, int state) {
         switch (state) {
             case GameView.PAUSED :
-                canvas.drawBitmap(playButton.bitmap, null, playButton.hitBox, null);
+                canvas.drawBitmap(continueButton.bitmap, null, continueButton.hitBox, null);
+                break;
+            case GameView.GAMEOVER :
+                canvas.drawBitmap(exitButton.bitmap, null, exitButton.hitBox, null);
                 break;
             default :
                 break;
@@ -65,57 +71,76 @@ public class InputController {
         for(int i=0;i<motionEvent.getPointerCount();++i) {
             int y = (int) motionEvent.getY(i);
             int x = (int) motionEvent.getX(i);
-
-            if(state == GameView.PLYAINTG) {
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                        if(down.contains(x, y)) {
-                            rocket.setGoingDown(true);
-                            rocket.setGoingUp(false);
-                        }
-                        if(up.contains(x, y)) {
-                            rocket.setGoingDown(false);
-                            rocket.setGoingUp(true);
-                        }
-                        if(pauseButton.hitBox.contains(x, y)) {
-                            return GameView.PAUSED;
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        rocket.setGoingDown(false);
-                        rocket.setGoingUp(false);
-                        break;
-                }
-            } else if (state == GameView.PAUSED){
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                        if(playButton.hitBox.contains(x, y)) {
-                            return GameView.PLYAINTG;
-                        }
-                        break;
-                }
-                return GameView.PAUSED;
-
-            } else if (state == GameView.GAMEOVER){
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                        if(playButton.hitBox.contains(x, y)) {
-                            return GameView.GAMEOVER;
-                        }
-                        break;
-                }
-                return GameView.GAMEOVER;
-            } else if (state == GameView.CLEAR){
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                        if(playButton.hitBox.contains(x, y)) {
-                            return GameView.CLEAR;
-                        }
-                        break;
-                }
-                return GameView.CLEAR;
+            switch (state) {
+                //case GameView.OPENING   : return handleOpeningInput(motionEvent, x, y, rocket);
+                case GameView.PLYAINTG:
+                    return handlePlayingInput(motionEvent, x, y, rocket);
+                case GameView.PAUSED:
+                    return handlePausedInput(motionEvent, x, y, rocket);
+                //case GameView.CLEAR     : return handleClearInput(motionEvent, x, y, rocket);
+                case GameView.GAMEOVER:
+                    return handleGameOverInput(motionEvent, x, y, rocket);
             }
         }
         return GameView.PLYAINTG;
+    }
+
+    private int handlePlayingInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                lastX = x;
+                lastY = y;
+                if(upButton.hitBox.contains(x, y)) {
+                    rocket.setGoingDown(true);
+                    rocket.setGoingUp(false);
+                }
+                if(downButton.hitBox.contains(x, y)) {
+                    rocket.setGoingDown(false);
+                    rocket.setGoingUp(true);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                if(pauseButton.hitBox.contains(lastX, lastY) &&
+                   pauseButton.hitBox.contains(x, y)) {
+                    return GameView.PAUSED;
+                } else {
+                    rocket.setGoingDown(false);
+                    rocket.setGoingUp(false);
+                }
+                break;
+        }
+        return GameView.PLYAINTG;
+    }
+
+    private int handlePausedInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                lastX = x;
+                lastY = y;
+                break;
+            case MotionEvent.ACTION_UP:
+                if(continueButton.hitBox.contains(lastX, lastY) &&
+                   continueButton.hitBox.contains(x, y)) {
+                    return GameView.PLYAINTG;
+                }
+                break;
+        }
+        return GameView.PAUSED;
+    }
+
+    private int handleGameOverInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                lastX = x;
+                lastY = y;
+                break;
+            case MotionEvent.ACTION_UP:
+                if(exitButton.hitBox.contains(lastX, lastY) &&
+                   exitButton.hitBox.contains(x, y)) {
+                    return GameView.OPENING;
+                }
+                break;
+        }
+        return GameView.GAMEOVER;
     }
 }
