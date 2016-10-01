@@ -48,15 +48,19 @@ public class InputController {
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
     }
 
-    public void drawButtons(Canvas canvas, Viewport vp, int state) {
+    public void drawPlayingButtons(Canvas canvas, Viewport vp) {
         canvas.drawRoundRect(up, 15f, 15f, white);
         canvas.drawRoundRect(down, 15f, 15f, white);
         canvas.drawBitmap(pauseButton.bitmap, null, pauseButton.hitBox, null);
-        if(state == GameView.PAUSED) {
-            canvas.drawBitmap(playButton.bitmap, null, playButton.hitBox, null);
-        } else if (state == GameView.GAMEOVER){
-        } else if (state == GameView.CLEAR){
+    }
 
+    public void drawButtonsOnBox(Canvas canvas, Viewport vp, int state) {
+        switch (state) {
+            case GameView.PAUSED :
+                canvas.drawBitmap(playButton.bitmap, null, playButton.hitBox, null);
+                break;
+            default :
+                break;
         }
     }
 
