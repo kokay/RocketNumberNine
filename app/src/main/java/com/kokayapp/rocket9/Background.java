@@ -11,10 +11,11 @@ import android.graphics.Canvas;
 
 public class Background {
     private Bitmap bitmap;
-    private float startY;
-    private float endY;
+    private final float startY;
+    private final float endY;
     private float speed;
     private int xClip;
+    private final int pixelsPerX;
 
     public Background(Context context, Viewport vp, int imageId, float startY, float endY, float speed) {
         bitmap = BitmapFactory.decodeResource(context.getResources(), imageId);
@@ -24,10 +25,11 @@ public class Background {
         this.endY = endY;
         this.speed = speed;
         xClip = 0;
+        pixelsPerX = vp.pixelsPerX;
     }
 
     public void update(float fps) {
-        xClip -= speed / fps;
+        xClip -= (speed * pixelsPerX) / fps;
         if(xClip >= bitmap.getWidth()) {
             xClip = 0;
         } else if (xClip <= 0) {

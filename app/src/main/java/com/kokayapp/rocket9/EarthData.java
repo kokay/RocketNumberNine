@@ -32,9 +32,9 @@ public class EarthData extends LevelData {
         background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
         background.setColor(Color.rgb(39, 38, 67));
         backgrounds.add(new Background(context,
-                vp, R.drawable.middleground, Viewport.VIEW_HEIGHT - 5, Viewport.VIEW_HEIGHT, 30));
+                vp, R.drawable.middleground, Viewport.VIEW_HEIGHT - 5, Viewport.VIEW_HEIGHT, rocket.velocityX / 10));
         foregrounds.add(new Background(context,
-                vp, R.drawable.foreground, Viewport.VIEW_HEIGHT - 3, Viewport.VIEW_HEIGHT, 300));
+                vp, R.drawable.foreground, Viewport.VIEW_HEIGHT - 3, Viewport.VIEW_HEIGHT, rocket.velocityX));
         for(int i=0; i < 200;++i) stars.add(new Star(vp));
     }
 

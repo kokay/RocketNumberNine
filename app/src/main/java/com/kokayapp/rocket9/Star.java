@@ -21,7 +21,7 @@ public class Star extends MovableObject {
         y = gen.nextInt((int)(Viewport.VIEW_HEIGHT * 0.7)) + gen.nextFloat();
         width = .075f;
         height = .075f;
-        velocityX = -gen.nextFloat();
+        velocityX = -gen.nextFloat() / 2;
         rect.set(vp.viewToScreen(this));
         starPaint.setColor(Color.argb(gen.nextInt(130), 138, 135, 107));
     }
