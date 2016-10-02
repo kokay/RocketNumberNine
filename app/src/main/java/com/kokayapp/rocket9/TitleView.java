@@ -49,7 +49,7 @@ public class TitleView extends SurfaceView implements Runnable {
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
         ic = new TitleInputController(context, vp);
-        ld = new EarthData(context, vp);
+        ld = new TitleData(context, vp);
         dt = new DrawingTool(vp);
     }
 
