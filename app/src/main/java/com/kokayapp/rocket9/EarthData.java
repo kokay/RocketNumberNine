@@ -40,7 +40,6 @@ public class EarthData extends LevelData {
 
     @Override
     public void updateOpening(long fps, Viewport vp) {
-        rocket.update(fps, vp);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);

@@ -134,9 +134,9 @@ public class GameView extends SurfaceView implements Runnable {
         canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
         switch (state) {
             case OPENING : {
-                canvas.drawText("READY?", vp.screenCenterX,
+                canvas.drawText("EARTH", vp.screenCenterX,
                         (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
-                canvas.drawText("Touch the Screen!", vp.screenCenterX,
+                canvas.drawText("Touch the screen to start!", vp.screenCenterX,
                         (Viewport.VIEW_CENTER_Y + 1.5f) * vp.pixelsPerY, dt.smallTextPaint);
                 break;
             }
