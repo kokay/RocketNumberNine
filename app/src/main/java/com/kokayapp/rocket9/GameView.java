@@ -51,6 +51,12 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        state = ic.handleInput(event, state, ld.getRocket());
+        return true;
+    }
+
+    @Override
     public void run() {
         while (running) {
             startFrameTime = System.currentTimeMillis();
@@ -92,8 +98,6 @@ public class GameView extends SurfaceView implements Runnable {
             ic.drawButtonsOnBox(canvas, vp, state);
             if(debugging) drawDebugging();
             holder.unlockCanvasAndPost(canvas);
-        }
-        if(state != PLYAINTG) {
         }
     }
 
@@ -170,11 +174,5 @@ public class GameView extends SurfaceView implements Runnable {
         } catch (InterruptedException e) {
             Log.e(TAG, "Failed to pause thread");
         }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        state = ic.handleInput(event, state, ld.getRocket());
-        return true;
     }
 }
