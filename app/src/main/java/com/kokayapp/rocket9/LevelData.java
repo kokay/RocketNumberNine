@@ -17,80 +17,31 @@ import java.util.ArrayList;
  * Created by Koji on 9/29/2016.
  */
 
-public class LevelData {
-    private Rocket rocket;
-    private ArrayList<Enemy> enemies = new ArrayList<>();
-    private Paint background = new Paint();
-    private ArrayList<Background> backgrounds = new ArrayList<>();
-    private ArrayList<Background> foregrounds = new ArrayList<>();
-    private ArrayList<Star> stars = new ArrayList<>();
-    private int distance = 300;
-    private int score = 0;
-    private int highScore = 0;
+public abstract class LevelData {
+    protected Rocket rocket;
+    protected ArrayList<Enemy> enemies = new ArrayList<>();
+    protected Paint background = new Paint();
+    protected ArrayList<Background> backgrounds = new ArrayList<>();
+    protected ArrayList<Background> foregrounds = new ArrayList<>();
 
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
+    protected int distance = 0;
+    protected int score = 0;
+    protected int highScore = 0;
+
+    protected SharedPreferences prefs;
+    protected SharedPreferences.Editor editor;
 
 
     public LevelData(Context context, Viewport vp) {
         prefs = context.getSharedPreferences("BestScoreFile", context.MODE_PRIVATE);
         highScore = prefs.getInt("BestScore", 0);
         editor = prefs.edit();
-
         rocket = new Rocket(context, vp);
-        enemies.add(new YellowEnemy(context, vp, 50, 10));
-        enemies.add(new YellowEnemy(context, vp, 50, 10));
-        enemies.add(new OrangeEnemy(context, vp, 60, 15));
-        enemies.add(new YellowEnemy(context, vp, 80, 10));
-        enemies.add(new YellowEnemy(context, vp, 90, 10));
-        enemies.add(new OrangeEnemy(context, vp, 100, 15));
-        enemies.add(new YellowEnemy(context, vp, 100, 10));
-        enemies.add(new YellowEnemy(context, vp, 110, 10));
-        enemies.add(new OrangeEnemy(context, vp, 130, 15));
-        enemies.add(new RedEnemy(context, vp, 50, 5));
-        background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
-        background.setColor(Color.rgb(39, 38, 67));
-        backgrounds.add(new Background(context,
-                vp, R.drawable.middleground, Viewport.VIEW_HEIGHT - 5, Viewport.VIEW_HEIGHT, 30));
-        foregrounds.add(new Background(context,
-                vp, R.drawable.foreground, Viewport.VIEW_HEIGHT - 3, Viewport.VIEW_HEIGHT, 300));
-        for(int i=0; i < 200;++i) stars.add(new Star(vp));
     }
 
-    public void updateOpening(long fps, Viewport vp) {
-        rocket.update(fps, vp);
-        for(Background bg : backgrounds) bg.update(fps);
-        for(Background fg : foregrounds) fg.update(fps);
-        for(Star s : stars) s.update(fps);
-    }
-
-    public int update(long fps, Viewport vp) {
-        rocket.update(fps, vp);
-        for(Enemy e : enemies) score += e.update(fps, vp, rocket);
-        for(Background bg : backgrounds) bg.update(fps);
-        for(Background fg : foregrounds) fg.update(fps);
-        for(Star s : stars) s.update(fps);
-        distance -= rocket.velocityX / fps;
-        if(rocket.getHealthPoint() <= 0) return GameView.GAMEOVER;
-        if(distance <= 0) {
-            if(score > highScore) {
-                editor.putInt("BestScore", score);
-                editor.commit();
-            }
-            return GameView.CLEAR;
-        }
-        return GameView.PLYAINTG;
-    }
-
-    public void draw(Canvas canvas, Viewport vp) {
-        canvas.drawPaint(background);
-        for(Background bg : backgrounds) bg.draw(canvas, vp);
-        for(Star s : stars) s.draw(canvas, vp);
-        for(Enemy enemy : enemies) enemy.draw(canvas, vp);
-        rocket.draw(canvas, vp);
-        for(Background fg : foregrounds) fg.draw(canvas, vp);
-        for(Enemy enemy : enemies) enemy.drawHealth(canvas, vp);
-    }
+    public abstract void updateOpening(long fps, Viewport vp);
+    public abstract int update(long fps, Viewport vp);
+    public abstract void draw(Canvas canvas, Viewport vp);
 
     public Rocket getRocket() {
         return rocket;
@@ -107,4 +58,10 @@ public class LevelData {
     public int getHighScore() {
         return highScore;
     }
+
+    protected void setHighScore(int score) {
+        editor.putInt("BestScore", score);
+        editor.commit();
+    }
 }
+

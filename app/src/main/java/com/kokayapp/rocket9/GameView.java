@@ -46,7 +46,7 @@ public class GameView extends SurfaceView implements Runnable {
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
         ic = new InputController(context, vp);
-        ld = new LevelData(context, vp);
+        ld = new EarthData(context, vp);
         dt = new DrawingTool(vp);
     }
 
