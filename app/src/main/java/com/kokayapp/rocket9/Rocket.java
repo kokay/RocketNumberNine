@@ -14,6 +14,7 @@ public class Rocket extends MovableObject {
     private boolean goingUp;
     private boolean goingDown;
     private Bitmap bitmap;
+    private float currentPlace = 0;
     private Gun gun;
 
     public Rocket(Context context, Viewport vp) {
@@ -53,7 +54,7 @@ public class Rocket extends MovableObject {
             velocityY += acceleration / fps;
             if(velocityY > maxVelocity) velocityY = maxVelocity;
         }
-
+        currentPlace += (velocityX / fps) * 10;
         y += velocityY / fps;
         if(y < 0) {
             y = 0;
@@ -79,5 +80,9 @@ public class Rocket extends MovableObject {
 
     public CopyOnWriteArrayList<Bullet> getBullets() {
         return gun.getBullets();
+    }
+
+    public float getCurrentPlace() {
+        return currentPlace;
     }
 }

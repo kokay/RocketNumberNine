@@ -10,11 +10,12 @@ import android.graphics.Canvas;
 public class RedEnemy extends Enemy {
 
     private Gun gun;
-    public RedEnemy(Context context, Viewport vp, float x, float y) {
+    public RedEnemy(Context context, Viewport vp, float startPlace, float startY) {
         height = 2.2f;
         width = 2.5f;
-        this.x = x;
-        this.y = y;
+        this.startPlace = startPlace;
+        this.x = Viewport.VIEW_WIDTH + 1;
+        this.y = startY;
         velocityX = -4;
         velocityY = 0;
         maxVelocity = 2;
@@ -33,10 +34,7 @@ public class RedEnemy extends Enemy {
     @Override
     public int update(long fps, Viewport vp, Rocket rocket) {
         switch (state) {
-            case ACTIVE:
-                followAttack(fps, rocket);
-                return 0;
-            case VISIBLE:
+            case ACTIVE :
                 followAttack(fps, rocket);
                 gun.pullTrigger(this);
                 for (Bullet bullet : gun.getBullets()) {
@@ -47,6 +45,10 @@ public class RedEnemy extends Enemy {
                     }
                 }
                 return checkHit(vp, rocket);
+            case NONACTIVE :
+                if(rocket.getCurrentPlace() >= startPlace)
+                    state = ACTIVE;
+                return 0;
             default:
                 return 0;
         }
@@ -54,7 +56,7 @@ public class RedEnemy extends Enemy {
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(state == VISIBLE) {
+        if(state == ACTIVE) {
             for(Bullet bullet : gun.getBullets())
                 canvas.drawRect(vp.viewToScreen(bullet), gun.getBulletPaint());
             canvas.drawBitmap(bitmaps[RED], null, vp.viewToScreen(this), null);

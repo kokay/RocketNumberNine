@@ -24,7 +24,7 @@ public abstract class LevelData {
     protected ArrayList<Background> backgrounds = new ArrayList<>();
     protected ArrayList<Background> foregrounds = new ArrayList<>();
 
-    protected int distance = 0;
+    protected float distance = 0;
     protected int score = 0;
     protected int highScore = 0;
 
@@ -48,7 +48,7 @@ public abstract class LevelData {
     }
 
     public int getDistance() {
-        return distance;
+        return (int) (distance - rocket.getCurrentPlace());
     }
 
     public int getScore() {

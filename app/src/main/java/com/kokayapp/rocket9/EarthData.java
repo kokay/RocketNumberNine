@@ -18,16 +18,16 @@ public class EarthData extends LevelData {
 
     public EarthData(Context context, Viewport vp) {
         super(context, vp);
-        distance = 1000;
-        enemies.add(new YellowEnemy(context, vp, 50, 10));
-        enemies.add(new YellowEnemy(context, vp, 50, 10));
-        enemies.add(new OrangeEnemy(context, vp, 60, 15));
-        enemies.add(new YellowEnemy(context, vp, 80, 10));
-        enemies.add(new YellowEnemy(context, vp, 90, 10));
-        enemies.add(new OrangeEnemy(context, vp, 100, 15));
-        enemies.add(new YellowEnemy(context, vp, 100, 10));
-        enemies.add(new YellowEnemy(context, vp, 110, 10));
-        enemies.add(new OrangeEnemy(context, vp, 130, 15));
+        distance = 5500;
+        enemies.add(new YellowEnemy(context, vp, 0, 2));
+        enemies.add(new YellowEnemy(context, vp, 500, 2));
+        enemies.add(new OrangeEnemy(context, vp, 1000, 15));
+        enemies.add(new YellowEnemy(context, vp, 1500, 4));
+        enemies.add(new YellowEnemy(context, vp, 2000, 10));
+        enemies.add(new OrangeEnemy(context, vp, 2500, 15));
+        enemies.add(new YellowEnemy(context, vp, 3000, 10));
+        enemies.add(new YellowEnemy(context, vp, 4500, 10));
+        enemies.add(new OrangeEnemy(context, vp, 5000, 15));
         enemies.add(new RedEnemy(context, vp, 50, 5));
         background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
         background.setColor(Color.rgb(39, 38, 67));
@@ -53,9 +53,8 @@ public class EarthData extends LevelData {
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
-        distance -= rocket.velocityX / fps;
         if(rocket.getHealthPoint() <= 0) return GameView.GAMEOVER;
-        if(distance <= 0) {
+        if(getDistance() <= 0) {
             if(score > highScore) setHighScore(score);
             return GameView.CLEAR;
         }

@@ -8,11 +8,12 @@ import android.graphics.Canvas;
  */
 
 public class OrangeEnemy extends Enemy {
-    public OrangeEnemy(Context context, Viewport vp, float x, float y) {
+    public OrangeEnemy(Context context, Viewport vp, float startPlace, float startY) {
         height = 2.2f;
         width = 2.5f;
-        this.x = x;
-        this.y = y;
+        this.startPlace = startPlace;
+        this.x = Viewport.VIEW_WIDTH + 1;
+        this.y = startY;
         velocityX = -4;
         velocityY = 0;
         maxVelocity = 2;
@@ -20,7 +21,6 @@ public class OrangeEnemy extends Enemy {
         maxHealthPoint = 4;
         healthPoint = 4;
         point = 30;
-
 
         if(bitmaps[ORANGE] == null) {
             bitmaps[ORANGE] = prepareBitmap(context, vp, R.drawable.orange_enemy);
@@ -30,12 +30,13 @@ public class OrangeEnemy extends Enemy {
     @Override
     public int update(long fps, Viewport vp, Rocket rocket) {
         switch (state) {
-            case ACTIVE:
-                followAttack(fps, rocket);
-                return 0;
-            case VISIBLE:
+            case ACTIVE :
                 followAttack(fps, rocket);
                 return checkHit(vp, rocket);
+            case NONACTIVE :
+                if(rocket.getCurrentPlace() >= startPlace)
+                    state = ACTIVE;
+                return 0;
             default:
                 return 0;
         }
@@ -43,7 +44,7 @@ public class OrangeEnemy extends Enemy {
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(state == VISIBLE)
+        if(state == ACTIVE)
             canvas.drawBitmap(bitmaps[ORANGE], null, vp.viewToScreen(this), null);
     }
 }
