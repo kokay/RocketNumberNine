@@ -9,20 +9,19 @@ import android.graphics.Canvas;
 
 public class YellowEnemy extends Enemy {
 
-    public YellowEnemy(Context context, Viewport vp, float startPlace, float startY) {
+    public YellowEnemy(Context context, Viewport vp, int level) {
         height = 2.2f;
         width = 2.5f;
-        this.startPlace = startPlace;
-        this.x = Viewport.VIEW_WIDTH + 1;
-        this.y = startY;
-        velocityX = -2;
-        maxHealthPoint = 3;
-        healthPoint = 3;
+        x = getRandomX();
+        y = getRandomY();
+        velocityX = getRandomVelocityX(3, 4);
+        maxHealthPoint = 2;
+        healthPoint = 2;
         point = 10;
+        setLevel(level);
 
-        if(bitmaps[YELLOW] == null) {
+        if(bitmaps[YELLOW] == null)
             bitmaps[YELLOW] = prepareBitmap(context, vp, R.drawable.yellow_enemy);
-        }
     }
 
     @Override
@@ -31,9 +30,13 @@ public class YellowEnemy extends Enemy {
             case ACTIVE :
                 normalAttack(fps);
                 return checkHit(vp, rocket);
+            case VISIBLE :
+                normalAttack(fps);
+                return checkHit(vp, rocket);
+            case CRASHED :
+                return 0;
             case NONACTIVE :
-                if(rocket.getCurrentPlace() >= startPlace)
-                    state = ACTIVE;
+                reborn();
                 return 0;
             default:
                 return 0;
@@ -42,7 +45,7 @@ public class YellowEnemy extends Enemy {
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(state == ACTIVE)
+        if(state == VISIBLE)
             canvas.drawBitmap(bitmaps[YELLOW], null, vp.viewToScreen(this), null);
     }
 }

@@ -20,16 +20,11 @@ public class TitleData extends LevelData {
         super(context, vp, level, score, healthPoint);
         rocketImage = new Button(context, vp, R.drawable.rocket_titile,
                 4, 2.5f, 10, 13);
-        enemies.add(new YellowEnemy(context, vp, 50, 10));
-        enemies.add(new YellowEnemy(context, vp, 50, 10));
-        enemies.add(new YellowEnemy(context, vp, 80, 10));
-        enemies.add(new YellowEnemy(context, vp, 100, 10));
-        enemies.add(new OrangeEnemy(context, vp, 60, 15));
-        enemies.add(new OrangeEnemy(context, vp, 100, 15));
-        enemies.add(new OrangeEnemy(context, vp, 130, 15));
-        enemies.add(new RedEnemy(context, vp, 60, 5));
-        enemies.add(new RedEnemy(context, vp, 100, 5));
-        enemies.add(new RedEnemy(context, vp, 150, 5));
+        enemies.add(new YellowEnemy(context, vp, level));
+        enemies.add(new YellowEnemy(context, vp, level));
+        enemies.add(new OrangeEnemy(context, vp, level));
+        enemies.add(new OrangeEnemy(context, vp, level));
+        enemies.add(new    RedEnemy(context, vp, level));
         background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56),
                 Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
         background.setColor(Color.rgb(39, 38, 67));

@@ -10,21 +10,19 @@ import android.graphics.Canvas;
 public class RedEnemy extends Enemy {
 
     private Gun gun;
-    public RedEnemy(Context context, Viewport vp, float startPlace, float startY) {
+    public RedEnemy(Context context, Viewport vp, int level) {
         height = 2.2f;
         width = 2.5f;
-        this.startPlace = startPlace;
-        this.x = Viewport.VIEW_WIDTH + 1;
-        this.y = startY;
-        velocityX = -4;
-        velocityY = 0;
+        this.x = getRandomX();
+        this.y = getRandomY();
+        velocityX = getRandomVelocityX(3, 4);
+        acceleration = getRandomAcceleration(1, 2);
         maxVelocity = 2;
-        acceleration = 1;
-        maxHealthPoint = 5;
-        healthPoint = 5;
+        maxHealthPoint = 2;
+        healthPoint = 2;
         point = 50;
-
-        gun = new Gun(5, -10);
+        setLevel(level);
+        gun = new Gun(5 + level, -10);
 
         if(bitmaps[RED] == null) {
             bitmaps[RED] = prepareBitmap(context, vp, R.drawable.red_enemy);
@@ -36,6 +34,9 @@ public class RedEnemy extends Enemy {
         switch (state) {
             case ACTIVE :
                 followAttack(fps, rocket);
+                return 0;
+            case VISIBLE :
+                followAttack(fps, rocket);
                 gun.pullTrigger(this);
                 for (Bullet bullet : gun.getBullets()) {
                     bullet.update(vp, fps);
@@ -46,8 +47,7 @@ public class RedEnemy extends Enemy {
                 }
                 return checkHit(vp, rocket);
             case NONACTIVE :
-                if(rocket.getCurrentPlace() >= startPlace)
-                    state = ACTIVE;
+                reborn();
                 return 0;
             default:
                 return 0;
@@ -56,7 +56,7 @@ public class RedEnemy extends Enemy {
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(state == ACTIVE) {
+        if(state == VISIBLE) {
             gun.draw(canvas, vp);
             canvas.drawBitmap(bitmaps[RED], null, vp.viewToScreen(this), null);
         }

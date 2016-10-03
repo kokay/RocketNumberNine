@@ -25,7 +25,7 @@ public class Rocket extends MovableObject {
         y = Viewport.VIEW_CENTER_Y - (height / 2.0f);
         velocityX = 3;
         maxVelocity = 6;
-        acceleration = 6;
+        acceleration = 20;
         this.healthPoint = (float) healthPoint;
         maxHealthPoint = MAX_HEALTH_POINT;
         setLevel(level);

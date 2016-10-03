@@ -23,8 +23,8 @@ public abstract class MovableObject extends GameObject {
     }
 
     protected void setLevel(int level) {
-        velocityX += level;
-        velocityY += level;
+        if(velocityX > 0) velocityX += level;
+        else if(velocityX < 0) velocityX -= level;
         maxVelocity += level;
         acceleration += level;
     }

@@ -18,17 +18,13 @@ public class EarthData extends LevelData {
 
     public EarthData(Context context, Viewport vp, int level, int score, int healthPoint) {
         super(context, vp, level, score, healthPoint);
-        distance = 30 + (level * 100);
-        enemies.add(new YellowEnemy(context, vp, 0, 2));
-        enemies.add(new YellowEnemy(context, vp, 500, 2));
-        enemies.add(new OrangeEnemy(context, vp, 1000, 15));
-        enemies.add(new YellowEnemy(context, vp, 1500, 4));
-        enemies.add(new YellowEnemy(context, vp, 2000, 10));
-        enemies.add(new OrangeEnemy(context, vp, 2500, 15));
-        enemies.add(new YellowEnemy(context, vp, 3000, 10));
-        enemies.add(new YellowEnemy(context, vp, 4500, 10));
-        enemies.add(new OrangeEnemy(context, vp, 5000, 15));
-        enemies.add(new RedEnemy(context, vp, 50, 5));
+        distance = 500 + (level * 100);
+        enemies.add(new YellowEnemy(context, vp, level));
+        enemies.add(new OrangeEnemy(context, vp, level));
+        enemies.add(new YellowEnemy(context, vp, level));
+        enemies.add(new OrangeEnemy(context, vp, level));
+        enemies.add(new YellowEnemy(context, vp, level));
+        enemies.add(new    RedEnemy(context, vp, level));
 
         background.setShader(new LinearGradient(0, 0, 0, vp.screenY, Color.rgb(22, 29, 56), Color.rgb(79, 64, 90), Shader.TileMode.CLAMP));
         background.setColor(Color.rgb(39, 38, 67));
