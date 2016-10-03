@@ -20,8 +20,8 @@ public class GameView extends SurfaceView implements Runnable {
     private long maxFps = 0, minFps = 10000, avgFps = 60;
 
     private volatile boolean running;
-    public static final int OPENING = 0, PLYAINTG = 1, PAUSED = 2, CLEAR = 3, GAMEOVER = 4, GO_EXIT = 5;
-    private volatile int state = PLYAINTG;
+    public static final int OPENING = 0, PLAYING = 1, PAUSED = 2, CLEAR = 3, GAMEOVER = 4, WINNING_RUN = 5, GO_EXIT = 6;
+    private volatile int state = PLAYING;
     private Thread gameThread;
 
     private Canvas canvas;
@@ -70,13 +70,16 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         switch (state) {
             case OPENING :
-                ld.updateOpening(fps, vp);
+                ld.openingUpdate(fps, vp);
                 break;
-            case PLYAINTG :
-                state = ld.update(fps, vp);
+            case PLAYING :
+                state = ld.playingUpdate(fps, vp);
                 break;
             case CLEAR :
-                ld.updateOpening(fps, vp);
+                ld.clearUpdate(fps, vp);
+                break;
+            case WINNING_RUN :
+                state = ld.winningRunUpdate(fps, vp);
                 break;
             case GO_EXIT :
                 Intent intent = new Intent(context, TitleActivity.class);
@@ -94,7 +97,7 @@ public class GameView extends SurfaceView implements Runnable {
             ld.draw(canvas, vp);
             drawTopBar();
             ic.drawPlayingButtons(canvas, vp);
-            if(state != PLYAINTG) drawInfo();
+            if(state != PLAYING) drawInfo();
             ic.drawButtonsOnBox(canvas, vp, state);
             if(debugging) drawDebugging();
             holder.unlockCanvasAndPost(canvas);
@@ -160,6 +163,8 @@ public class GameView extends SurfaceView implements Runnable {
                         (Viewport.VIEW_CENTER_Y - 0.5f) * vp.pixelsPerY, dt.smallTextPaint);
                 break;
             }
+            default :
+                break;
         }
     }
 

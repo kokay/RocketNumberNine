@@ -39,8 +39,10 @@ public abstract class LevelData {
         rocket = new Rocket(context, vp);
     }
 
-    public abstract void updateOpening(long fps, Viewport vp);
-    public abstract int update(long fps, Viewport vp);
+    public abstract void openingUpdate(long fps, Viewport vp);
+    public abstract int playingUpdate(long fps, Viewport vp);
+    public abstract void clearUpdate(long fps, Viewport vp);
+    public abstract int winningRunUpdate(long fps, Viewport vp);
     public abstract void draw(Canvas canvas, Viewport vp);
 
     public Rocket getRocket() {

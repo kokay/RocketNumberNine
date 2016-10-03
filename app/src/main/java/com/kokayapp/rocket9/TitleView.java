@@ -81,7 +81,7 @@ public class TitleView extends SurfaceView implements Runnable {
                 context.startActivity(intent);
                 break;
             default:
-                ld.update(fps, vp);
+                ld.openingUpdate(fps, vp);
                 break;
         }
     }

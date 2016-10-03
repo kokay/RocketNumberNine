@@ -1,5 +1,6 @@
 package com.kokayapp.rocket9;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
@@ -32,13 +33,7 @@ public class Gun {
         bulletPaint.setColor(Color.WHITE);
     }
 
-    public CopyOnWriteArrayList<Bullet> getBullets() {
-        return bullets;
-    }
 
-    public Paint getBulletPaint() {
-        return bulletPaint;
-    }
 
     public void pullTrigger(GameObject go) {
         if(System.currentTimeMillis() - lastShotTime > 10000/ fireRate) {
@@ -46,5 +41,19 @@ public class Gun {
             bulletsIdx = (bulletsIdx + 1) % bullets.size();
             lastShotTime = System.currentTimeMillis();
         }
+    }
+
+    public void update(Viewport vp, long fps) {
+        for(Bullet bullet : bullets)
+            bullet.update(vp, fps);
+    }
+
+    public void draw(Canvas canvas, Viewport vp) {
+        for(Bullet bullet : bullets)
+            canvas.drawRect(vp.viewToScreen(bullet), bulletPaint);
+    }
+
+    public CopyOnWriteArrayList<Bullet> getBullets() {
+        return bullets;
     }
 }

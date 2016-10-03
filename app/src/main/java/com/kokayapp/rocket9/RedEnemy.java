@@ -38,7 +38,7 @@ public class RedEnemy extends Enemy {
                 followAttack(fps, rocket);
                 gun.pullTrigger(this);
                 for (Bullet bullet : gun.getBullets()) {
-                    bullet.update(fps, vp);
+                    bullet.update(vp, fps);
                     if (bullet.hitBox.intersect(rocket.hitBox)) {
                         rocket.healthPoint -= 1;
                         bullet.hide();
@@ -57,8 +57,7 @@ public class RedEnemy extends Enemy {
     @Override
     public void draw(Canvas canvas, Viewport vp) {
         if(state == ACTIVE) {
-            for(Bullet bullet : gun.getBullets())
-                canvas.drawRect(vp.viewToScreen(bullet), gun.getBulletPaint());
+            gun.draw(canvas, vp);
             canvas.drawBitmap(bitmaps[RED], null, vp.viewToScreen(this), null);
         }
     }

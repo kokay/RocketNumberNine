@@ -41,15 +41,25 @@ public class TitleData extends LevelData {
     }
 
     @Override
-    public void updateOpening(long fps, Viewport vp) {
-    }
-
-    @Override
-    public int update(long fps, Viewport vp) {
+    public void openingUpdate(long fps, Viewport vp) {
         for(Enemy e : enemies) e.update(fps, vp, rocket);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
+    }
+
+    @Override
+    public int playingUpdate(long fps, Viewport vp) {
+        return 0;
+    }
+
+    @Override
+    public void clearUpdate(long fps, Viewport vp) {
+
+    }
+
+    @Override
+    public int winningRunUpdate(long fps, Viewport vp) {
         return 0;
     }
 

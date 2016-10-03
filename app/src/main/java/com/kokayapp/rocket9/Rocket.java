@@ -36,8 +36,7 @@ public class Rocket extends MovableObject {
     }
 
     public void draw(Canvas canvas, Viewport vp) {
-        for(Bullet bullet : getBullets())
-            canvas.drawRect(vp.viewToScreen(bullet), gun.getBulletPaint());
+        gun.draw(canvas, vp);
         canvas.drawBitmap(bitmap, null, vp.viewToScreen(this), null);
     }
 
@@ -66,8 +65,7 @@ public class Rocket extends MovableObject {
         hitBox.set(vp.viewToScreen(this));
         gun.pullTrigger(this);
 
-        for (Bullet bullet : gun.getBullets())
-            bullet.update(fps, vp);
+        gun.update(vp, fps);
     }
 
     public void setGoingDown(boolean goingDown) {
@@ -84,5 +82,18 @@ public class Rocket extends MovableObject {
 
     public float getCurrentPlace() {
         return currentPlace;
+    }
+
+    public void runAway(long fps) {
+        if (y > Viewport.VIEW_CENTER_Y) {
+            velocityY -= acceleration / fps;
+            if(velocityY < -3) velocityY = -3;
+        } else if (y < Viewport.VIEW_CENTER_Y) {
+            velocityY += acceleration / fps;
+            if(velocityY > 3) velocityY = 3;
+        }
+        velocityX += acceleration / fps;
+        x += velocityX / fps;
+        y += velocityY / fps;
     }
 }

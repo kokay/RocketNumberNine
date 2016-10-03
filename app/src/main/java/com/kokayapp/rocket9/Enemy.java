@@ -16,7 +16,7 @@ public abstract class Enemy extends MovableObject {
     protected static final int YELLOW = 0, ORANGE = 1, RED = 2;
     protected static final int NONACTIVE = 0, ACTIVE = 1, CRASHED = 2;
     protected int state = NONACTIVE;
-    protected float startPlace = -1;
+    protected float startPlace = 0;
     protected int point = 10;
 
     public abstract int update(long fps, Viewport vp, Rocket rocket);

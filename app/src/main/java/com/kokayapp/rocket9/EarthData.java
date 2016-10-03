@@ -18,7 +18,7 @@ public class EarthData extends LevelData {
 
     public EarthData(Context context, Viewport vp) {
         super(context, vp);
-        distance = 7000;
+        distance = 70;
         enemies.add(new YellowEnemy(context, vp, 0, 2));
         enemies.add(new YellowEnemy(context, vp, 500, 2));
         enemies.add(new OrangeEnemy(context, vp, 1000, 15));
@@ -39,14 +39,14 @@ public class EarthData extends LevelData {
     }
 
     @Override
-    public void updateOpening(long fps, Viewport vp) {
+    public void openingUpdate(long fps, Viewport vp) {
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
     }
 
     @Override
-    public int update(long fps, Viewport vp) {
+    public int playingUpdate(long fps, Viewport vp) {
         rocket.update(fps, vp);
         for(Enemy e : enemies) score += e.update(fps, vp, rocket);
         for(Background bg : backgrounds) bg.update(fps);
@@ -57,7 +57,27 @@ public class EarthData extends LevelData {
             if(score > highScore) setHighScore(score);
             return GameView.CLEAR;
         }
-        return GameView.PLYAINTG;
+        return GameView.PLAYING;
+    }
+
+    @Override
+    public void clearUpdate(long fps, Viewport vp) {
+        rocket.update(fps, vp);
+        for(Background bg : backgrounds) bg.update(fps);
+        for(Background fg : foregrounds) fg.update(fps);
+        for(Star s : stars) s.update(fps);
+    }
+
+    @Override
+    public int winningRunUpdate(long fps, Viewport vp) {
+        rocket.runAway(fps);
+        rocket.update(fps, vp);
+        if(rocket.getX() > Viewport.VIEW_WIDTH + 10)
+            return GameView.GO_EXIT;
+        for(Background bg : backgrounds) bg.update(fps);
+        for(Background fg : foregrounds) fg.update(fps);
+        for(Star s : stars) s.update(fps);
+        return GameView.WINNING_RUN;
     }
 
     @Override

@@ -76,7 +76,7 @@ public class InputController {
     private int handleOpeningInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_UP:
-                return GameView.PLYAINTG;
+                return GameView.PLAYING;
         }
         return GameView.OPENING;
     }
@@ -87,13 +87,13 @@ public class InputController {
             int x = (int) motionEvent.getX(i);
             switch (state) {
                 case GameView.OPENING   : return handleOpeningInput(motionEvent, x, y, rocket);
-                case GameView.PLYAINTG  : return handlePlayingInput(motionEvent, x, y, rocket);
+                case GameView.PLAYING  : return handlePlayingInput(motionEvent, x, y, rocket);
                 case GameView.PAUSED    : return handlePausedInput(motionEvent, x, y, rocket);
                 case GameView.CLEAR     : return handleClearInput(motionEvent, x, y, rocket);
                 case GameView.GAMEOVER  : return handleGameOverInput(motionEvent, x, y, rocket);
             }
         }
-        return GameView.PLYAINTG;
+        return GameView.PLAYING;
     }
 
     private int handlePlayingInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
@@ -120,7 +120,7 @@ public class InputController {
                 }
                 break;
         }
-        return GameView.PLYAINTG;
+        return GameView.PLAYING;
     }
 
     private int handlePausedInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
@@ -132,7 +132,7 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 if(continueButton.hitBox.contains(lastX, lastY) &&
                    continueButton.hitBox.contains(x, y)) {
-                    return GameView.PLYAINTG;
+                    return GameView.PLAYING;
                 }
                 break;
         }
@@ -160,11 +160,21 @@ public class InputController {
             case MotionEvent.ACTION_DOWN:
                 lastX = x;
                 lastY = y;
+                if(upButton.hitBox.contains(x, y)) {
+                    rocket.setGoingDown(true);
+                    rocket.setGoingUp(false);
+                }
+                if(downButton.hitBox.contains(x, y)) {
+                    rocket.setGoingDown(false);
+                    rocket.setGoingUp(true);
+                }
                 break;
             case MotionEvent.ACTION_UP:
+                rocket.setGoingDown(false);
+                rocket.setGoingUp(false);
                 if(exitButton2.hitBox.contains(lastX, lastY) &&
                         exitButton2.hitBox.contains(x, y)) {
-                    return GameView.GO_EXIT;
+                    return GameView.WINNING_RUN;
                 }
                 break;
         }
