@@ -17,12 +17,11 @@ import java.util.ArrayList;
 public class InputController {
     private Button upButton;
     private Button downButton;
-    private Button playButton;
     private Button pauseButton;
     private Button continueButton;
+    private Button playButton;
     private Button exitButton;
     private Button exitButton2;
-    private Button settingButton;
     private int lastX = -1, lastY = -1;
 
 
@@ -39,17 +38,15 @@ public class InputController {
         continueButton = new Button(context, vp, R.drawable.continue_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
 
-        playButton = new Button(context, vp, R.drawable.play_button,
-                Viewport.VIEW_CENTER_X - 4f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
-
         exitButton = new Button(context, vp, R.drawable.exit_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
 
-        exitButton2 = new Button(context, vp, R.drawable.exit_button,
-                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+        playButton = new Button(context, vp, R.drawable.play_button,
+                Viewport.VIEW_CENTER_X - 5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
 
-        settingButton = new Button(context, vp, R.drawable.settings_button,
-                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
+        exitButton2 = new Button(context, vp, R.drawable.exit_button,
+                Viewport.VIEW_CENTER_X + 2f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+
     }
 
     public void drawPlayingButtons(Canvas canvas, Viewport vp) {
@@ -63,23 +60,17 @@ public class InputController {
             case GameView.PAUSED :
                 canvas.drawBitmap(continueButton.bitmap, null, continueButton.hitBox, null);
                 break;
-            case GameView.GAMEOVER :
+            case GameView.GAME_OVER :
                 canvas.drawBitmap(exitButton.bitmap, null, exitButton.hitBox, null);
                 break;
             case GameView.CLEAR :
+                canvas.drawBitmap(playButton.bitmap, null, playButton.hitBox, null);
                 canvas.drawBitmap(exitButton2.bitmap, null, exitButton2.hitBox, null);
             default :
                 break;
         }
     }
 
-    private int handleOpeningInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
-        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_UP:
-                return GameView.PLAYING;
-        }
-        return GameView.OPENING;
-    }
 
     public int handleInput(MotionEvent motionEvent, int state, Rocket rocket) {
         for(int i=0;i<motionEvent.getPointerCount();++i) {
@@ -90,11 +81,19 @@ public class InputController {
                 case GameView.PLAYING  : return handlePlayingInput(motionEvent, x, y, rocket);
                 case GameView.PAUSED    : return handlePausedInput(motionEvent, x, y, rocket);
                 case GameView.CLEAR     : return handleClearInput(motionEvent, x, y, rocket);
-                case GameView.GAMEOVER  : return handleGameOverInput(motionEvent, x, y, rocket);
+                case GameView.GAME_OVER  : return handleGameOverInput(motionEvent, x, y, rocket);
                 default: return state;
             }
         }
         return state;
+    }
+
+    private int handleOpeningInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_UP:
+                return GameView.PLAYING;
+        }
+        return GameView.OPENING;
     }
 
     private int handlePlayingInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
@@ -153,7 +152,7 @@ public class InputController {
                 }
                 break;
         }
-        return GameView.GAMEOVER;
+        return GameView.GAME_OVER;
     }
 
     private int handleClearInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
@@ -173,9 +172,13 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 rocket.setGoingDown(false);
                 rocket.setGoingUp(false);
+                if(playButton.hitBox.contains(lastX, lastY) &&
+                        playButton.hitBox.contains(x, y)) {
+                    return GameView.WINNING_RUN;
+                }
                 if(exitButton2.hitBox.contains(lastX, lastY) &&
                         exitButton2.hitBox.contains(x, y)) {
-                    return GameView.WINNING_RUN;
+                    return GameView.GO_EXIT;
                 }
                 break;
         }

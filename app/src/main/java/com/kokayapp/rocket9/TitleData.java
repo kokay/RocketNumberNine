@@ -16,8 +16,8 @@ public class TitleData extends LevelData {
     private ArrayList<Star> stars = new ArrayList<>();
     private Button rocketImage;
 
-    public TitleData(Context context, Viewport vp) {
-        super(context, vp);
+    public TitleData(Context context, Viewport vp, int level, Rocket oldRocket) {
+        super(context, vp, level, oldRocket);
         rocketImage = new Button(context, vp, R.drawable.rocket_titile,
                 4, 2.5f, 10, 13);
         enemies.add(new YellowEnemy(context, vp, 50, 10));

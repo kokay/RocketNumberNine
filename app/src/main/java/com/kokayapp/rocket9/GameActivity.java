@@ -21,7 +21,8 @@ public class GameActivity extends Activity {
         Point screen = new Point();
         display.getSize(screen);
 
-        gameView = new GameView(this, screen.x, screen.y);
+        int level = getIntent().getIntExtra("Level", 0);
+        gameView = new GameView(this, screen.x, screen.y, level, null);
         setContentView(gameView);
     }
 

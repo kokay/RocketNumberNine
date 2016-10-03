@@ -21,4 +21,11 @@ public abstract class MovableObject extends GameObject {
     public float getHealthPoint() {
         return healthPoint;
     }
+
+    protected void setLevel(int level) {
+        velocityX += level;
+        velocityY += level;
+        maxVelocity += level;
+        acceleration += level;
+    }
 }

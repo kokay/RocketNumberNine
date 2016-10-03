@@ -17,22 +17,23 @@ public class Rocket extends MovableObject {
     private float currentPlace = 0;
     private Gun gun;
 
-    public Rocket(Context context, Viewport vp) {
+    public Rocket(Context context, Viewport vp, int level) {
         height = 2.5f;
         width = 3f;
         x = 3;
         y = Viewport.VIEW_CENTER_Y - (height / 2.0f);
-        velocityX = 10;
-        velocityY = 0;
-        maxVelocity = 8;
-        acceleration = 10;
+        velocityX = 3;
+        maxVelocity = 6;
+        acceleration = 6;
         healthPoint = 10;
         maxHealthPoint = 10;
+        setLevel(level);
+        velocityY = 0;
 
         goingUp = false;
         goingUp = false;
+        gun = new Gun(12 + level, 20);
         bitmap = prepareBitmap(context, vp, R.drawable.rocket);
-        gun = new Gun(12, 20);
     }
 
     public void draw(Canvas canvas, Viewport vp) {
@@ -63,8 +64,8 @@ public class Rocket extends MovableObject {
             velocityY = 0;
         }
         hitBox.set(vp.viewToScreen(this));
-        gun.pullTrigger(this);
 
+        gun.pullTrigger(this);
         gun.update(vp, fps);
     }
 
@@ -84,7 +85,7 @@ public class Rocket extends MovableObject {
         return currentPlace;
     }
 
-    public void runAway(long fps) {
+    public void runAwayUpdate(long fps) {
         if (y > Viewport.VIEW_CENTER_Y) {
             velocityY -= acceleration / fps;
             if(velocityY < -3) velocityY = -3;

@@ -41,7 +41,7 @@ public class TitleView extends SurfaceView implements Runnable {
     private DrawingTool dt;
 
 
-    public TitleView(Context context, int screenX, int screenY) {
+    public TitleView(Context context, int screenX, int screenY, int level, Rocket rocket) {
         super(context);
         this.context = context;
         thread = null;
@@ -49,7 +49,7 @@ public class TitleView extends SurfaceView implements Runnable {
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
         ic = new TitleInputController(context, vp);
-        ld = new TitleData(context, vp);
+        ld = new TitleData(context, vp, level, rocket);
         dt = new DrawingTool(vp);
     }
 
