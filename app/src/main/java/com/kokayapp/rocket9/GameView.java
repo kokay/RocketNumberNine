@@ -131,9 +131,9 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void drawInfo() {
         canvas.drawColor(Color.argb(50, 0, 0, 0));
-        canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
         switch (state) {
             case OPENING : {
+                canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
                 canvas.drawText("EARTH", vp.screenCenterX,
                         (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
                 canvas.drawText("Touch the screen to start!", vp.screenCenterX,
@@ -141,20 +141,23 @@ public class GameView extends SurfaceView implements Runnable {
                 break;
             }
             case PAUSED : {
+                canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
                 canvas.drawText("PAUSED", vp.screenCenterX,
                         (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
                 break;
             }
             case GAMEOVER : {
+                canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
                 canvas.drawText("GAME OVER", vp.screenCenterX,
                         (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
                 break;
             }
             case CLEAR : {
+                canvas.drawRoundRect(dt.bigBox, 15f, 15f, dt.darkNavy);
                 canvas.drawText("GAME CLEAR!!", vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y - 2f) * vp.pixelsPerY, dt.bigTextPaint);
+                        (Viewport.VIEW_CENTER_Y - 3f) * vp.pixelsPerY, dt.bigTextPaint);
                 canvas.drawText("SCORE : " + ld.getScore(), vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y + 1f) * vp.pixelsPerY, dt.smallTextPaint);
+                        (Viewport.VIEW_CENTER_Y - 0.5f) * vp.pixelsPerY, dt.smallTextPaint);
                 break;
             }
         }

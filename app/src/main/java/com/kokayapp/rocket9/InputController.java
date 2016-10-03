@@ -21,6 +21,7 @@ public class InputController {
     private Button pauseButton;
     private Button continueButton;
     private Button exitButton;
+    private Button exitButton2;
     private Button settingButton;
     private int lastX = -1, lastY = -1;
 
@@ -44,6 +45,9 @@ public class InputController {
         exitButton = new Button(context, vp, R.drawable.exit_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
 
+        exitButton2 = new Button(context, vp, R.drawable.exit_button,
+                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+
         settingButton = new Button(context, vp, R.drawable.settings_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
     }
@@ -63,7 +67,7 @@ public class InputController {
                 canvas.drawBitmap(exitButton.bitmap, null, exitButton.hitBox, null);
                 break;
             case GameView.CLEAR :
-                canvas.drawBitmap(exitButton.bitmap, null, exitButton.hitBox, null);
+                canvas.drawBitmap(exitButton2.bitmap, null, exitButton2.hitBox, null);
             default :
                 break;
         }
@@ -110,9 +114,9 @@ public class InputController {
                 if(pauseButton.hitBox.contains(lastX, lastY) &&
                    pauseButton.hitBox.contains(x, y)) {
                     return GameView.PAUSED;
-//                } else {
-//                    rocket.setGoingDown(false);
-//                    rocket.setGoingUp(false);
+                } else {
+                    rocket.setGoingDown(false);
+                    rocket.setGoingUp(false);
                 }
                 break;
         }
@@ -158,8 +162,8 @@ public class InputController {
                 lastY = y;
                 break;
             case MotionEvent.ACTION_UP:
-                if(exitButton.hitBox.contains(lastX, lastY) &&
-                        exitButton.hitBox.contains(x, y)) {
+                if(exitButton2.hitBox.contains(lastX, lastY) &&
+                        exitButton2.hitBox.contains(x, y)) {
                     return GameView.GO_EXIT;
                 }
                 break;

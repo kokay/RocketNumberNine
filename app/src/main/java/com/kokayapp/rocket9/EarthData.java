@@ -18,7 +18,7 @@ public class EarthData extends LevelData {
 
     public EarthData(Context context, Viewport vp) {
         super(context, vp);
-        distance = 5500;
+        distance = 7000;
         enemies.add(new YellowEnemy(context, vp, 0, 2));
         enemies.add(new YellowEnemy(context, vp, 500, 2));
         enemies.add(new OrangeEnemy(context, vp, 1000, 15));

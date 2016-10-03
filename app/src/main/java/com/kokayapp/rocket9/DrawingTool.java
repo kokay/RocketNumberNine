@@ -14,6 +14,7 @@ import android.view.Display;
 public class DrawingTool {
     public final Rect topBar = new Rect();
     public final RectF infoBox = new RectF();
+    public final RectF bigBox = new RectF();
 
     public final Paint darkNavy = new Paint();
     public final Paint smallTextPaint = new Paint();
@@ -27,6 +28,12 @@ public class DrawingTool {
                 (Viewport.VIEW_CENTER_Y - 4.5f) * vp.pixelsPerX,
                 (Viewport.VIEW_CENTER_X + 8) * vp.pixelsPerX,
                 (Viewport.VIEW_CENTER_Y + 4.5f) * vp.pixelsPerX );
+
+        bigBox .set(
+                (Viewport.VIEW_CENTER_X - 9.5f) * vp.pixelsPerX,
+                (Viewport.VIEW_CENTER_Y - 6f) * vp.pixelsPerX,
+                (Viewport.VIEW_CENTER_X + 9.5f) * vp.pixelsPerX,
+                (Viewport.VIEW_CENTER_Y + 6f) * vp.pixelsPerX );
 
         darkNavy.setColor(Color.rgb(2, 12, 35));
 
