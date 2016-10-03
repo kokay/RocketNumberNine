@@ -91,9 +91,10 @@ public class InputController {
                 case GameView.PAUSED    : return handlePausedInput(motionEvent, x, y, rocket);
                 case GameView.CLEAR     : return handleClearInput(motionEvent, x, y, rocket);
                 case GameView.GAMEOVER  : return handleGameOverInput(motionEvent, x, y, rocket);
+                default: return state;
             }
         }
-        return GameView.PLAYING;
+        return state;
     }
 
     private int handlePlayingInput(MotionEvent motionEvent, int x, int y, Rocket rocket) {
