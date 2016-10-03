@@ -40,7 +40,7 @@ public class GameView extends SurfaceView implements Runnable {
     private DrawingTool dt;
 
 
-    public GameView(Context context, int screenX, int screenY, int level, Rocket rocket) {
+    public GameView(Context context, int screenX, int screenY, int level, int score, int healthPoint) {
         super(context);
         this.context = context;
         this.level = level;
@@ -49,7 +49,7 @@ public class GameView extends SurfaceView implements Runnable {
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
         ic = new InputController(context, vp);
-        ld = new EarthData(context, vp, level, rocket);
+        ld = new EarthData(context, vp, level, score, healthPoint);
         dt = new DrawingTool(vp);
     }
 
@@ -65,7 +65,6 @@ public class GameView extends SurfaceView implements Runnable {
             startFrameTime = System.currentTimeMillis();
             update();
             draw();
-
             timeOfFrame = System.currentTimeMillis() - startFrameTime;
             if (timeOfFrame >= 1) fps = 1000 / timeOfFrame;
         }
@@ -87,6 +86,7 @@ public class GameView extends SurfaceView implements Runnable {
             case GO_NEXT_LEVEL :
                 Intent nextLevelIntent = new Intent(context, GameActivity.class);
                 nextLevelIntent.putExtra("Level", level + 1);
+                nextLevelIntent.putExtra("Score", ld.getScore());
                 context.startActivity(nextLevelIntent);
                 ((Activity)(context)).finish();
                 break;

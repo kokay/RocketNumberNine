@@ -32,11 +32,12 @@ public abstract class LevelData {
     protected SharedPreferences.Editor editor;
 
 
-    public LevelData(Context context, Viewport vp, int level, Rocket rocket) {
+    public LevelData(Context context, Viewport vp, int level, int score, int healthPoint) {
         prefs = context.getSharedPreferences("BestScoreFile", context.MODE_PRIVATE);
         highScore = prefs.getInt("BestScore", 0);
         editor = prefs.edit();
-        this.rocket = new Rocket(context, vp, level);
+        this.rocket = new Rocket(context, vp, level, healthPoint);
+        this.score = score;
     }
 
     public abstract void openingUpdate(long fps, Viewport vp);

@@ -16,7 +16,7 @@ public class TitleActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         Point screen = new Point();
         display.getSize(screen);
-        titleView = new TitleView(this, screen.x, screen.y, 0, null);
+        titleView = new TitleView(this, screen.x, screen.y);
         setContentView(titleView);
     }
 

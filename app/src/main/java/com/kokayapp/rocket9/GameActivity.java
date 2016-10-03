@@ -22,7 +22,8 @@ public class GameActivity extends Activity {
         display.getSize(screen);
 
         int level = getIntent().getIntExtra("Level", 0);
-        gameView = new GameView(this, screen.x, screen.y, level, null);
+        int score = getIntent().getIntExtra("Score", 0);
+        gameView = new GameView(this, screen.x, screen.y, level, score, Rocket.MAX_HEALTH_POINT);
         setContentView(gameView);
     }
 

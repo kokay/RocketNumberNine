@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class EarthData extends LevelData {
     private ArrayList<Star> stars = new ArrayList<>();
 
-    public EarthData(Context context, Viewport vp, int level, Rocket oldRocket) {
-        super(context, vp, level, oldRocket);
+    public EarthData(Context context, Viewport vp, int level, int score, int healthPoint) {
+        super(context, vp, level, score, healthPoint);
         distance = 70;
         enemies.add(new YellowEnemy(context, vp, 0, 2));
         enemies.add(new YellowEnemy(context, vp, 500, 2));
@@ -53,17 +53,17 @@ public class EarthData extends LevelData {
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
-        if(rocket.getHealthPoint() <= 0) return GameView.GAME_OVER;
-        if(getDistance() <= 0) {
+        if(rocket.getHealthPoint() <= 0) {
             if(score > highScore) setHighScore(score);
-            return GameView.CLEAR;
+            return GameView.GAME_OVER;
         }
+        if(getDistance() <= 0) return GameView.CLEAR;
         return GameView.PLAYING;
     }
 
     @Override
     public void clearUpdate(long fps, Viewport vp) {
-        rocket.update(fps, vp);
+        rocket.completeUpdate(fps);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
@@ -71,7 +71,7 @@ public class EarthData extends LevelData {
 
     @Override
     public int winningRunUpdate(long fps, Viewport vp) {
-        rocket.runAwayUpdate(fps);
+        rocket.winningRunUpdate(fps);
         if(rocket.getX() > Viewport.VIEW_WIDTH + 10)
             return GameView.GO_NEXT_LEVEL;
         for(Background bg : backgrounds) bg.update(fps);

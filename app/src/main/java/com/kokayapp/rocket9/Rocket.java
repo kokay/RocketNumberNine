@@ -10,14 +10,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 
 public class Rocket extends MovableObject {
+    public static final int MAX_HEALTH_POINT = 10;
 
-    private boolean goingUp;
-    private boolean goingDown;
+    private boolean goingUp = false;
+    private boolean goingDown = false;
     private Bitmap bitmap;
     private float currentPlace = 0;
     private Gun gun;
 
-    public Rocket(Context context, Viewport vp, int level) {
+    public Rocket(Context context, Viewport vp, int level, int healthPoint) {
         height = 2.5f;
         width = 3f;
         x = 3;
@@ -25,14 +26,12 @@ public class Rocket extends MovableObject {
         velocityX = 3;
         maxVelocity = 6;
         acceleration = 6;
-        healthPoint = 10;
-        maxHealthPoint = 10;
+        this.healthPoint = healthPoint;
+        maxHealthPoint = MAX_HEALTH_POINT;
         setLevel(level);
         velocityY = 0;
 
-        goingUp = false;
-        goingUp = false;
-        gun = new Gun(12 + level, 20);
+        gun = new Gun(20 + level, 20);
         bitmap = prepareBitmap(context, vp, R.drawable.rocket);
     }
 
@@ -69,6 +68,37 @@ public class Rocket extends MovableObject {
         gun.update(vp, fps);
     }
 
+    public void winningRunUpdate(long fps) {
+        if (y > Viewport.VIEW_CENTER_Y) {
+            velocityY -= acceleration / fps;
+            if(velocityY < -3) velocityY = -3;
+        } else if (y < Viewport.VIEW_CENTER_Y) {
+            velocityY += acceleration / fps;
+            if(velocityY > 3) velocityY = 3;
+        }
+        velocityX += acceleration / fps;
+        x += velocityX / fps;
+        y += velocityY / fps;
+    }
+
+    public void completeUpdate(long fps) {
+        if(goingDown) {
+            velocityY -= acceleration / fps;
+            if(velocityY < -maxVelocity) velocityY = -maxVelocity;
+        } else if (goingUp) {
+            velocityY += acceleration / fps;
+            if(velocityY > maxVelocity) velocityY = maxVelocity;
+        }
+        y += velocityY / fps;
+        if(y < 0) {
+            y = 0;
+            velocityY = 0;
+        } else if (y > (Viewport.VIEW_HEIGHT - height)) {
+            y = (Viewport.VIEW_HEIGHT - height);
+            velocityY = 0;
+        }
+    }
+
     public void setGoingDown(boolean goingDown) {
         this.goingDown = goingDown;
     }
@@ -85,16 +115,4 @@ public class Rocket extends MovableObject {
         return currentPlace;
     }
 
-    public void runAwayUpdate(long fps) {
-        if (y > Viewport.VIEW_CENTER_Y) {
-            velocityY -= acceleration / fps;
-            if(velocityY < -3) velocityY = -3;
-        } else if (y < Viewport.VIEW_CENTER_Y) {
-            velocityY += acceleration / fps;
-            if(velocityY > 3) velocityY = 3;
-        }
-        velocityX += acceleration / fps;
-        x += velocityX / fps;
-        y += velocityY / fps;
-    }
 }
