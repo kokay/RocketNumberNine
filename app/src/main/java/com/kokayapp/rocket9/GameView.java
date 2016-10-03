@@ -87,6 +87,7 @@ public class GameView extends SurfaceView implements Runnable {
                 Intent nextLevelIntent = new Intent(context, GameActivity.class);
                 nextLevelIntent.putExtra("Level", level + 1);
                 nextLevelIntent.putExtra("Score", ld.getScore());
+                nextLevelIntent.putExtra("HealthPoint", (int) ld.getRocket().getHealthPoint());
                 context.startActivity(nextLevelIntent);
                 ((Activity)(context)).finish();
                 break;
