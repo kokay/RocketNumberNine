@@ -3,6 +3,8 @@ package com.kokayapp.rocket9;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Vibrator;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -17,8 +19,10 @@ public class Rocket extends MovableObject {
     private Bitmap bitmap;
     private float currentPlace = 0;
     private Gun gun;
+    private Vibrator vib;
 
-    public Rocket(Context context, Viewport vp, int level, int healthPoint) {
+    public Rocket(Context context, Viewport vp, Vibrator vib, int level, int healthPoint) {
+        this.vib = vib;
         height = 2.5f;
         width = 3f;
         x = 3;
@@ -115,4 +119,13 @@ public class Rocket extends MovableObject {
         return currentPlace;
     }
 
+    public void hitEnemy() {
+        healthPoint -= 2;
+        if(vib != null) vib.vibrate(80);
+    }
+
+    public void hitBullet() {
+        healthPoint -= 1;
+        if(vib != null) vib.vibrate(50);
+    }
 }

@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  * Created by Koji on 10/2/2016.
@@ -40,16 +42,19 @@ public class TitleView extends SurfaceView implements Runnable {
     private LevelData ld;
     private DrawingTool dt;
 
+    private Vibrator vib;
 
     public TitleView(Context context, int screenX, int screenY) {
         super(context);
+
+        vib = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
         this.context = context;
         thread = null;
         holder = getHolder();
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
         ic = new TitleInputController(context, vp);
-        ld = new TitleData(context, vp, 0, 0, 0);
+        ld = new TitleData(context, vp, vib, 0, 0, 0);
         dt = new DrawingTool(vp);
     }
 
@@ -81,7 +86,7 @@ public class TitleView extends SurfaceView implements Runnable {
                 context.startActivity(intent);
                 break;
             default:
-                ld.openingUpdate(fps, vp);
+                ld.openingUpdate(fps);
                 break;
         }
     }
@@ -89,7 +94,7 @@ public class TitleView extends SurfaceView implements Runnable {
     private void draw() {
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
-            ld.draw(canvas, vp);
+            ld.draw(canvas);
             drawTopBar();
             ic.drawPlayingButtons(canvas, vp);
             if(state != TITLE) drawInfo();

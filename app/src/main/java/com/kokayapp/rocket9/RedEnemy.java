@@ -41,7 +41,7 @@ public class RedEnemy extends Enemy {
                 for (Bullet bullet : gun.getBullets()) {
                     bullet.update(vp, fps);
                     if (bullet.hitBox.intersect(rocket.hitBox)) {
-                        rocket.healthPoint -= 1;
+                        rocket.hitBullet();
                         bullet.hide();
                     }
                 }

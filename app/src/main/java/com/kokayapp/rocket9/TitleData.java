@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.os.Vibrator;
 
 import java.util.ArrayList;
 
@@ -16,8 +17,8 @@ public class TitleData extends LevelData {
     private ArrayList<Star> stars = new ArrayList<>();
     private Button rocketImage;
 
-    public TitleData(Context context, Viewport vp, int level, int score, int healthPoint) {
-        super(context, vp, level, score, healthPoint);
+    public TitleData(Context context, Viewport vp, Vibrator vib, int level, int score, int healthPoint) {
+        super(context, vp, vib, level, score, healthPoint);
         rocketImage = new Button(context, vp, R.drawable.rocket_titile,
                 4, 2.5f, 10, 13);
         enemies.add(new YellowEnemy(context, vp, level));
@@ -36,7 +37,7 @@ public class TitleData extends LevelData {
     }
 
     @Override
-    public void openingUpdate(long fps, Viewport vp) {
+    public void openingUpdate(long fps) {
         for(Enemy e : enemies) e.update(fps, vp, rocket);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
@@ -44,22 +45,22 @@ public class TitleData extends LevelData {
     }
 
     @Override
-    public int playingUpdate(long fps, Viewport vp) {
+    public int playingUpdate(long fps) {
         return 0;
     }
 
     @Override
-    public void clearUpdate(long fps, Viewport vp) {
+    public void clearUpdate(long fps) {
 
     }
 
     @Override
-    public int winningRunUpdate(long fps, Viewport vp) {
+    public int winningRunUpdate(long fps) {
         return 0;
     }
 
     @Override
-    public void draw(Canvas canvas, Viewport vp) {
+    public void draw(Canvas canvas) {
         canvas.drawPaint(background);
         for(Background bg : backgrounds) bg.draw(canvas, vp);
         for(Star s : stars) s.draw(canvas, vp);

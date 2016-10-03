@@ -10,6 +10,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.os.Vibrator;
 
 import java.util.ArrayList;
 
@@ -31,20 +32,24 @@ public abstract class LevelData {
     protected SharedPreferences prefs;
     protected SharedPreferences.Editor editor;
 
+    protected Viewport vp;
+    protected Vibrator vib;
 
-    public LevelData(Context context, Viewport vp, int level, int score, int healthPoint) {
+    public LevelData(Context context, Viewport vp, Vibrator vib, int level, int score, int healthPoint) {
+        this.vp = vp;
+        this.vib = vib;
         prefs = context.getSharedPreferences("BestScoreFile", context.MODE_PRIVATE);
         highScore = prefs.getInt("BestScore", 0);
         editor = prefs.edit();
-        this.rocket = new Rocket(context, vp, level, healthPoint);
+        this.rocket = new Rocket(context, vp, vib, level, healthPoint);
         this.score = score;
     }
 
-    public abstract void openingUpdate(long fps, Viewport vp);
-    public abstract int playingUpdate(long fps, Viewport vp);
-    public abstract void clearUpdate(long fps, Viewport vp);
-    public abstract int winningRunUpdate(long fps, Viewport vp);
-    public abstract void draw(Canvas canvas, Viewport vp);
+    public abstract void openingUpdate(long fps);
+    public abstract int playingUpdate(long fps);
+    public abstract void clearUpdate(long fps);
+    public abstract int winningRunUpdate(long fps);
+    public abstract void draw(Canvas canvas);
 
     public Rocket getRocket() {
         return rocket;

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.os.Vibrator;
 
 import java.util.ArrayList;
 
@@ -16,8 +17,9 @@ import java.util.ArrayList;
 public class EarthData extends LevelData {
     private ArrayList<Star> stars = new ArrayList<>();
 
-    public EarthData(Context context, Viewport vp, int level, int score, int healthPoint) {
-        super(context, vp, level, score, healthPoint);
+    public EarthData(Context context, Viewport vp, Vibrator vib, int level, int score, int healthPoint) {
+        super(context, vp, vib, level, score, healthPoint);
+
         distance = 500 + (level * 100);
         enemies.add(new YellowEnemy(context, vp, level));
         enemies.add(new OrangeEnemy(context, vp, level));
@@ -36,14 +38,14 @@ public class EarthData extends LevelData {
     }
 
     @Override
-    public void openingUpdate(long fps, Viewport vp) {
+    public void openingUpdate(long fps) {
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
         for(Star s : stars) s.update(fps);
     }
 
     @Override
-    public int playingUpdate(long fps, Viewport vp) {
+    public int playingUpdate(long fps) {
         rocket.update(fps, vp);
         for(Enemy e : enemies) score += e.update(fps, vp, rocket);
         for(Background bg : backgrounds) bg.update(fps);
@@ -58,7 +60,7 @@ public class EarthData extends LevelData {
     }
 
     @Override
-    public void clearUpdate(long fps, Viewport vp) {
+    public void clearUpdate(long fps) {
         rocket.completeUpdate(fps);
         for(Background bg : backgrounds) bg.update(fps);
         for(Background fg : foregrounds) fg.update(fps);
@@ -66,7 +68,7 @@ public class EarthData extends LevelData {
     }
 
     @Override
-    public int winningRunUpdate(long fps, Viewport vp) {
+    public int winningRunUpdate(long fps) {
         rocket.winningRunUpdate(fps);
         if(rocket.getX() > Viewport.VIEW_WIDTH + 10)
             return GameView.GO_NEXT_LEVEL;
@@ -77,7 +79,7 @@ public class EarthData extends LevelData {
     }
 
     @Override
-    public void draw(Canvas canvas, Viewport vp) {
+    public void draw(Canvas canvas) {
         canvas.drawPaint(background);
         for(Background bg : backgrounds) bg.draw(canvas, vp);
         for(Star s : stars) s.draw(canvas, vp);

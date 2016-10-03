@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -15,6 +16,10 @@ import java.util.ArrayList;
  */
 
 public class InputController {
+    private Canvas canvas;
+    private Viewport vp;
+    private Vibrator vib;
+
     private Button upButton;
     private Button downButton;
     private Button pauseButton;
@@ -23,9 +28,14 @@ public class InputController {
     private Button exitButton;
     private Button exitButton2;
     private int lastX = -1, lastY = -1;
+    private long vibDuration = 40;
 
 
-    public InputController(Context context, Viewport vp) {
+    public InputController(Context context, Viewport vp, Canvas canvas, Vibrator vib) {
+        this.canvas = canvas;
+        this.vp = vp;
+        this.vib = vib;
+
         upButton = new Button(context, vp, R.drawable.up_button,
                 0.1f, Viewport.VIEW_HEIGHT - 6f - 0.2f, 3f, 3f);
 
@@ -49,13 +59,13 @@ public class InputController {
 
     }
 
-    public void drawPlayingButtons(Canvas canvas, Viewport vp) {
+    public void drawPlayingButtons(Canvas canvas) {
         canvas.drawBitmap(upButton.bitmap, null, upButton.hitBox, null);
         canvas.drawBitmap(downButton.bitmap, null, downButton.hitBox, null);
         canvas.drawBitmap(pauseButton.bitmap, null, pauseButton.hitBox, null);
     }
 
-    public void drawButtonsOnBox(Canvas canvas, Viewport vp, int state) {
+    public void drawButtonsOnBox(Canvas canvas, int state) {
         switch (state) {
             case GameView.PAUSED :
                 canvas.drawBitmap(continueButton.bitmap, null, continueButton.hitBox, null);
@@ -104,15 +114,18 @@ public class InputController {
                 if(upButton.hitBox.contains(x, y)) {
                     rocket.setGoingDown(true);
                     rocket.setGoingUp(false);
+                    vib.vibrate(vibDuration);
                 }
                 if(downButton.hitBox.contains(x, y)) {
                     rocket.setGoingDown(false);
                     rocket.setGoingUp(true);
+                    vib.vibrate(vibDuration);
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 if(pauseButton.hitBox.contains(lastX, lastY) &&
                    pauseButton.hitBox.contains(x, y)) {
+                    vib.vibrate(vibDuration);
                     return GameView.PAUSED;
                 } else {
                     rocket.setGoingDown(false);
@@ -132,6 +145,7 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 if(continueButton.hitBox.contains(lastX, lastY) &&
                    continueButton.hitBox.contains(x, y)) {
+                    vib.vibrate(vibDuration);
                     return GameView.PLAYING;
                 }
                 break;
@@ -148,6 +162,7 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 if(exitButton.hitBox.contains(lastX, lastY) &&
                    exitButton.hitBox.contains(x, y)) {
+                    if(vib != null) vib.vibrate(vibDuration);
                     return GameView.GO_EXIT;
                 }
                 break;
@@ -163,10 +178,12 @@ public class InputController {
                 if(upButton.hitBox.contains(x, y)) {
                     rocket.setGoingDown(true);
                     rocket.setGoingUp(false);
+                    if(vib != null) vib.vibrate(vibDuration);
                 }
                 if(downButton.hitBox.contains(x, y)) {
                     rocket.setGoingDown(false);
                     rocket.setGoingUp(true);
+                    if(vib != null) vib.vibrate(vibDuration);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -174,10 +191,12 @@ public class InputController {
                 rocket.setGoingUp(false);
                 if(playButton.hitBox.contains(lastX, lastY) &&
                         playButton.hitBox.contains(x, y)) {
+                    if(vib != null) vib.vibrate(vibDuration);
                     return GameView.WINNING_RUN;
                 }
                 if(exitButton2.hitBox.contains(lastX, lastY) &&
                         exitButton2.hitBox.contains(x, y)) {
+                    if(vib != null) vib.vibrate(vibDuration);
                     return GameView.GO_EXIT;
                 }
                 break;

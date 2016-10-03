@@ -55,7 +55,7 @@ public abstract class Enemy extends MovableObject {
     public int checkHit(Viewport vp, Rocket rocket) {
         hitBox.set(vp.viewToScreen(this));
         if(hitBox.intersect(rocket.hitBox)) {
-            rocket.healthPoint -= 2;
+            rocket.hitEnemy();
             state = NONACTIVE;
             //state = CRASHED;
             return point;

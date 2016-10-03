@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  * Created by Koji on 9/28/2016.
@@ -34,6 +37,7 @@ public class GameView extends SurfaceView implements Runnable {
     private long fps;
 
     private Context context;
+    private Vibrator vib;
     private Viewport vp;
     private InputController ic;
     private LevelData ld;
@@ -48,8 +52,11 @@ public class GameView extends SurfaceView implements Runnable {
         holder = getHolder();
         fps = 2000000000;
         vp = new Viewport(screenX, screenY);
-        ic = new InputController(context, vp);
-        ld = new EarthData(context, vp, level, score, healthPoint);
+
+        vib = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+        if(vib == null) Log.w(TAG, "No vibration service");
+        ic = new InputController(context, vp, canvas, vib);
+        ld = new EarthData(context, vp, vib, level, score, healthPoint);
         dt = new DrawingTool(vp);
     }
 
@@ -72,16 +79,16 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         switch (state) {
             case OPENING :
-                ld.openingUpdate(fps, vp);
+                ld.openingUpdate(fps);
                 break;
             case PLAYING :
-                state = ld.playingUpdate(fps, vp);
+                state = ld.playingUpdate(fps);
                 break;
             case CLEAR :
-                ld.clearUpdate(fps, vp);
+                ld.clearUpdate(fps);
                 break;
             case WINNING_RUN :
-                state = ld.winningRunUpdate(fps, vp);
+                state = ld.winningRunUpdate(fps);
                 break;
             case GO_NEXT_LEVEL :
                 Intent nextLevelIntent = new Intent(context, GameActivity.class);
@@ -104,11 +111,11 @@ public class GameView extends SurfaceView implements Runnable {
     private void draw() {
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
-            ld.draw(canvas, vp);
+            ld.draw(canvas);
             drawTopBar();
-            ic.drawPlayingButtons(canvas, vp);
+            ic.drawPlayingButtons(canvas);
             if(state != PLAYING) drawInfo();
-            ic.drawButtonsOnBox(canvas, vp, state);
+            ic.drawButtonsOnBox(canvas, state);
             if(debugging) drawDebugging();
             holder.unlockCanvasAndPost(canvas);
         }
