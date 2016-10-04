@@ -20,12 +20,16 @@ public class Bullet extends MovableObject {
     public void update(Viewport vp, long fps) {
         x += velocityX / fps;
         hitBox.set(vp.viewToScreen(this));
+        if(x + width < 0 || x > Viewport.VIEW_WIDTH)
+            hide();
     }
 
     public void set(float x, float y, float velocityX) {
-        this.x = x;
-        this.y = y;
-        this.velocityX = velocityX;
+        if(this.y == HIDE_PLACE_Y) {
+            this.x = x;
+            this.y = y;
+            this.velocityX = velocityX;
+        }
     }
 
     public void hide() {

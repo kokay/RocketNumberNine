@@ -56,4 +56,10 @@ public class Gun {
     public CopyOnWriteArrayList<Bullet> getBullets() {
         return bullets;
     }
+
+    public boolean bulletIsGone() {
+        for(Bullet bullet : bullets)
+            if(bullet.getY() != -1) return false;
+        return true;
+    }
 }

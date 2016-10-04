@@ -47,7 +47,14 @@ public class RedEnemy extends Enemy {
                 }
                 return checkHit(vp, rocket);
             case NONACTIVE :
-                reborn();
+                for (Bullet bullet : gun.getBullets()) {
+                    bullet.update(vp, fps);
+                    if (bullet.hitBox.intersect(rocket.hitBox)) {
+                        rocket.hitBullet();
+                        bullet.hide();
+                    }
+                }
+                if(gun.bulletIsGone()) reborn();
                 return 0;
             default:
                 return 0;
@@ -56,9 +63,8 @@ public class RedEnemy extends Enemy {
 
     @Override
     public void draw(Canvas canvas, Viewport vp) {
-        if(state == VISIBLE) {
-            gun.draw(canvas, vp);
+        gun.draw(canvas, vp);
+        if(state == VISIBLE)
             canvas.drawBitmap(bitmaps[RED], null, vp.viewToScreen(this), null);
-        }
     }
 }
