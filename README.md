@@ -1,4 +1,4 @@
-# RocketNumberNine# Rocket #9 - Android Application
+# Rocket #9 - Android Application
 This is a personal project for studying android application develpment.
 
 This is not completed yet.
