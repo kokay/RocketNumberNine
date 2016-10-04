@@ -25,8 +25,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     private volatile boolean running;
     public static final int OPENING = 0, PLAYING = 1, PAUSED = 2, CLEAR = 3, GAME_OVER = 4, WINNING_RUN = 5, GO_NEXT_LEVEL = 6, GO_EXIT = 7;
-    private volatile int state = PLAYING;
-    private Thread gameThread;
+    private volatile int state = OPENING;
+    private Thread gameThread = null;
     private int level = 0;
 
     private Canvas canvas;
@@ -34,7 +34,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private long startFrameTime;
     private long timeOfFrame;
-    private long fps;
+    private long fps = 2000000000;
 
     private Context context;
     private Vibrator vib;
@@ -48,11 +48,9 @@ public class GameView extends SurfaceView implements Runnable {
         super(context);
         this.context = context;
         this.level = level;
-        gameThread = null;
         holder = getHolder();
-        fps = 2000000000;
-        vp = new Viewport(screenX, screenY);
 
+        vp = new Viewport(screenX, screenY);
         vib = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
         if(vib == null) Log.w(TAG, "No vibration service");
         ic = new InputController(context, vp, canvas, vib);
@@ -78,34 +76,29 @@ public class GameView extends SurfaceView implements Runnable {
     }
     private void update() {
         switch (state) {
-            case OPENING :
-                ld.openingUpdate(fps);
-                break;
-            case PLAYING :
-                state = ld.playingUpdate(fps);
-                break;
-            case CLEAR :
-                ld.clearUpdate(fps);
-                break;
-            case WINNING_RUN :
-                state = ld.winningRunUpdate(fps);
-                break;
-            case GO_NEXT_LEVEL :
-                Intent nextLevelIntent = new Intent(context, GameActivity.class);
-                nextLevelIntent.putExtra("Level", level + 1);
-                nextLevelIntent.putExtra("Score", ld.getScore());
-                nextLevelIntent.putExtra("HealthPoint", (int) ld.getRocket().getHealthPoint());
-                context.startActivity(nextLevelIntent);
-                ((Activity)(context)).finish();
-                break;
-            case GO_EXIT :
-                Intent backHomeIntent = new Intent(context, TitleActivity.class);
-                backHomeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                context.startActivity(backHomeIntent);
-                break;
-            default:
-                break;
+            case OPENING       : ld.openingUpdate(fps); break;
+            case PLAYING       : state = ld.playingUpdate(fps); break;
+            case CLEAR         : ld.clearUpdate(fps); break;
+            case WINNING_RUN   : state = ld.winningRunUpdate(fps); break;
+            case GO_NEXT_LEVEL : startNextLevel(); break;
+            case GO_EXIT       : goBackToTitle(); break;
+            default            : break;
         }
+    }
+
+    private void startNextLevel() {
+        Intent nextLevelIntent = new Intent(context, GameActivity.class);
+        nextLevelIntent.putExtra("Level", level + 1);
+        nextLevelIntent.putExtra("Score", ld.getScore() + 100);
+        nextLevelIntent.putExtra("HealthPoint", (int) ld.getRocket().getHealthPoint());
+        context.startActivity(nextLevelIntent);
+        ((Activity)(context)).finish();
+    }
+
+    private void goBackToTitle() {
+        Intent backHomeIntent = new Intent(context, TitleActivity.class);
+        backHomeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(backHomeIntent);
     }
 
     private void draw() {
@@ -114,7 +107,7 @@ public class GameView extends SurfaceView implements Runnable {
             ld.draw(canvas);
             drawTopBar();
             ic.drawPlayingButtons(canvas);
-            if(state != PLAYING) drawInfo();
+            if(state != PLAYING) drawMessage();
             ic.drawButtonsOnBox(canvas, state);
             if(debugging) drawDebugging();
             holder.unlockCanvasAndPost(canvas);
@@ -149,43 +142,14 @@ public class GameView extends SurfaceView implements Runnable {
         ld.getRocket().drawHealth(canvas, vp);
     }
 
-    private void drawInfo() {
+    private void drawMessage() {
         canvas.drawColor(Color.argb(50, 0, 0, 0));
         switch (state) {
-            case OPENING : {
-                canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
-                canvas.drawText("EARTH", vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y - 2f) * vp.pixelsPerY, dt.bigTextPaint);
-                canvas.drawText("LEVEL " + level, vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y ) * vp.pixelsPerY, dt.bigTextPaint);
-                canvas.drawText("Touch the screen to start!", vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y + 2.5f) * vp.pixelsPerY, dt.smallTextPaint);
-                break;
-            }
-            case PAUSED : {
-                canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
-                canvas.drawText("PAUSED", vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
-                break;
-            }
-            case GAME_OVER : {
-                canvas.drawRoundRect(dt.infoBox, 15f, 15f, dt.darkNavy);
-                canvas.drawText("GAME OVER", vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
-                break;
-            }
-            case CLEAR : {
-                canvas.drawRoundRect(dt.bigBox, 15f, 15f, dt.darkNavy);
-                canvas.drawText("LEVEL " + level, vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y - 3.5f) * vp.pixelsPerY, dt.bigTextPaint);
-                canvas.drawText("COMPLETE", vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, dt.bigTextPaint);
-                canvas.drawText("SCORE : " + ld.getScore(), vp.screenCenterX,
-                        (Viewport.VIEW_CENTER_Y + 0.5f) * vp.pixelsPerY, dt.smallTextPaint);
-                break;
-            }
-            default :
-                break;
+            case OPENING   : dt.showOpeningMessage(canvas, level); break;
+            case PAUSED    : dt.showPausedMessage(canvas); break;
+            case GAME_OVER : dt.showGameOverMessage(canvas, level, ld.getScore()); break;
+            case CLEAR     : dt.showCompleteMessage(canvas, level, ld.getScore()); break;
+            default        : break;
         }
     }
 

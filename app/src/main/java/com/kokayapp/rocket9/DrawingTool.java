@@ -1,5 +1,6 @@
 package com.kokayapp.rocket9;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -12,6 +13,7 @@ import android.view.Display;
  */
 
 public class DrawingTool {
+    private Viewport vp;
     public final Rect topBar = new Rect();
     public final RectF infoBox = new RectF();
     public final RectF bigBox = new RectF();
@@ -21,6 +23,7 @@ public class DrawingTool {
     public final Paint bigTextPaint = new Paint();
 
     public DrawingTool(Viewport vp) {
+        this.vp = vp;
         topBar.set(0, 0, vp.screenX, (int) (1.2 * vp.pixelsPerY));
 
         infoBox .set(
@@ -48,5 +51,41 @@ public class DrawingTool {
         bigTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         bigTextPaint.setTextAlign(Paint.Align.CENTER);
         bigTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+    }
+
+    public void showOpeningMessage(Canvas canvas, int level) {
+        canvas.drawRoundRect(infoBox, 15f, 15f, darkNavy);
+        canvas.drawText("EARTH", vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y - 2f) * vp.pixelsPerY, bigTextPaint);
+        canvas.drawText("LEVEL " + level, vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y ) * vp.pixelsPerY, bigTextPaint);
+        canvas.drawText("Touch the screen to start!", vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y + 2.5f) * vp.pixelsPerY, smallTextPaint);
+    }
+
+    public void showPausedMessage(Canvas canvas) {
+        canvas.drawRoundRect(infoBox, 15f, 15f, darkNavy);
+        canvas.drawText("PAUSED", vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, bigTextPaint);
+    }
+
+    public void showCompleteMessage(Canvas canvas, int level, int score) {
+        canvas.drawRoundRect(bigBox, 15f, 15f, darkNavy);
+        canvas.drawText("LEVEL " + level, vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y - 3.5f) * vp.pixelsPerY, bigTextPaint);
+        canvas.drawText("COMPLETE", vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, bigTextPaint);
+        canvas.drawText("SCORE : " + score + " + 100", vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y + 0.5f) * vp.pixelsPerY, smallTextPaint);
+    }
+
+    public void showGameOverMessage(Canvas canvas, int level, int score) {
+        canvas.drawRoundRect(infoBox, 15f, 15f, darkNavy);
+        canvas.drawText("GAME OVER", vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, bigTextPaint);
+        canvas.drawText("LEVEL : " + level, vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y + 0.5f) * vp.pixelsPerY, smallTextPaint);
+        canvas.drawText("SCORE : " + score, vp.screenCenterX,
+                (Viewport.VIEW_CENTER_Y + 0.5f) * vp.pixelsPerY, smallTextPaint);
     }
 }

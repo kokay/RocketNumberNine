@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public abstract class LevelData {
     protected Rocket rocket;
     protected ArrayList<Enemy> enemies = new ArrayList<>();
+
     protected Paint background = new Paint();
     protected ArrayList<Background> backgrounds = new ArrayList<>();
     protected ArrayList<Background> foregrounds = new ArrayList<>();
@@ -33,11 +34,9 @@ public abstract class LevelData {
     protected SharedPreferences.Editor editor;
 
     protected Viewport vp;
-    protected Vibrator vib;
 
     public LevelData(Context context, Viewport vp, Vibrator vib, int level, int score, int healthPoint) {
         this.vp = vp;
-        this.vib = vib;
         prefs = context.getSharedPreferences("BestScoreFile", context.MODE_PRIVATE);
         highScore = prefs.getInt("BestScore", 0);
         editor = prefs.edit();
