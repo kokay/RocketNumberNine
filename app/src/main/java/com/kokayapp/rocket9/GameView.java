@@ -14,17 +14,25 @@ import android.view.SurfaceView;
 import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
- * Created by Koji on 9/28/2016.
+ * Ckreated by Koji on 9/28/2016.
  */
 
 public class GameView extends SurfaceView implements Runnable {
+    public static final int OPENING = 0;
+    public static final int PLAYING = 1;
+    public static final int PAUSED = 2;
+    public static final int CLEAR = 3;
+    public static final int GAME_OVER = 4;
+    public static final int WINNING_RUN = 5;
+    public static final int GO_NEXT_LEVEL = 6;
+    public static final int GO_EXIT = 7;
 
     private String TAG = getClass().getSimpleName();
     private boolean debugging = true;
     private long maxFps = 0, minFps = 10000, avgFps = 60;
 
     private volatile boolean running;
-    public static final int OPENING = 0, PLAYING = 1, PAUSED = 2, CLEAR = 3, GAME_OVER = 4, WINNING_RUN = 5, GO_NEXT_LEVEL = 6, GO_EXIT = 7;
+
     private volatile int state = OPENING;
     private Thread gameThread = null;
     private int level = 0;
@@ -37,7 +45,6 @@ public class GameView extends SurfaceView implements Runnable {
     private long fps = 2000000000;
 
     private Context context;
-    private Vibrator vib;
     private Viewport vp;
     private InputController ic;
     private LevelData ld;
@@ -51,16 +58,16 @@ public class GameView extends SurfaceView implements Runnable {
         holder = getHolder();
 
         vp = new Viewport(screenX, screenY);
-        vib = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+        Vibrator vib = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
         if(vib == null) Log.w(TAG, "No vibration service");
-        ic = new InputController(context, vp, canvas, vib);
+        dt = new DrawingTool(context, vp);
         ld = new EarthData(context, vp, vib, level, score, healthPoint);
-        dt = new DrawingTool(vp);
+        ic = new InputController(vib, dt, ld.getRocket());
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        state = ic.handleInput(event, state, ld.getRocket());
+        state = ic.gameHandleInput(event, state);
         return true;
     }
 
@@ -105,41 +112,13 @@ public class GameView extends SurfaceView implements Runnable {
         if (holder.getSurface().isValid()) {
             canvas = holder.lockCanvas();
             ld.draw(canvas);
-            drawTopBar();
-            ic.drawPlayingButtons(canvas);
+            dt.drawGameTopBar(canvas, ld);
+            dt.drawGameButtons(canvas);
             if(state != PLAYING) drawMessage();
-            ic.drawButtonsOnBox(canvas, state);
+            dt.drawGameButtonsOnBox(canvas, state);
             if(debugging) drawDebugging();
             holder.unlockCanvasAndPost(canvas);
         }
-    }
-
-    private void drawDebugging() {
-        canvas.drawText("FPS : " + fps, 80, 100, dt.smallTextPaint);
-        if(fps > 60) canvas.drawText("true", 80, 140, dt.smallTextPaint);
-        maxFps = Math.max(maxFps, fps);
-        canvas.drawText("MAX : " + maxFps, 80, 180, dt.smallTextPaint);
-        minFps = Math.min(minFps, fps);
-        canvas.drawText("MIN : " + minFps, 80, 220, dt.smallTextPaint);
-        avgFps = (avgFps + fps) / 2;
-        canvas.drawText("AVG : " + avgFps, 80, 260, dt.smallTextPaint);
-    }
-
-    private void drawTopBar() {
-        canvas.drawRect(dt.topBar, dt.darkNavy);
-        canvas.drawText("DISTANCE : " + String.format("%1$05d", ld.getDistance()) + " M",
-                (int)(vp.pixelsPerX * 12.5f),
-                (int)(vp.pixelsPerY * 0.9f),
-                dt.smallTextPaint);
-        canvas.drawText("SCORE : " + String.format("%1$05d", ld.getScore()),
-                (int)(vp.pixelsPerX * 20f),
-                (int)(vp.pixelsPerY * 0.9f),
-                dt.smallTextPaint);
-        canvas.drawText("HIGH SCORE : " + String.format("%1$05d", ld.getHighScore()),
-                (int)(vp.pixelsPerX * 28f),
-                (int)(vp.pixelsPerY * 0.9f),
-                dt.smallTextPaint);
-        ld.getRocket().drawHealth(canvas, vp);
     }
 
     private void drawMessage() {
@@ -153,9 +132,19 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    private void drawDebugging() {
+        canvas.drawText("FPS : " + fps, 80, 100, dt.smallText);
+        if(fps > 60) canvas.drawText("true", 80, 140, dt.smallText);
+        maxFps = Math.max(maxFps, fps);
+        canvas.drawText("MAX : " + maxFps, 80, 180, dt.smallText);
+        minFps = Math.min(minFps, fps);
+        canvas.drawText("MIN : " + minFps, 80, 220, dt.smallText);
+        avgFps = (avgFps + fps) / 2;
+        canvas.drawText("AVG : " + avgFps, 80, 260, dt.smallText);
+    }
+
     public void resume() {
         running = true;
-        state = OPENING;
         gameThread = new Thread(this);
         gameThread.start();
     }

@@ -44,10 +44,6 @@ public class Rocket extends MovableObject {
         canvas.drawBitmap(bitmap, null, vp.viewToScreen(this), null);
     }
 
-    public void drawHealth(Canvas canvas, Viewport vp) {
-        canvas.drawRoundRect(vp.getHealthBarFrame(this), 5f, 5f, vp.healthBarFramePaint);
-        canvas.drawRoundRect(vp.getHealthBar(this), 5f, 5f, vp.healthBarPaint);
-    }
 
     public void update(long fps, Viewport vp) {
         if(goingDown) {
