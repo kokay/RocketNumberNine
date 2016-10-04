@@ -28,7 +28,7 @@ public class GameView extends SurfaceView implements Runnable {
     public static final int GO_EXIT = 7;
 
     private String TAG = getClass().getSimpleName();
-    private boolean debugging = true;
+    private boolean debugging = false;
     private long maxFps = 0, minFps = 10000, avgFps = 60;
 
     private volatile boolean running;

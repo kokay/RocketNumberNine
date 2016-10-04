@@ -22,6 +22,7 @@ public class DrawingTool {
 
     public final Paint darkNavy = new Paint();
     public final Paint smallText = new Paint();
+    public final Paint mediumText = new Paint();
     public final Paint bigText = new Paint();
 
     public final Button titlePlay;
@@ -30,6 +31,7 @@ public class DrawingTool {
     public final Button titleExit;
     public final Button titleContinue;
     public final Button rocketImage;
+    public final Button logo;
 
     public final Button gameUp;
     public final Button gameDown;
@@ -71,6 +73,12 @@ public class DrawingTool {
         smallText.setTextAlign(Paint.Align.CENTER);
         smallText.setFlags(Paint.ANTI_ALIAS_FLAG);
 
+        mediumText.setColor(Color.rgb(254, 245, 249));
+        mediumText.setTextSize(vp.pixelsPerX * 1.5f);
+        mediumText.setTypeface(Typeface.DEFAULT_BOLD);
+        mediumText.setTextAlign(Paint.Align.CENTER);
+        mediumText.setFlags(Paint.ANTI_ALIAS_FLAG);
+
         bigText.setColor(Color.rgb(254, 245, 249));
         bigText.setTextSize(vp.pixelsPerX * 2);
         bigText.setTypeface(Typeface.DEFAULT_BOLD);
@@ -78,13 +86,13 @@ public class DrawingTool {
         bigText.setFlags(Paint.ANTI_ALIAS_FLAG);
 
         titlePlay = new Button(context, vp, R.drawable.play_button,
-                Viewport.VIEW_CENTER_X, Viewport.VIEW_CENTER_Y, 3f, 3f);
+                Viewport.VIEW_CENTER_X, Viewport.VIEW_CENTER_Y + 1f, 3f, 3f);
 
         titleSetting = new Button(context, vp, R.drawable.settings_button,
-                Viewport.VIEW_CENTER_X + 4.5f, Viewport.VIEW_CENTER_Y, 3f, 3f);
+                Viewport.VIEW_CENTER_X + 4.5f, Viewport.VIEW_CENTER_Y + 1f, 3f, 3f);
 
         titleExit = new Button(context, vp, R.drawable.exit_button,
-                Viewport.VIEW_CENTER_X + 9f, Viewport.VIEW_CENTER_Y, 3f, 3f);
+                Viewport.VIEW_CENTER_X + 9f, Viewport.VIEW_CENTER_Y + 1f, 3f, 3f);
 
         titleScore = new Button(context, vp, R.drawable.down_button,
                 Viewport.VIEW_CENTER_X + 2f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
@@ -92,7 +100,9 @@ public class DrawingTool {
         titleContinue = new Button(context, vp, R.drawable.continue_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
 
-        rocketImage = new Button(context, vp, R.drawable.rocket_titile, 4, 2.5f, 10, 13);
+        rocketImage = new Button(context, vp, R.drawable.rocket_titile, 3, 2.5f, 10, 13);
+        logo = new Button(context, vp, R.drawable.intro,
+                Viewport.VIEW_CENTER_X - 2f, 3.5f, 16, 5);
 
 
         gameUp = new Button(context, vp, R.drawable.up_button,
@@ -108,7 +118,7 @@ public class DrawingTool {
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
 
         gameExitGameOver = new Button(context, vp, R.drawable.exit_button,
-                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
+                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
 
         gamePlay = new Button(context, vp, R.drawable.play_button,
                 Viewport.VIEW_CENTER_X - 5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
@@ -152,16 +162,17 @@ public class DrawingTool {
     }
 
     public void showGameOverMessage(Canvas canvas, int level, int score) {
-        canvas.drawRoundRect(smallBox, 15f, 15f, darkNavy);
+        canvas.drawRoundRect(bigBox, 15f, 15f, darkNavy);
         canvas.drawText("GAME OVER", vp.screenCenterX,
-                (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, bigText);
+                (Viewport.VIEW_CENTER_Y - 3.5f) * vp.pixelsPerY, bigText);
         canvas.drawText("LEVEL : " + level, vp.screenCenterX,
-                (Viewport.VIEW_CENTER_Y + 0.5f) * vp.pixelsPerY, smallText);
+                (Viewport.VIEW_CENTER_Y - 1.5f) * vp.pixelsPerY, mediumText);
         canvas.drawText("SCORE : " + score, vp.screenCenterX,
-                (Viewport.VIEW_CENTER_Y + 0.5f) * vp.pixelsPerY, smallText);
+                (Viewport.VIEW_CENTER_Y + 0.5f) * vp.pixelsPerY, mediumText);
     }
 
     public void drawTitleButtons(Canvas canvas) {
+        canvas.drawBitmap(logo.bitmap, null, logo.hitBox, null);
         canvas.drawBitmap(rocketImage.bitmap, null, rocketImage.hitBox, null);
         canvas.drawBitmap(titlePlay.bitmap, null, titlePlay.hitBox, null);
         canvas.drawBitmap(titleSetting.bitmap, null, titleSetting.hitBox, null);
