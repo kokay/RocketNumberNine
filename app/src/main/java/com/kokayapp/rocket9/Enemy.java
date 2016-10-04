@@ -79,7 +79,7 @@ public abstract class Enemy extends MovableObject {
     }
 
     protected float getRandomY() {
-        return gen.nextInt(Viewport.VIEW_HEIGHT) + gen.nextFloat();
+        return gen.nextInt(Viewport.VIEW_HEIGHT - 3) + gen.nextFloat() + 1;
     }
 
     protected float getRandomVelocityX(int min, int max) {
