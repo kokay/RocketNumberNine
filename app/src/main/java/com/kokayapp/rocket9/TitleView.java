@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import static android.content.ContentValues.TAG;
 import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
@@ -81,7 +80,7 @@ public class TitleView extends SurfaceView implements Runnable {
     private void update() {
         switch (state) {
             case EXIT : ((Activity) context).finish(); break;
-            case STAGE_CHOSEN  : ld.winningRunUpdate(fps); break;
+            case STAGE_CHOSEN  : state = START_GAME; break; //state = ld.winningRunUpdate(fps); break;
             case START_GAME : startGame(); break;
             default: ld.openingUpdate(fps); break;
         }
@@ -98,7 +97,8 @@ public class TitleView extends SurfaceView implements Runnable {
             canvas = holder.lockCanvas();
             ld.draw(canvas);
             dt.drawTitleTopBar(canvas);
-            dt.drawTitleButtons(canvas);
+            if(state != STAGE_CHOSEN && state != START_GAME)
+                dt.drawTitleButtons(canvas);
             if(state != TITLE) drawMessage();
             dt.drawTitleButtonsOnBox(canvas, state);
             if(debugging) drawDebugging();
@@ -128,6 +128,7 @@ public class TitleView extends SurfaceView implements Runnable {
     public void resume() {
         running = true;
         state = TITLE;
+        ld.rocket.x = -5;
         titleThread = new Thread(this);
         titleThread.start();
     }

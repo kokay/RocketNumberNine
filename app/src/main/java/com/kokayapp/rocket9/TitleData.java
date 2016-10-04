@@ -15,12 +15,10 @@ import java.util.ArrayList;
 
 public class TitleData extends LevelData {
     private ArrayList<Star> stars = new ArrayList<>();
-    private Button rocketImage;
 
     public TitleData(Context context, Viewport vp, Vibrator vib, int level, int score, int healthPoint) {
         super(context, vp, vib, level, score, healthPoint);
-        rocketImage = new Button(context, vp, R.drawable.rocket_titile,
-                4, 2.5f, 10, 13);
+        rocket.x = 0 - rocket.getWidth() - 1;
         enemies.add(new YellowEnemy(context, vp, level));
         enemies.add(new YellowEnemy(context, vp, level));
         enemies.add(new OrangeEnemy(context, vp, level));
@@ -51,21 +49,27 @@ public class TitleData extends LevelData {
 
     @Override
     public void clearUpdate(long fps) {
-
     }
 
     @Override
     public int winningRunUpdate(long fps) {
-        return 0;
+        rocket.winningRunUpdate(fps);
+        if(rocket.getX() > Viewport.VIEW_WIDTH + 10)
+            return TitleView.START_GAME;
+        for(Enemy e : enemies) e.update(fps, vp, rocket);
+        for(Background bg : backgrounds) bg.update(fps);
+        for(Background fg : foregrounds) fg.update(fps);
+        for(Star s : stars) s.update(fps);
+        return TitleView.STAGE_CHOSEN;
     }
 
     @Override
     public void draw(Canvas canvas) {
         canvas.drawPaint(background);
+        rocket.draw(canvas, vp);
         for(Background bg : backgrounds) bg.draw(canvas, vp);
         for(Star s : stars) s.draw(canvas, vp);
         for(Enemy enemy : enemies) enemy.draw(canvas, vp);
         for(Background fg : foregrounds) fg.draw(canvas, vp);
-        canvas.drawBitmap(rocketImage.bitmap, null, rocketImage.hitBox, null);
     }
 }

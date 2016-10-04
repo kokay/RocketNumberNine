@@ -29,6 +29,7 @@ public class DrawingTool {
     public final Button titleSetting;
     public final Button titleExit;
     public final Button titleContinue;
+    public final Button rocketImage;
 
     public final Button gameUp;
     public final Button gameDown;
@@ -90,6 +91,8 @@ public class DrawingTool {
 
         titleContinue = new Button(context, vp, R.drawable.continue_button,
                 Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+
+        rocketImage = new Button(context, vp, R.drawable.rocket_titile, 4, 2.5f, 10, 13);
 
 
         gameUp = new Button(context, vp, R.drawable.up_button,
@@ -159,6 +162,7 @@ public class DrawingTool {
     }
 
     public void drawTitleButtons(Canvas canvas) {
+        canvas.drawBitmap(rocketImage.bitmap, null, rocketImage.hitBox, null);
         canvas.drawBitmap(titlePlay.bitmap, null, titlePlay.hitBox, null);
         canvas.drawBitmap(titleSetting.bitmap, null, titleSetting.hitBox, null);
         canvas.drawBitmap(titleExit.bitmap, null, titleExit.hitBox, null);

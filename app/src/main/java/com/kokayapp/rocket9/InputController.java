@@ -45,14 +45,17 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 if(dt.titlePlay.hitBox.contains(lastX, lastY) &&
                         dt.titlePlay.hitBox.contains(x, y)) {
-                    return TitleView.START_GAME;
+                    if(vib != null) vib.vibrate(vibDuration);
+                    return TitleView.STAGE_CHOSEN;
                 }
                 if(dt.titleExit.hitBox.contains(lastX, lastY) &&
                         dt.titleExit.hitBox.contains(x, y)) {
+                    if(vib != null) vib.vibrate(vibDuration);
                     return TitleView.EXIT;
                 }
                 if(dt.titleSetting.hitBox.contains(lastX, lastY) &&
                         dt.titleSetting.hitBox.contains(x, y)) {
+                    if(vib != null) vib.vibrate(vibDuration);
                     return TitleView.SETTING;
                 }
                 break;
@@ -69,6 +72,7 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 if(dt.titleContinue.hitBox.contains(lastX, lastY) &&
                         dt.titleContinue.hitBox.contains(x, y)) {
+                    if(vib != null) vib.vibrate(vibDuration);
                     return TitleView.TITLE;
                 }
                 break;
@@ -85,6 +89,7 @@ public class InputController {
             case MotionEvent.ACTION_UP:
                 if(dt.titleContinue.hitBox.contains(lastX, lastY) &&
                         dt.titleContinue.hitBox.contains(x, y)) {
+                    if(vib != null) vib.vibrate(vibDuration);
                     return TitleView.TITLE;
                 }
                 break;
