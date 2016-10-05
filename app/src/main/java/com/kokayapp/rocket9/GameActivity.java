@@ -23,7 +23,7 @@ public class GameActivity extends Activity {
 
         int level = getIntent().getIntExtra("Level", 0);
         int score = getIntent().getIntExtra("Score", 0);
-        int healthPoint = getIntent().getIntExtra("HealthPoint", 0);
+        int healthPoint = getIntent().getIntExtra("HealthPoint", Rocket.MAX_HEALTH_POINT);
         gameView = new GameView(this, screen.x, screen.y, level, score, healthPoint);
         setContentView(gameView);
     }
