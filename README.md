@@ -1,9 +1,10 @@
-# RocketNumberNine# Rocket #9 - Android Application
+# Rocket #9 - Android Application
 This is a personal project for studying android application develpment.
 
 This is not completed yet.
 - I am waiting for some assets(image files).
 - I will add a function to see others'(who have this application) high scores.
+- I will add setting menu.
 - I will adjust level difficulty.
 
 ## Images:
