@@ -14,11 +14,15 @@ import android.graphics.Typeface;
 
 public class DrawingTool {
     private Viewport vp;
+    private final Rect leftSpace = new Rect();
+    private final Rect topSpace = new Rect();
+    private final Rect rightSpace = new Rect();
+    private final Rect bottomSpace = new Rect();
     private final Rect topBar = new Rect();
     private final RectF smallBox = new RectF();
     private final RectF bigBox = new RectF();
-    private final RectF healthBarFrame = new RectF();
-    private RectF healthBar = new RectF();
+    private final RectF rocketHealthBarFrame = new RectF();
+    private RectF rocketHealthBar = new RectF();
 
     public final Paint darkNavy = new Paint();
     public final Paint smallText = new Paint();
@@ -41,29 +45,56 @@ public class DrawingTool {
     public final Button gameExitComplete;
     public final Button gameExitGameOver;
 
+    private final float distanceX;
+    private final float distanceY;
+    private final float scoreX;
+    private final float scoreY;
+    private final float highScoreX;
+    private final float highScoreY;
+
     public DrawingTool(Context context, Viewport vp) {
         this.vp = vp;
-        topBar.set(0, 0, vp.screenX, (int) (1.2 * vp.pixelsPerY));
+
+        leftSpace.set(0, 0, vp.screenStartX, vp.screenY);
+        topSpace.set(0, 0, vp.screenX, vp.screenStartY);
+        rightSpace.set(vp.screenEndX, 0, vp.screenX, vp.screenY);
+        bottomSpace.set(0, vp.screenEndY, vp.screenX, vp.screenY);
+
+        topBar.set(
+                vp.screenStartX,
+                vp.screenStartY,
+                vp.screenEndX,
+                (int) (1.2 * vp.pixelsPerBox)
+        );
 
         smallBox.set(
-                (Viewport.VIEW_CENTER_X - 8) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_Y - 4.5f) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_X + 8) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_Y + 4.5f) * vp.pixelsPerX );
+                vp.getScreenX(Viewport.VIEW_CENTER_X - 8),
+                vp.getScreenY(Viewport.VIEW_CENTER_Y - 4.5f),
+                vp.getScreenX(Viewport.VIEW_CENTER_X + 8),
+                vp.getScreenY(Viewport.VIEW_CENTER_Y + 4.5f)
+        );
 
         bigBox .set(
-                (Viewport.VIEW_CENTER_X - 9.5f) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_Y - 6f) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_X + 9.5f) * vp.pixelsPerX,
-                (Viewport.VIEW_CENTER_Y + 6f) * vp.pixelsPerX );
+                vp.getScreenX(Viewport.VIEW_CENTER_X - 9.5f),
+                vp.getScreenY(Viewport.VIEW_CENTER_Y - 6f),
+                vp.getScreenX(Viewport.VIEW_CENTER_X + 9.5f),
+                vp.getScreenY(Viewport.VIEW_CENTER_Y + 6f)
+        );
 
-        healthBarFrame.set(
-                (int)(0.2f * vp.pixelsPerX), (int)(0.2f * vp.pixelsPerY),
-                (int)((0.2f + 8) * vp.pixelsPerX), (int)(1.0f * vp.pixelsPerY));
+        rocketHealthBarFrame.set(
+                vp.getScreenX(0.2f),
+                vp.getScreenY(0.2f),
+                vp.getScreenX(8.2f),
+                vp.getScreenY(1f)
+        );
 
-        healthBar.set(
-                (int)(0.3f * vp.pixelsPerX), (int)(0.3f * vp.pixelsPerY),
-                (int)((0.3f + 8 - 0.2f) * vp.pixelsPerX), (int)(0.9f * vp.pixelsPerY ));
+        rocketHealthBar.set(
+                vp.getScreenX(0.3f),
+                vp.getScreenY(0.3f),
+                vp.getScreenX(8.1f),
+                vp.getScreenY(0.9f)
+        );
+
 
         darkNavy.setColor(Color.rgb(2, 12, 35));
 
@@ -85,47 +116,81 @@ public class DrawingTool {
         bigText.setTextAlign(Paint.Align.CENTER);
         bigText.setFlags(Paint.ANTI_ALIAS_FLAG);
 
-        titlePlay = new Button(context, vp, R.drawable.play_button,
-                Viewport.VIEW_CENTER_X, Viewport.VIEW_CENTER_Y + 1f, 3f, 3f);
+        titlePlay = new Button(context, vp, R.drawable.play_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X,
+                Viewport.VIEW_CENTER_Y + 1f
+        );
 
-        titleSetting = new Button(context, vp, R.drawable.settings_button,
-                Viewport.VIEW_CENTER_X + 4.5f, Viewport.VIEW_CENTER_Y + 1f, 3f, 3f);
+        titleSetting = new Button(context, vp, R.drawable.settings_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X + 4.5f,
+                Viewport.VIEW_CENTER_Y + 1f
+        );
 
-        titleExit = new Button(context, vp, R.drawable.exit_button,
-                Viewport.VIEW_CENTER_X + 9f, Viewport.VIEW_CENTER_Y + 1f, 3f, 3f);
+        titleExit = new Button(context, vp, R.drawable.exit_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X + 9f,
+                Viewport.VIEW_CENTER_Y + 1f
+        );
 
-        titleScore = new Button(context, vp, R.drawable.down_button,
-                Viewport.VIEW_CENTER_X + 2f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+        titleScore = new Button(context, vp, R.drawable.down_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X + 2f,
+                Viewport.VIEW_CENTER_Y + 1.5f
+        );
 
-        titleContinue = new Button(context, vp, R.drawable.continue_button,
-                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+        titleContinue = new Button(context, vp, R.drawable.continue_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X - 1.5f,
+                Viewport.VIEW_CENTER_Y + 1.5f
+        );
 
-        rocketImage = new Button(context, vp, R.drawable.rocket_titile, 3, 2.5f, 10, 13);
-        logo = new Button(context, vp, R.drawable.intro,
-                Viewport.VIEW_CENTER_X - 2f, 3.5f, 16, 5);
+        rocketImage = new Button(context, vp, R.drawable.rocket_titile, 10, 13,
+                3,
+                2.5f
+        );
 
+        logo = new Button(context, vp, R.drawable.intro, 16, 5,
+                Viewport.VIEW_CENTER_X - 2f,
+                3.5f
+        );
 
-        gameUp = new Button(context, vp, R.drawable.up_button,
-                0.1f, Viewport.VIEW_HEIGHT - 6f - 0.2f, 3f, 3f);
+        gameUp = new Button(context, vp, R.drawable.up_button, 3f, 3f,
+                0.1f,
+                Viewport.VIEW_HEIGHT - 6f - 0.2f
+        );
 
-        gameDown = new Button(context, vp, R.drawable.down_button,
-                0.1f, Viewport.VIEW_HEIGHT - 3f - 0.1f, 3f, 3f);
+        gameDown = new Button(context, vp, R.drawable.down_button, 3f, 3f,
+                0.1f,
+                Viewport.VIEW_HEIGHT - 3f - 0.1f
+        );
 
-        gamePause = new Button(context, vp, R.drawable.pause_button,
-                Viewport.VIEW_WIDTH - 3.1f, 1.3f, 3f, 3f);
+        gamePause = new Button(context, vp, R.drawable.pause_button, 3f, 3f,
+                Viewport.VIEW_WIDTH - 3.1f, 1.3f
+        );
 
-        gameContinue = new Button(context, vp, R.drawable.continue_button,
-                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y - 0.5f, 3f, 3f);
+        gameContinue = new Button(context, vp, R.drawable.continue_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X - 1.5f,
+                Viewport.VIEW_CENTER_Y - 0.5f
+        );
 
-        gameExitGameOver = new Button(context, vp, R.drawable.exit_button,
-                Viewport.VIEW_CENTER_X - 1.5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+        gameExitGameOver = new Button(context, vp, R.drawable.exit_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X - 1.5f,
+                Viewport.VIEW_CENTER_Y + 1.5f
+        );
 
-        gamePlay = new Button(context, vp, R.drawable.play_button,
-                Viewport.VIEW_CENTER_X - 5f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+        gamePlay = new Button(context, vp, R.drawable.play_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X - 5f,
+                Viewport.VIEW_CENTER_Y + 1.5f
+        );
 
-        gameExitComplete = new Button(context, vp, R.drawable.exit_button,
-                Viewport.VIEW_CENTER_X + 2f, Viewport.VIEW_CENTER_Y + 1.5f, 3f, 3f);
+        gameExitComplete = new Button(context, vp, R.drawable.exit_button, 3f, 3f,
+                Viewport.VIEW_CENTER_X + 2f,
+                Viewport.VIEW_CENTER_Y + 1.5f
+        );
 
+        distanceX = vp.getScreenX(12f);
+        distanceY = vp.getScreenY(0.9f);
+        scoreX = vp.getScreenX(19f);
+        scoreY = vp.getScreenY(0.9f);
+        highScoreX = vp.getScreenX(26f);
+        highScoreY = vp.getScreenY(0.9f);
     }
 
     public void showSetting(Canvas canvas) {
@@ -216,20 +281,22 @@ public class DrawingTool {
     public void drawGameTopBar(Canvas canvas, LevelData ld) {
         canvas.drawRect(topBar, darkNavy);
         canvas.drawText("DISTANCE : " + String.format("%1$05d", ld.getDistance()) + " M",
-                (int)(vp.pixelsPerX * 12.5f),
-                (int)(vp.pixelsPerY * 0.9f),
-                smallText);
+                distanceX, distanceY, smallText);
         canvas.drawText("SCORE : " + String.format("%1$05d", ld.getScore()),
-                (int)(vp.pixelsPerX * 20f),
-                (int)(vp.pixelsPerY * 0.9f),
-                smallText);
+                scoreX, scoreY, smallText);
         canvas.drawText("HIGH SCORE : " + String.format("%1$05d", ld.getHighScore()),
-                (int)(vp.pixelsPerX * 28f),
-                (int)(vp.pixelsPerY * 0.9f),
-                smallText);
-        healthBar.right = (int)((0.3f + 8 - 0.2f) * vp.pixelsPerX) *
-                ld.getRocket().getHealthPoint() / ld.getRocket().getMaxHealthPoint();
-        canvas.drawRoundRect(healthBarFrame, 5f, 5f, vp.healthBarFramePaint);
-        canvas.drawRoundRect(healthBar, 5f, 5f, vp.healthBarPaint);
+                highScoreX, highScoreY, smallText);
+        canvas.drawRoundRect(rocketHealthBarFrame, 5f, 5f, vp.healthBarFramePaint);
+
+        rocketHealthBar.right = (int)(vp.getScreenX(8.1f) *
+                ld.getRocket().getHealthPoint() / ld.getRocket().getMaxHealthPoint());
+        canvas.drawRoundRect(rocketHealthBar, 5f, 5f, vp.healthBarPaint);
+    }
+
+    public void drawSpace(Canvas canvas) {
+        canvas.drawRect(leftSpace, darkNavy);
+        canvas.drawRect(topSpace, darkNavy);
+        canvas.drawRect(rightSpace, darkNavy);
+        canvas.drawRect(bottomSpace, darkNavy);
     }
 }

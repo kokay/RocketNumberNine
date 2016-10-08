@@ -19,7 +19,8 @@ public class Background {
 
     public Background(Context context, Viewport vp, int imageId, float startY, float endY, float speed) {
         bitmap = BitmapFactory.decodeResource(context.getResources(), imageId);
-        bitmap = Bitmap.createScaledBitmap(bitmap, vp.screenX, (int)(endY - startY) * vp.pixelsPerY, true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, (vp.screenEndX - vp.screenStartX),
+                (int)((endY - startY) * vp.pixelsPerBox), true);
 
         this.startY = startY;
         this.endY = endY;

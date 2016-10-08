@@ -101,6 +101,7 @@ public class TitleView extends SurfaceView implements Runnable {
                 dt.drawTitleButtons(canvas);
             if(state != TITLE) drawMessage();
             dt.drawTitleButtonsOnBox(canvas, state);
+            dt.drawSpace(canvas);
             if(debugging) drawDebugging();
             holder.unlockCanvasAndPost(canvas);
         }

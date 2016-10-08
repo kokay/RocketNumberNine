@@ -8,8 +8,8 @@ import android.graphics.Bitmap;
  */
 
 public class Button extends GameObject {
-    Bitmap bitmap;
-    public Button(Context context, Viewport vp, int imageId, float x, float y, float width, float height) {
+    public final Bitmap bitmap;
+    public Button(Context context, Viewport vp, int imageId, float width, float height, float x, float y) {
         this.x = x;
         this.y = y;
         this.width = width;

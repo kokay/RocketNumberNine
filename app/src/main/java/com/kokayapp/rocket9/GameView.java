@@ -116,6 +116,7 @@ public class GameView extends SurfaceView implements Runnable {
             dt.drawGameButtons(canvas);
             if(state != PLAYING) drawMessage();
             dt.drawGameButtonsOnBox(canvas, state);
+            dt.drawSpace(canvas);
             if(debugging) drawDebugging();
             holder.unlockCanvasAndPost(canvas);
         }

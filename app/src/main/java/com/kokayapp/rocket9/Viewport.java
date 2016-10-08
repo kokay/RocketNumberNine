@@ -10,8 +10,8 @@ import android.graphics.RectF;
  */
 
 public class Viewport {
-    public static final int VIEW_WIDTH = 32;
-    public static final int VIEW_HEIGHT = 18;
+    public static final int VIEW_WIDTH = 30;
+    public static final int VIEW_HEIGHT = 20;
     public static final int VIEW_WIDTH_TO_DRAW = VIEW_WIDTH + 2;
     public static final int VIEW_HEIGHT_TO_DRAW = VIEW_HEIGHT + 2;
     public static final int VIEW_CENTER_X = VIEW_WIDTH / 2;
@@ -24,12 +24,19 @@ public class Viewport {
 
     public final int pixelsPerX;
     public final int pixelsPerY;
+
     private Rect rect1 = new Rect();
     private Rect rect2 = new Rect();
     private RectF rectF = new RectF();
     public final Paint healthBarFramePaint = new Paint();
     public final Paint healthBarPaint = new Paint();
     public final Paint healthBarEnemyPaint = new Paint();
+
+    public final double pixelsPerBox;
+    public final int screenStartX;
+    public final int screenStartY;
+    public final int screenEndX;
+    public final int screenEndY;
 
     //public final Paint healthBarEmergencyPaint = new Paint();
     //healthBarEmergencyPaint.setColor(Color.rgb(255, 200, 80));
@@ -38,13 +45,39 @@ public class Viewport {
         this.screenY = screenY;
         screenCenterX = screenX / 2;
         screenCenterY = screenY / 2;
-        pixelsPerX = screenX / VIEW_WIDTH;
-        pixelsPerY = screenY / VIEW_HEIGHT;
+        //pixelsPerX = screenX / VIEW_WIDTH;
+        //pixelsPerY = screenY / VIEW_HEIGHT;
+
+        double pixelsPerX = (double)screenX / VIEW_WIDTH;
+        double pixelsPerY = (double)screenY / VIEW_HEIGHT;
+        if(pixelsPerX > pixelsPerY) {
+            pixelsPerBox = this.pixelsPerX = this.pixelsPerY = (int)pixelsPerY;
+            int remainPixels = (int)(screenX - (pixelsPerBox * VIEW_WIDTH));
+            screenStartX = remainPixels / 2;
+            screenStartY = 0;
+            screenEndX = screenStartX + (int)(pixelsPerBox * VIEW_WIDTH);
+            screenEndY = screenY;
+        } else {
+            pixelsPerBox = this.pixelsPerY = this.pixelsPerX = (int)pixelsPerX;
+            int remainPixels = (int)(screenY - (pixelsPerBox * VIEW_HEIGHT));
+            screenStartX = 0;
+            screenStartY = remainPixels / 2;
+            screenEndX = screenX;
+            screenEndY = screenStartY + (int)(pixelsPerBox * VIEW_HEIGHT);
+        }
 
 
         healthBarFramePaint.setColor(Color.rgb(254, 245, 249));
         healthBarPaint.setColor(Color.rgb(71, 183, 73));
         healthBarEnemyPaint.setColor(Color.rgb(217, 57, 51));
+    }
+
+    public int getScreenX(float x) {
+        return (int)((x * pixelsPerBox) + screenStartX);
+    }
+
+    public int getScreenY(float y) {
+        return (int)((y * pixelsPerBox) + screenStartY);
     }
 
     public Rect viewToScreen(GameObject go) {
@@ -79,18 +112,27 @@ public class Viewport {
         return rect1;
     }
 
-    public Rect getToRect1(Background bg) {
-        rect2.set(bg.getXClip(), (int) (bg.getStartY() * pixelsPerY), bg.getBitmapWidth(), (int) (bg.getEndY()* pixelsPerY));
-        return rect2;
-    }
-
     public Rect getFromRect2(Background bg) {
         rect1.set(bg.getBitmapWidth() - bg.getXClip(), 0, bg.getBitmapWidth(), bg.getBitmapHeight());
         return rect1;
     }
 
+    public Rect getToRect1(Background bg) {
+        rect2.set(
+                bg.getXClip() + screenStartX,
+                (int) (bg.getStartY() * pixelsPerY),
+                bg.getBitmapWidth() + screenStartX,
+                (int) (bg.getEndY()* pixelsPerY));
+        return rect2;
+    }
+
+
     public Rect getToRect2(Background bg) {
-        rect2.set(0, (int)(bg.getStartY() * pixelsPerY), bg.getXClip(), (int)(bg.getEndY() * pixelsPerY));
+        rect2.set(
+                screenStartX,
+                (int)(bg.getStartY() * pixelsPerY),
+                bg.getXClip() + screenStartX,
+                (int)(bg.getEndY() * pixelsPerY));
         return rect2;
     }
 }
