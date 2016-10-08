@@ -288,7 +288,7 @@ public class DrawingTool {
                 highScoreX, highScoreY, smallText);
         canvas.drawRoundRect(rocketHealthBarFrame, 5f, 5f, vp.healthBarFramePaint);
 
-        rocketHealthBar.right = (int)(vp.getScreenX(8.1f) *
+        rocketHealthBar.right = vp.getScreenX(8.1f *
                 ld.getRocket().getHealthPoint() / ld.getRocket().getMaxHealthPoint());
         canvas.drawRoundRect(rocketHealthBar, 5f, 5f, vp.healthBarPaint);
     }
