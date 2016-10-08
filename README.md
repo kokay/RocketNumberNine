@@ -7,6 +7,9 @@ This is not completed yet.
 - I will add setting menu.
 - I will adjust level difficulty.
 
+*UPDATE
+-  Screen ratio is now 3:2.
+
 ## Images:
 <p align="center"><img alt="Title" src="https://github.com/kokay/RocketNumberNine/blob/master/screenshot/title.png"></p>
 <p align="center"><img alt="Start" src="https://github.com/kokay/RocketNumberNine/blob/master/screenshot/start.png"></p>
